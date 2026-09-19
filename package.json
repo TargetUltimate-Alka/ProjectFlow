@@ -1,0 +1,27 @@
+{
+  "name": "projectflow",
+  "version": "1.0.0",
+  "description": "Microservice-based academic software project lifecycle and evaluation platform",
+  "private": true,
+  "scripts": {
+    "start": "node scripts/start-all.js",
+    "seed": "node scripts/seed.js",
+    "dev:gateway": "node gateway/server.js",
+    "dev:auth": "node services/auth/server.js",
+    "dev:project": "node services/project/server.js",
+    "dev:task": "node services/task/server.js",
+    "dev:evaluation": "node services/evaluation/server.js",
+    "dev:integration": "node services/integration/server.js",
+    "dev:notification": "node services/notification/server.js"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.4",
+    "axios": "^1.7.9",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.12.0"
+  }
+}
