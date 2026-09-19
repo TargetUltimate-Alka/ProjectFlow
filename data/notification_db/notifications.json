@@ -1,0 +1,42 @@
+[
+  {
+    "_id": "e03fc8bdc895864bcfc287b6",
+    "title": "GitHub Synchronized Successfully",
+    "message": "Synchronized latest repository state: 14 commits, 5 pull requests, 4 contributors.",
+    "type": "github",
+    "read": true,
+    "targetRole": "all",
+    "createdAt": "2026-09-15T19:50:59.284Z",
+    "updatedAt": "2026-09-15T20:23:30.336Z"
+  },
+  {
+    "_id": "35c3943be462be3515d4dbe3",
+    "title": "Milestone 2 Reached 75%",
+    "message": "Milestone 2: Core Development & Architecture advanced to 75% after PR #104 was merged.",
+    "type": "milestone",
+    "read": true,
+    "targetRole": "all",
+    "createdAt": "2026-09-15T19:20:59.284Z",
+    "updatedAt": "2026-09-15T20:23:30.336Z"
+  },
+  {
+    "_id": "c3de0e9e98fcab8f73dde2eb",
+    "title": "Faculty Added Evaluation Feedback",
+    "message": "Dr. Robert Harrison reviewed the Capstone and submitted rubric evaluation: 94/100.",
+    "type": "evaluation",
+    "read": true,
+    "targetRole": "all",
+    "createdAt": "2026-09-15T17:05:59.284Z",
+    "updatedAt": "2026-09-15T20:23:30.336Z"
+  },
+  {
+    "_id": "f8afa953a4223b4aa0ac5396",
+    "title": "Milestone 3 Due Soon",
+    "message": "Milestone 3: Evaluation, Testing & Final Report is scheduled for review next week.",
+    "type": "milestone",
+    "read": true,
+    "targetRole": "all",
+    "createdAt": "2026-09-15T08:05:59.284Z",
+    "updatedAt": "2026-09-15T20:23:30.336Z"
+  }
+]

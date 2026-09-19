@@ -1,0 +1,87 @@
+[
+  {
+    "_id": "3bffcc2e21e8af83b91837e0",
+    "number": 104,
+    "title": "feat: Real-time milestone evidence synchronization",
+    "state": "merged",
+    "mergedAt": "2026-09-15T18:36:50.155Z",
+    "author": {
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "role": "Team Lead",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
+    },
+    "additions": 420,
+    "deletions": 65,
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.180Z"
+  },
+  {
+    "_id": "5ed5ffd62b88e8eda4f40864",
+    "number": 103,
+    "title": "feat: Rubric scoring engine and evaluation feedback",
+    "state": "merged",
+    "mergedAt": "2026-09-15T15:06:50.155Z",
+    "author": {
+      "login": "marcus-vance",
+      "name": "Marcus Vance",
+      "role": "Backend Dev",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
+    },
+    "additions": 280,
+    "deletions": 40,
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.180Z"
+  },
+  {
+    "_id": "2903f7d7e14aa475c59545b8",
+    "number": 102,
+    "title": "feat: Add secure JWT authorization and gateway proxying",
+    "state": "merged",
+    "mergedAt": "2026-09-15T00:06:50.155Z",
+    "author": {
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "role": "Fullstack Dev",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+    },
+    "additions": 510,
+    "deletions": 110,
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.180Z"
+  },
+  {
+    "_id": "008073765008a16fd6534ca1",
+    "number": 101,
+    "title": "docs: Requirements traceability matrix and SRS review",
+    "state": "closed",
+    "mergedAt": null,
+    "author": {
+      "login": "elena-rostova",
+      "name": "Elena Rostova",
+      "role": "QA & Docs",
+      "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100"
+    },
+    "additions": 90,
+    "deletions": 12,
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.180Z"
+  },
+  {
+    "_id": "39b2ce33753f929fe4b8542d",
+    "number": 105,
+    "title": "test: End-to-end task workflow coverage",
+    "state": "open",
+    "mergedAt": null,
+    "author": {
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "role": "Fullstack Dev",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+    },
+    "additions": 140,
+    "deletions": 18,
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.180Z"
+  }
+]

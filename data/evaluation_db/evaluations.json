@@ -1,0 +1,102 @@
+[
+  {
+    "_id": "27b44dc6bcdf4bfc2851fc8e",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "projectName": "Distributed Real-time Cloud Pipeline (ProjectFlow)",
+    "facultyId": "f114140c2c5a78bed1251d8b",
+    "facultyName": "Dr. Robert Harrison",
+    "facultyEmail": "dr.harrison@projectflow.edu",
+    "scores": {
+      "requirements": 19,
+      "implementation": 24,
+      "githubDevelopment": 23,
+      "documentation": 14,
+      "projectProgress": 14
+    },
+    "totalScore": 94,
+    "maxScore": 100,
+    "percentage": 94,
+    "feedback": "Outstanding software architecture and demonstrable Git hygiene. The microservice isolation is pristine and the automated milestone tracking is well-demonstrated.",
+    "recommendations": "Ensure comprehensive stress-testing on the event bus before final capstone symposium defense.",
+    "status": "submitted",
+    "evaluatedAt": "2026-09-15T16:54:10.459Z",
+    "updatedAt": "2026-09-15T16:54:10.459Z",
+    "disclaimer": "GitHub evidence informs the evaluation, but the score itself is an academic faculty decision.",
+    "createdAt": "2026-09-15T19:54:10.460Z"
+  },
+  {
+    "_id": "c6a8d96c9c33d6e585e7cc3a",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "projectName": "Distributed Real-time Cloud Pipeline (ProjectFlow)",
+    "facultyId": "f114140c2c5a78bed1251d8b",
+    "facultyName": "Dr.%20Robert%20Harrison",
+    "facultyEmail": "dr.harrison@projectflow.edu",
+    "scores": {
+      "requirements": 20,
+      "implementation": 24,
+      "githubDevelopment": 25,
+      "documentation": 15,
+      "projectProgress": 15
+    },
+    "totalScore": 99,
+    "maxScore": 100,
+    "percentage": 99,
+    "feedback": "E2E Automated test evaluation: Architecture and Git hygiene satisfy all criteria.",
+    "recommendations": "Deploy to staging cluster.",
+    "status": "submitted",
+    "evaluatedAt": "2026-09-15T20:06:50.585Z",
+    "updatedAt": "2026-09-15T20:06:50.585Z",
+    "disclaimer": "GitHub evidence informs the evaluation, but the score itself is an academic faculty decision.",
+    "createdAt": "2026-09-15T20:06:50.588Z"
+  },
+  {
+    "_id": "223b7d0c5698dd319d805813",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "projectName": "Distributed Real-time Cloud Pipeline (ProjectFlow)",
+    "facultyId": "f114140c2c5a78bed1251d8b",
+    "facultyName": "Dr.%20Robert%20Harrison",
+    "facultyEmail": "dr.harrison@projectflow.edu",
+    "scores": {
+      "requirements": 20,
+      "implementation": 24,
+      "githubDevelopment": 25,
+      "documentation": 15,
+      "projectProgress": 15
+    },
+    "totalScore": 99,
+    "maxScore": 100,
+    "percentage": 99,
+    "feedback": "E2E Automated test evaluation: Architecture and Git hygiene satisfy all criteria.",
+    "recommendations": "Deploy to staging cluster.",
+    "status": "submitted",
+    "evaluatedAt": "2026-09-15T20:23:04.196Z",
+    "updatedAt": "2026-09-15T20:23:04.196Z",
+    "disclaimer": "GitHub evidence informs the evaluation, but the score itself is an academic faculty decision.",
+    "createdAt": "2026-09-15T20:23:04.200Z"
+  },
+  {
+    "_id": "666d1ce381c6b209f407b0d3",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "projectName": "Distributed Real-time Cloud Pipeline (ProjectFlow)",
+    "facultyId": "f114140c2c5a78bed1251d8b",
+    "facultyName": "Dr.%20Robert%20Harrison",
+    "facultyEmail": "dr.harrison@projectflow.edu",
+    "scores": {
+      "requirements": 20,
+      "implementation": 24,
+      "githubDevelopment": 25,
+      "documentation": 15,
+      "projectProgress": 15
+    },
+    "totalScore": 99,
+    "maxScore": 100,
+    "percentage": 99,
+    "feedback": "E2E Automated test evaluation: Architecture and Git hygiene satisfy all criteria.",
+    "recommendations": "Deploy to staging cluster.",
+    "status": "submitted",
+    "evaluatedAt": "2026-09-15T20:23:06.641Z",
+    "updatedAt": "2026-09-15T20:23:06.641Z",
+    "disclaimer": "GitHub evidence informs the evaluation, but the score itself is an academic faculty decision.",
+    "createdAt": "2026-09-15T20:23:06.644Z"
+  }
+]

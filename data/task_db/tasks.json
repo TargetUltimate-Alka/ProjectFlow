@@ -1,0 +1,62 @@
+[
+  {
+    "_id": "148ebb946f66c6ca2ec12b97",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "title": "Scaffold Express Gateway with JWT Header Forwarding",
+    "description": "Setup reverse proxy and attach x-user-id, x-user-role headers.",
+    "assigneeId": "6a6d2015893749fb5c124969",
+    "assigneeName": "Alex Chen",
+    "priority": "critical",
+    "status": "completed",
+    "dueDate": "2026-09-20",
+    "createdBy": "6a6d2015893749fb5c124969",
+    "createdByName": "Alex Chen",
+    "createdAt": "2026-09-15T19:54:07.988Z",
+    "updatedAt": "2026-09-15T19:54:07.988Z"
+  },
+  {
+    "_id": "f45324579231ffc811f2eaa3",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "title": "Implement Resilient GitHub Sync Pipeline",
+    "description": "Fetch commits, PRs, issues and preserve last-good-snapshot on failure.",
+    "assigneeId": "6a6d2015893749fb5c124969",
+    "assigneeName": "Priya Patel",
+    "priority": "high",
+    "status": "completed",
+    "dueDate": "2026-09-22",
+    "createdBy": "6a6d2015893749fb5c124969",
+    "createdByName": "Alex Chen",
+    "createdAt": "2026-09-15T19:54:07.988Z",
+    "updatedAt": "2026-09-15T19:54:07.988Z"
+  },
+  {
+    "_id": "dab3278767f08918a07f2812",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "title": "Connect RabbitMQ Topic Exchange for Milestone Events",
+    "description": "Publish MilestoneCompleted and consume in Notification Service.",
+    "assigneeId": "6a6d2015893749fb5c124969",
+    "assigneeName": "Marcus Vance",
+    "priority": "high",
+    "status": "in_progress",
+    "dueDate": "2026-09-25",
+    "createdBy": "6a6d2015893749fb5c124969",
+    "createdByName": "Alex Chen",
+    "createdAt": "2026-09-15T19:54:07.988Z",
+    "updatedAt": "2026-09-15T19:54:07.988Z"
+  },
+  {
+    "_id": "84921e9082a29fd27478d8e0",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "title": "Prepare Capstone Evaluation & Rubric Criteria Demo",
+    "description": "Compile testing benchmarks and user acceptance reports.",
+    "assigneeId": "6a6d2015893749fb5c124969",
+    "assigneeName": "Elena Rostova",
+    "priority": "medium",
+    "status": "todo",
+    "dueDate": "2026-09-28",
+    "createdBy": "6a6d2015893749fb5c124969",
+    "createdByName": "Alex Chen",
+    "createdAt": "2026-09-15T19:54:07.988Z",
+    "updatedAt": "2026-09-15T19:54:07.988Z"
+  }
+]

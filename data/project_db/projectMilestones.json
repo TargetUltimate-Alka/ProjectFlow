@@ -1,0 +1,59 @@
+[
+  {
+    "_id": "49bcdba989d456c8fa7a849a",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "criteriaCode": "M1",
+    "name": "Milestone 1: Project Genesis & Scaffolding",
+    "description": "Initial repository setup, architectural scaffolding, initial commits, and Requirements Document (SRS).",
+    "percentage": 100,
+    "status": "Completed",
+    "evidenceList": [
+      "✓ GitHub repository connected (projectflow-team/academic-capstone-project)",
+      "✓ Commits: 10/5 commits detected",
+      "✓ Merged PRs: 3/1 merged pull requests",
+      "✓ Issues Closed: 4/1 completed issues",
+      "✓ Document Artifact: SRS verified in Documents"
+    ],
+    "lastCheckedAt": "2026-09-15T20:26:10.144Z",
+    "createdAt": "2026-09-15T19:54:06.760Z",
+    "updatedAt": "2026-09-15T20:26:10.161Z"
+  },
+  {
+    "_id": "5a4eabcff335b2898ca5bf9e",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "criteriaCode": "M2",
+    "name": "Milestone 2: Core Development & Architecture",
+    "description": "Full microservice development, team collaboration PRs, closed feature issues, and Architecture Documentation.",
+    "percentage": 100,
+    "status": "Completed",
+    "evidenceList": [
+      "✓ GitHub repository connected (projectflow-team/academic-capstone-project)",
+      "✓ Commits: 10/10 commits detected",
+      "✓ Merged PRs: 3/2 merged pull requests",
+      "✓ Issues Closed: 4/3 completed issues",
+      "✓ Document Artifact: Architecture Design verified in Documents"
+    ],
+    "lastCheckedAt": "2026-09-15T20:26:10.181Z",
+    "createdAt": "2026-09-15T19:54:06.760Z",
+    "updatedAt": "2026-09-15T20:26:10.188Z"
+  },
+  {
+    "_id": "2301a41814ec3631e60b8585",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "criteriaCode": "M3",
+    "name": "Milestone 3: Evaluation, Testing & Final Report",
+    "description": "Comprehensive test coverage, final pull requests merged, resolved issues, and Final Capstone Report.",
+    "percentage": 68,
+    "status": "In Progress",
+    "evidenceList": [
+      "✓ GitHub repository connected (projectflow-team/academic-capstone-project)",
+      "⏳ Commits: 10/15 commits (5 remaining)",
+      "✓ Merged PRs: 3/3 merged pull requests",
+      "⏳ Issues Closed: 4/5 closed",
+      "⏳ Document Artifact: Final Report required (upload in Documents)"
+    ],
+    "lastCheckedAt": "2026-09-15T20:26:10.206Z",
+    "createdAt": "2026-09-15T19:54:06.760Z",
+    "updatedAt": "2026-09-15T20:26:10.210Z"
+  }
+]

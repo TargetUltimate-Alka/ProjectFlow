@@ -1,0 +1,73 @@
+[
+  {
+    "_id": "c8f87315359c47b198daf61f",
+    "name": "Dr. Arthur Vance",
+    "email": "admin@projectflow.edu",
+    "passwordHash": "$2a$10$zXKUPjDe5hUimX7YvolzB.vtX02OEFdc8JMtwgFHGrsUTswWDX8T.",
+    "role": "Admin",
+    "status": "active",
+    "department": "Academic Administration & Capstone Oversight",
+    "createdAt": "2026-09-15T19:54:05.468Z"
+  },
+  {
+    "_id": "f114140c2c5a78bed1251d8b",
+    "name": "Dr. Robert Harrison",
+    "email": "dr.harrison@projectflow.edu",
+    "passwordHash": "$2a$10$/hQpsMFC5Nc.9yqnCIDqJuQDJGH7yK6yaTUG6BF/WsjlIM/hRa8F.",
+    "role": "Faculty",
+    "status": "active",
+    "department": "Computer Science - Systems & Networking",
+    "createdAt": "2026-09-15T19:54:05.469Z",
+    "updatedAt": "2026-09-15T20:24:21.657Z"
+  },
+  {
+    "_id": "496891d6755313abe36601d4",
+    "name": "Dr. Sarah Patel",
+    "email": "dr.patel@projectflow.edu",
+    "passwordHash": "$2a$10$/hQpsMFC5Nc.9yqnCIDqJuQDJGH7yK6yaTUG6BF/WsjlIM/hRa8F.",
+    "role": "Faculty",
+    "status": "active",
+    "department": "Computer Science - Software Architecture",
+    "createdAt": "2026-09-15T19:54:05.469Z"
+  },
+  {
+    "_id": "6a6d2015893749fb5c124969",
+    "name": "Alex Chen",
+    "email": "alex.chen@student.edu",
+    "passwordHash": "$2a$10$/hQpsMFC5Nc.9yqnCIDqJuQDJGH7yK6yaTUG6BF/WsjlIM/hRa8F.",
+    "role": "Student",
+    "status": "active",
+    "department": "Computer Science & Engineering",
+    "createdAt": "2026-09-15T19:54:05.469Z"
+  },
+  {
+    "_id": "3a381f47eb0727ec613c12a2",
+    "name": "Priya Patel",
+    "email": "priya.patel@student.edu",
+    "passwordHash": "$2a$10$/hQpsMFC5Nc.9yqnCIDqJuQDJGH7yK6yaTUG6BF/WsjlIM/hRa8F.",
+    "role": "Student",
+    "status": "active",
+    "department": "Computer Science & Engineering",
+    "createdAt": "2026-09-15T19:54:05.469Z"
+  },
+  {
+    "_id": "509ff19bfbf337cb95dbcb8a",
+    "name": "Marcus Vance",
+    "email": "marcus.vance@student.edu",
+    "passwordHash": "$2a$10$/hQpsMFC5Nc.9yqnCIDqJuQDJGH7yK6yaTUG6BF/WsjlIM/hRa8F.",
+    "role": "Student",
+    "status": "active",
+    "department": "Computer Science & Engineering",
+    "createdAt": "2026-09-15T19:54:05.469Z"
+  },
+  {
+    "_id": "fcec51637271ba7419db7085",
+    "name": "Elena Rostova",
+    "email": "elena.rostova@student.edu",
+    "passwordHash": "$2a$10$/hQpsMFC5Nc.9yqnCIDqJuQDJGH7yK6yaTUG6BF/WsjlIM/hRa8F.",
+    "role": "Student",
+    "status": "active",
+    "department": "Computer Science & Engineering",
+    "createdAt": "2026-09-15T19:54:05.469Z"
+  }
+]

@@ -1,0 +1,77 @@
+[
+  {
+    "_id": "5e937416beefeb0e1e7f9e0c",
+    "number": 12,
+    "title": "Validate foreign key ID boundaries across microservice APIs",
+    "state": "closed",
+    "closedAt": "2026-09-15T16:06:50.155Z",
+    "author": {
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "role": "Team Lead",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
+    },
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.183Z"
+  },
+  {
+    "_id": "3356eb9d588a5b379184ed59",
+    "number": 11,
+    "title": "Ensure failed GitHub sync does not overwrite previous good snapshot",
+    "state": "closed",
+    "closedAt": "2026-09-15T10:06:50.155Z",
+    "author": {
+      "login": "marcus-vance",
+      "name": "Marcus Vance",
+      "role": "Backend Dev",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
+    },
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.183Z"
+  },
+  {
+    "_id": "68f60db13af3981f2d4c7f4d",
+    "number": 10,
+    "title": "Support dark glassmorphic styling tokens across all dashboard shells",
+    "state": "closed",
+    "closedAt": "2026-09-14T19:06:50.155Z",
+    "author": {
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "role": "Fullstack Dev",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+    },
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.183Z"
+  },
+  {
+    "_id": "995560387f79b653b0b5c3d8",
+    "number": 9,
+    "title": "Rate-limiting backoff for external GitHub API requests",
+    "state": "closed",
+    "closedAt": "2026-09-14T02:26:50.155Z",
+    "author": {
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "role": "Team Lead",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
+    },
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.183Z"
+  },
+  {
+    "_id": "bda5bbe4c3dca156bf4be50f",
+    "number": 13,
+    "title": "Faculty rubric scoring validation and lock after submit",
+    "state": "open",
+    "closedAt": null,
+    "author": {
+      "login": "marcus-vance",
+      "name": "Marcus Vance",
+      "role": "Backend Dev",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
+    },
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.183Z"
+  }
+]

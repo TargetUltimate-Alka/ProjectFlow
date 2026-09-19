@@ -1,0 +1,142 @@
+[
+  {
+    "_id": "a4a6ab78c08f83da3bcafb41",
+    "sha": "e4a1b09",
+    "message": "feat: implement JWT auth middleware with refresh tokens",
+    "author": {
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "role": "Fullstack Dev",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+    },
+    "timestamp": "2026-09-15T19:21:50.155Z",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.177Z"
+  },
+  {
+    "_id": "5c326bc638efffa10403fdf9",
+    "sha": "7b2c9df",
+    "message": "fix: resolve race condition in milestone recalculation engine",
+    "author": {
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "role": "Team Lead",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
+    },
+    "timestamp": "2026-09-15T17:06:50.155Z",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.177Z"
+  },
+  {
+    "_id": "83e256f80f166c7ddb18badb",
+    "sha": "91f82c1",
+    "message": "feat: add rubric evaluation calculations and scoring API",
+    "author": {
+      "login": "marcus-vance",
+      "name": "Marcus Vance",
+      "role": "Backend Dev",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
+    },
+    "timestamp": "2026-09-15T14:06:50.155Z",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.177Z"
+  },
+  {
+    "_id": "a639d025accbe9ee566ccae4",
+    "sha": "63d0aa2",
+    "message": "docs: update software architecture document and API contract",
+    "author": {
+      "login": "elena-rostova",
+      "name": "Elena Rostova",
+      "role": "QA & Docs",
+      "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100"
+    },
+    "timestamp": "2026-09-15T08:06:50.155Z",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.177Z"
+  },
+  {
+    "_id": "0dbca500794362670fc2549f",
+    "sha": "58c3a11",
+    "message": "test: write integration test suite for task transition states",
+    "author": {
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "role": "Fullstack Dev",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+    },
+    "timestamp": "2026-09-14T20:06:50.155Z",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.177Z"
+  },
+  {
+    "_id": "a0bdf5b0bfc30e70527ea551",
+    "sha": "47d2b88",
+    "message": "feat: setup RabbitMQ event bus with topic exchange routing",
+    "author": {
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "role": "Team Lead",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
+    },
+    "timestamp": "2026-09-14T09:06:50.155Z",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.177Z"
+  },
+  {
+    "_id": "0047113ab87229737f0416de",
+    "sha": "31f9c04",
+    "message": "refactor: isolate database connection layers per microservice",
+    "author": {
+      "login": "marcus-vance",
+      "name": "Marcus Vance",
+      "role": "Backend Dev",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
+    },
+    "timestamp": "2026-09-13T20:06:50.155Z",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.177Z"
+  },
+  {
+    "_id": "5aa8c32935c95df8a22458e7",
+    "sha": "20a5e77",
+    "message": "chore: configure Vite client build and Tailwind/CSS tokens",
+    "author": {
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "role": "Fullstack Dev",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+    },
+    "timestamp": "2026-09-13T08:06:50.155Z",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.177Z"
+  },
+  {
+    "_id": "943facb064ca305c287737db",
+    "sha": "11b4d66",
+    "message": "feat: add team member assignment and permissions validator",
+    "author": {
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "role": "Team Lead",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
+    },
+    "timestamp": "2026-09-12T20:06:50.155Z",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.177Z"
+  },
+  {
+    "_id": "e5d0aeea30154065daabe917",
+    "sha": "09c3e55",
+    "message": "init: scaffold initial monorepo structure with Express microservices",
+    "author": {
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "role": "Team Lead",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
+    },
+    "timestamp": "2026-09-11T20:06:50.155Z",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.177Z"
+  }
+]

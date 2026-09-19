@@ -1,0 +1,19 @@
+[
+  {
+    "_id": "0b306f2dcca5fc026fc867ad",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "startedAt": "2026-09-15T20:06:50.155Z",
+    "finishedAt": "2026-09-15T20:06:50.187Z",
+    "status": "success",
+    "stats": {
+      "totalCommits": 10,
+      "totalPRs": 5,
+      "mergedPRs": 3,
+      "openPRs": 1,
+      "closedIssues": 4,
+      "openIssues": 1,
+      "totalContributors": 4
+    },
+    "createdAt": "2026-09-15T20:06:50.193Z"
+  }
+]

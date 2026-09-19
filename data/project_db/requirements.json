@@ -1,0 +1,54 @@
+[
+  {
+    "_id": "b14eac1de7082c3c1e6760c4",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "reqCode": "REQ-01",
+    "title": "Decoupled Microservice Architecture with Independent Databases",
+    "description": "Each service must maintain an isolated database with zero cross-database joins and communicate strictly via REST or messaging.",
+    "priority": "High",
+    "category": "Architecture",
+    "status": "Verified",
+    "createdBy": "6a6d2015893749fb5c124969",
+    "createdByName": "Alex Chen",
+    "createdAt": "2026-09-15T19:54:06.756Z"
+  },
+  {
+    "_id": "af9f8689bd2eb2e5e0130e95",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "reqCode": "REQ-02",
+    "title": "Automated GitHub Sync Pipeline for Commits & PRs",
+    "description": "Never permit manual commit or PR entry; all development metrics must sync directly from GitHub REST API.",
+    "priority": "High",
+    "category": "Integration",
+    "status": "Verified",
+    "createdBy": "6a6d2015893749fb5c124969",
+    "createdByName": "Alex Chen",
+    "createdAt": "2026-09-15T19:54:06.756Z"
+  },
+  {
+    "_id": "5dc48dfa5b10066b9f15fbda",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "reqCode": "REQ-03",
+    "title": "Automated Milestone Evidence Calculation Engine",
+    "description": "Milestones must evaluate progress dynamically based on confirmed GitHub facts (commits, PRs, issues) and uploaded academic artifacts.",
+    "priority": "High",
+    "category": "Milestones",
+    "status": "Verified",
+    "createdBy": "6a6d2015893749fb5c124969",
+    "createdByName": "Alex Chen",
+    "createdAt": "2026-09-15T19:54:06.756Z"
+  },
+  {
+    "_id": "2feb71ff3548d2bc15dea199",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "reqCode": "REQ-04",
+    "title": "Role-Specific Distinct Dashboard Shells",
+    "description": "Students, Faculty, and Administrators must have dedicated UI shells with distinct action sets.",
+    "priority": "Medium",
+    "category": "Frontend",
+    "status": "In Progress",
+    "createdBy": "6a6d2015893749fb5c124969",
+    "createdByName": "Alex Chen",
+    "createdAt": "2026-09-15T19:54:06.756Z"
+  }
+]

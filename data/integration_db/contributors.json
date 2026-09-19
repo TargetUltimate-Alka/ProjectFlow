@@ -1,0 +1,46 @@
+[
+  {
+    "_id": "0a72c0df653a32a6c7d5f9f1",
+    "login": "alex-chen",
+    "name": "Alex Chen",
+    "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100",
+    "commits": 14,
+    "additions": 1250,
+    "deletions": 310,
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.185Z"
+  },
+  {
+    "_id": "7d07e6c77510f421dbcc1279",
+    "login": "priya-patel",
+    "name": "Priya Patel",
+    "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100",
+    "commits": 11,
+    "additions": 980,
+    "deletions": 215,
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.185Z"
+  },
+  {
+    "_id": "07009f835f32afe35c795121",
+    "login": "marcus-vance",
+    "name": "Marcus Vance",
+    "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100",
+    "commits": 9,
+    "additions": 740,
+    "deletions": 180,
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.185Z"
+  },
+  {
+    "_id": "0c68b489a7c7cb8de8ffe3ba",
+    "login": "elena-rostova",
+    "name": "Elena Rostova",
+    "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100",
+    "commits": 6,
+    "additions": 350,
+    "deletions": 45,
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "createdAt": "2026-09-15T20:06:50.185Z"
+  }
+]
