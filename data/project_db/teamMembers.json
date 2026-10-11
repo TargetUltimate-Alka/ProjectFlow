@@ -3,7 +3,7 @@
     "_id": "22b54e137ed167955991d381",
     "projectId": "91c22b3a5381ee085ce4d576",
     "userId": "6a6d2015893749fb5c124969",
-    "name": "Alex Chen",
+    "name": "Alka Jha",
     "email": "alex.chen@student.edu",
     "role": "Team Lead & Backend",
     "isLeader": true,
@@ -13,7 +13,7 @@
   {
     "_id": "1196397debcc52ae535bc6cf",
     "projectId": "91c22b3a5381ee085ce4d576",
-    "name": "Priya Patel",
+    "name": "Alok Mihsra",
     "email": "priya.patel@student.edu",
     "role": "Fullstack & Gateway Dev",
     "isLeader": false,
@@ -23,7 +23,7 @@
   {
     "_id": "d81fe1663fe9df53df438ed4",
     "projectId": "91c22b3a5381ee085ce4d576",
-    "name": "Marcus Vance",
+    "name": "nandini Kanaujiya",
     "email": "marcus.vance@student.edu",
     "role": "Microservice Architect",
     "isLeader": false,
@@ -33,11 +33,21 @@
   {
     "_id": "6b9431dd7a70bbb8d0c8dda9",
     "projectId": "91c22b3a5381ee085ce4d576",
-    "name": "Elena Rostova",
+    "name": "Radhika Verma",
     "email": "elena.rostova@student.edu",
     "role": "Documentation & QA Lead",
     "isLeader": false,
     "addedAt": "2026-09-15T19:54:06.754Z",
     "createdAt": "2026-09-15T19:54:06.755Z"
+  },
+  {
+    "_id": "b35993f5de482078c1e08450",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "name": "abc",
+    "email": "gradualka62026@gmail.com",
+    "role": "Fullstack Developer",
+    "isLeader": false,
+    "addedAt": "2026-09-24T08:34:56.645Z",
+    "createdAt": "2026-09-24T08:34:56.648Z"
   }
 ]

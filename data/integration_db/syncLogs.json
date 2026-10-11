@@ -15,5 +15,124 @@
       "totalContributors": 4
     },
     "createdAt": "2026-09-15T20:06:50.193Z"
+  },
+  {
+    "_id": "f6d1adb037805ed0ab7dd6b6",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "startedAt": "2026-09-19T11:14:43.368Z",
+    "finishedAt": "2026-09-19T11:14:43.391Z",
+    "status": "success",
+    "stats": {
+      "totalCommits": 10,
+      "totalPRs": 5,
+      "mergedPRs": 3,
+      "openPRs": 1,
+      "closedIssues": 4,
+      "openIssues": 1,
+      "totalContributors": 4
+    },
+    "createdAt": "2026-09-19T11:14:43.396Z"
+  },
+  {
+    "_id": "55fcba40055f67df17a92edc",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "startedAt": "2026-09-19T11:14:49.241Z",
+    "finishedAt": "2026-09-19T11:14:49.259Z",
+    "status": "success",
+    "stats": {
+      "totalCommits": 10,
+      "totalPRs": 5,
+      "mergedPRs": 3,
+      "openPRs": 1,
+      "closedIssues": 4,
+      "openIssues": 1,
+      "totalContributors": 4
+    },
+    "createdAt": "2026-09-19T11:14:49.264Z"
+  },
+  {
+    "_id": "e69f85cdca11b362994a2b4c",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "startedAt": "2026-09-23T17:40:13.329Z",
+    "finishedAt": "2026-09-23T17:40:13.363Z",
+    "status": "success",
+    "stats": {
+      "totalCommits": 10,
+      "totalPRs": 5,
+      "mergedPRs": 3,
+      "openPRs": 1,
+      "closedIssues": 4,
+      "openIssues": 1,
+      "totalContributors": 4
+    },
+    "createdAt": "2026-09-23T17:40:13.389Z"
+  },
+  {
+    "_id": "b2522a9775eeb7c4057a63bc",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "startedAt": "2026-09-23T18:41:10.965Z",
+    "finishedAt": "2026-09-23T18:41:11.010Z",
+    "status": "success",
+    "stats": {
+      "totalCommits": 10,
+      "totalPRs": 5,
+      "mergedPRs": 3,
+      "openPRs": 1,
+      "closedIssues": 4,
+      "openIssues": 1,
+      "totalContributors": 4
+    },
+    "createdAt": "2026-09-23T18:41:11.013Z"
+  },
+  {
+    "_id": "b1078e79e56cf144af0caa51",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "startedAt": "2026-09-23T18:41:12.425Z",
+    "finishedAt": "2026-09-23T18:41:12.451Z",
+    "status": "success",
+    "stats": {
+      "totalCommits": 10,
+      "totalPRs": 5,
+      "mergedPRs": 3,
+      "openPRs": 1,
+      "closedIssues": 4,
+      "openIssues": 1,
+      "totalContributors": 4
+    },
+    "createdAt": "2026-09-23T18:41:12.466Z"
+  },
+  {
+    "_id": "df73dc2885013f1a5a2e86f8",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "startedAt": "2026-09-23T18:41:14.054Z",
+    "finishedAt": "2026-09-23T18:41:14.081Z",
+    "status": "success",
+    "stats": {
+      "totalCommits": 10,
+      "totalPRs": 5,
+      "mergedPRs": 3,
+      "openPRs": 1,
+      "closedIssues": 4,
+      "openIssues": 1,
+      "totalContributors": 4
+    },
+    "createdAt": "2026-09-23T18:41:14.090Z"
+  },
+  {
+    "_id": "4eb4d716524de8bc8df22b48",
+    "projectId": "91c22b3a5381ee085ce4d576",
+    "startedAt": "2026-09-23T18:42:02.309Z",
+    "finishedAt": "2026-09-23T18:42:02.341Z",
+    "status": "success",
+    "stats": {
+      "totalCommits": 10,
+      "totalPRs": 5,
+      "mergedPRs": 3,
+      "openPRs": 1,
+      "closedIssues": 4,
+      "openIssues": 1,
+      "totalContributors": 4
+    },
+    "createdAt": "2026-09-23T18:42:02.345Z"
   }
 ]

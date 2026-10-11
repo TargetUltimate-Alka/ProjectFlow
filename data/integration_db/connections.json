@@ -9,8 +9,8 @@
     "stars": 12,
     "forks": 3,
     "openIssues": 2,
-    "lastSyncedAt": "2026-09-15T20:06:50.187Z",
-    "syncStatus": "synced",
+    "lastSyncedAt": "2026-09-23T18:42:02.341Z",
+    "syncStatus": "syncing",
     "useDemoMode": true,
     "stats": {
       "totalCommits": 10,
@@ -22,7 +22,7 @@
       "totalContributors": 4
     },
     "createdAt": "2026-09-15T19:54:09.228Z",
-    "updatedAt": "2026-09-15T20:06:50.190Z",
+    "updatedAt": "2026-09-24T07:49:43.561Z",
     "syncError": null
   }
 ]

@@ -18,7 +18,7 @@
     "status": "active",
     "department": "Computer Science - Systems & Networking",
     "createdAt": "2026-09-15T19:54:05.469Z",
-    "updatedAt": "2026-09-15T20:24:21.657Z"
+    "updatedAt": "2026-09-19T13:27:05.340Z"
   },
   {
     "_id": "496891d6755313abe36601d4",
@@ -38,7 +38,8 @@
     "role": "Student",
     "status": "active",
     "department": "Computer Science & Engineering",
-    "createdAt": "2026-09-15T19:54:05.469Z"
+    "createdAt": "2026-09-15T19:54:05.469Z",
+    "updatedAt": "2026-09-24T08:41:01.548Z"
   },
   {
     "_id": "3a381f47eb0727ec613c12a2",
@@ -69,5 +70,25 @@
     "status": "active",
     "department": "Computer Science & Engineering",
     "createdAt": "2026-09-15T19:54:05.469Z"
+  },
+  {
+    "_id": "126ee7247860ab2a760fd15d",
+    "name": "Dr.  Alka",
+    "email": "alka@2947",
+    "passwordHash": "$2a$10$YwuQSOVZdkv3QU5EhNdVTu7FSr6Ll1J6syJLson1Jb1gYK6OSYTn2",
+    "role": "Faculty",
+    "department": "Computer Science & Engineering",
+    "status": "active",
+    "createdAt": "2026-09-19T13:28:28.982Z"
+  },
+  {
+    "_id": "c7cbccace7992094920478c7",
+    "name": "Radhika",
+    "email": "gradualka62026@gmail.com",
+    "passwordHash": "$2a$10$6vntxpH30YE1ZV/evD99BOXloqC/DhtejtXr7G33YuRzWUoYbHhay",
+    "role": "Student",
+    "status": "active",
+    "department": "Computer Science & Engineering",
+    "createdAt": "2026-09-24T08:33:40.660Z"
   }
 ]

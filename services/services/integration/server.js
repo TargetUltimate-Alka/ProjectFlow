@@ -69,6 +69,132 @@ function generateDemoData(repoOwner, repoName) {
   return { commits, pulls, issues, contributors };
 }
 
+// Robust GitHub URL parser supporting HTTPS, SSH, .git, trailing slashes, and owner/repo shorthand
+function parseGitHubUrl(input) {
+  if (!input || typeof input !== 'string') return null;
+  const clean = input.trim();
+  // Support ssh: git@github.com:owner/repo(.git)
+  const sshMatch = clean.match(/^git@github\.com:([a-zA-Z0-9_.-]+)\/([a-zA-Z0-9_.-]+?)(?:\.git)?$/i);
+  if (sshMatch) {
+    return { owner: sshMatch[1], repo: sshMatch[2] };
+  }
+  // Support http/https or github.com/owner/repo(.git)
+  const httpsMatch = clean.match(/(?:https?:\/\/)?(?:www\.)?github\.com\/([a-zA-Z0-9_.-]+)\/([a-zA-Z0-9_.-]+?)(?:\.git|\/|\?|#|$)/i);
+  if (httpsMatch) {
+    return { owner: httpsMatch[1], repo: httpsMatch[2] };
+  }
+  // Support simple "owner/repo" shorthand
+  const shorthandMatch = clean.match(/^([a-zA-Z0-9_.-]+)\/([a-zA-Z0-9_.-]+)$/);
+  if (shorthandMatch) {
+    return { owner: shorthandMatch[1], repo: shorthandMatch[2] };
+  }
+  return null;
+}
+
+// Fetch live repository facts directly from GitHub REST API
+async function fetchLiveGitHubData(repoOwner, repoName, token) {
+  const effectiveToken = token || process.env.GITHUB_TOKEN || process.env.GITHUB_PAT || null;
+  const headers = {
+    'User-Agent': 'ProjectFlow-Sync-Agent/1.0',
+    'Accept': 'application/vnd.github.v3+json'
+  };
+  if (effectiveToken) {
+    headers['Authorization'] = `Bearer ${effectiveToken}`;
+  }
+
+  // 1. Fetch Repository Info
+  const repoRes = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}`, { headers, timeout: 8000 });
+  const repoData = repoRes.data || {};
+  const repoInfo = {
+    stars: repoData.stargazers_count ?? 0,
+    forks: repoData.forks_count ?? 0,
+    openIssues: repoData.open_issues_count ?? 0
+  };
+
+  // 2. Fetch Commits (handle 409 for empty repositories)
+  let commits = [];
+  try {
+    const commitsRes = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/commits?per_page=30`, { headers, timeout: 8000 });
+    commits = (commitsRes.data || []).map(c => ({
+      sha: c.sha ? c.sha.substring(0, 7) : 'commit',
+      message: c.commit?.message || 'Commit message',
+      author: {
+        login: c.author?.login || c.commit?.author?.name || 'contributor',
+        name: c.commit?.author?.name || c.author?.login || 'Contributor',
+        avatar: c.author?.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'
+      },
+      timestamp: c.commit?.author?.date || c.commit?.committer?.date || new Date().toISOString()
+    }));
+  } catch (err) {
+    if (err.response?.status === 409) {
+      commits = [];
+    } else {
+      throw err;
+    }
+  }
+
+  // 3. Fetch Pull Requests
+  let pulls = [];
+  try {
+    const pullsRes = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/pulls?state=all&per_page=30`, { headers, timeout: 8000 });
+    pulls = (pullsRes.data || []).map(p => ({
+      number: p.number,
+      title: p.title || `PR #${p.number}`,
+      state: p.merged_at ? 'merged' : (p.state || 'open'),
+      mergedAt: p.merged_at || null,
+      createdAt: p.created_at || new Date().toISOString(),
+      author: {
+        login: p.user?.login || 'contributor',
+        name: p.user?.login || 'Contributor',
+        avatar: p.user?.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'
+      },
+      additions: 150,
+      deletions: 25
+    }));
+  } catch (err) {
+    pulls = [];
+  }
+
+  // 4. Fetch Issues (excluding PRs)
+  let issues = [];
+  try {
+    const issuesRes = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/issues?state=all&per_page=30`, { headers, timeout: 8000 });
+    issues = (issuesRes.data || [])
+      .filter(i => !i.pull_request)
+      .map(i => ({
+        number: i.number,
+        title: i.title || `Issue #${i.number}`,
+        state: i.state || 'open',
+        closedAt: i.closed_at || null,
+        createdAt: i.created_at || new Date().toISOString(),
+        author: {
+          login: i.user?.login || 'user',
+          name: i.user?.login || 'User'
+        }
+      }));
+  } catch (err) {
+    issues = [];
+  }
+
+  // 5. Fetch Contributors
+  let contributors = [];
+  try {
+    const contribRes = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/contributors?per_page=15`, { headers, timeout: 8000 });
+    contributors = Array.isArray(contribRes.data) ? contribRes.data.map(c => ({
+      login: c.login,
+      name: c.login,
+      avatar: c.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100',
+      commits: c.contributions || 1,
+      additions: (c.contributions || 1) * 45,
+      deletions: (c.contributions || 1) * 12
+    })) : [];
+  } catch (err) {
+    contributors = [];
+  }
+
+  return { repoInfo, commits, pulls, issues, contributors };
+}
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ service: 'integration-service', status: 'healthy', dbType: db.type });
@@ -86,16 +212,20 @@ app.post('/github/connect', authenticate, async (req, res) => {
     let repoName = repo;
 
     if (repoUrl && (!repoOwner || !repoName)) {
-      const match = repoUrl.match(/github\.com\/([^\/]+)\/([^\/\.]+)/i);
-      if (match) {
-        repoOwner = match[1];
-        repoName = match[2];
+      const parsed = parseGitHubUrl(repoUrl);
+      if (!parsed) {
+        return res.status(400).json({
+          error: `Invalid GitHub repository URL: "${repoUrl}". Expected format: https://github.com/owner/repository or owner/repository`
+        });
       }
+      repoOwner = parsed.owner;
+      repoName = parsed.repo;
     }
 
     if (!repoOwner || !repoName) {
-      repoOwner = 'projectflow-team';
-      repoName = 'academic-capstone-project';
+      return res.status(400).json({
+        error: 'Repository owner and name or a valid GitHub repository URL are required.'
+      });
     }
 
     const connectionDoc = {
@@ -107,12 +237,12 @@ app.post('/github/connect', authenticate, async (req, res) => {
       token: token ? '***STORED_SECURELY***' : null,
       rawToken: token || null,
       useDemoMode: useDemoMode !== false,
-      stars: 18,
-      forks: 4,
-      openIssues: 3,
+      stars: 0,
+      forks: 0,
+      openIssues: 0,
       connectedAt: new Date().toISOString(),
       lastSyncedAt: null,
-      syncStatus: 'connected',
+      syncStatus: 'connecting',
       connectedBy: req.user.id
     };
 
@@ -122,20 +252,43 @@ app.post('/github/connect', authenticate, async (req, res) => {
       { upsert: true }
     );
 
-    // Trigger initial synchronization immediately
-    performSync(projectId, repoOwner, repoName, token, connectionDoc.useDemoMode)
-      .catch(err => console.error(`[IntegrationService] Initial sync error for project ${projectId}:`, err.message));
-
-    res.json({
-      message: 'GitHub repository successfully connected',
-      connection: {
+    // Synchronously execute initial sync to validate repository and fetch real data
+    try {
+      const stats = await performSync(
         projectId,
-        repoFullName: connectionDoc.repoFullName,
-        repoUrl: connectionDoc.repoUrl,
-        syncStatus: 'syncing',
-        useDemoMode: connectionDoc.useDemoMode
-      }
-    });
+        repoOwner,
+        repoName,
+        token,
+        connectionDoc.useDemoMode
+      );
+
+      res.json({
+        message: 'GitHub repository successfully connected and synchronized',
+        connection: {
+          projectId,
+          repoFullName: connectionDoc.repoFullName,
+          repoUrl: connectionDoc.repoUrl,
+          syncStatus: 'synced',
+          useDemoMode: connectionDoc.useDemoMode,
+          dataSource: stats.dataSource,
+          syncWarning: stats.syncWarning || null,
+          stats
+        }
+      });
+    } catch (syncErr) {
+      await connectionsCollection.updateOne(
+        { projectId },
+        {
+          $set: {
+            syncStatus: 'failed',
+            syncError: syncErr.message,
+            lastFailedSyncAt: new Date().toISOString()
+          }
+        }
+      );
+      const statusCode = syncErr.message.includes('not found') ? 404 : (syncErr.message.includes('authentication failed') ? 401 : 400);
+      return res.status(statusCode).json({ error: syncErr.message });
+    }
   } catch (err) {
     console.error('[IntegrationService] Connect error:', err);
     res.status(500).json({ error: err.message });
@@ -147,176 +300,127 @@ async function performSync(projectId, repoOwner, repoName, token, useDemoMode) {
   const startedAt = new Date().toISOString();
   console.log(`[IntegrationService] Starting sync for project ${projectId} (${repoOwner}/${repoName})...`);
 
+  let commits = [];
+  let pulls = [];
+  let issues = [];
+  let contributors = [];
+  let repoInfo = { stars: 0, forks: 0, openIssues: 0 };
+  let isLive = false;
+  let syncWarning = null;
+
   try {
-    let commits = [];
-    let pulls = [];
-    let issues = [];
-    let contributors = [];
-    let repoInfo = { stars: 12, forks: 3, openIssues: 2 };
+    // 1. PRIMARY: Always attempt live GitHub API first
+    console.log(`[IntegrationService] Querying live GitHub API for ${repoOwner}/${repoName}...`);
+    const liveData = await fetchLiveGitHubData(repoOwner, repoName, token);
+    commits = liveData.commits;
+    pulls = liveData.pulls;
+    issues = liveData.issues;
+    contributors = liveData.contributors;
+    repoInfo = liveData.repoInfo;
+    isLive = true;
+    console.log(`[IntegrationService] LIVE GitHub data retrieved: ${commits.length} commits, ${pulls.length} PRs, ${contributors.length} contributors.`);
+  } catch (ghErr) {
+    const status = ghErr.response?.status;
+    const ghMessage = ghErr.response?.data?.message || ghErr.message;
+    console.warn(`[IntegrationService] Live GitHub API call failed (${status || 'Network'}): ${ghMessage}`);
 
-    if (!useDemoMode && token) {
-      const headers = {
-        'User-Agent': 'ProjectFlow-Sync-Agent/1.0',
-        'Authorization': `token ${token}`,
-        'Accept': 'application/vnd.github.v3+json'
-      };
+    // If repository not found (404) or bad credentials (401) -> Throw meaningful error
+    if (status === 404) {
+      throw new Error(`GitHub repository "${repoOwner}/${repoName}" was not found. Please verify the URL or provide a Personal Access Token for private repositories.`);
+    }
+    if (status === 401) {
+      throw new Error(`GitHub authentication failed for "${repoOwner}/${repoName}". Please verify your Personal Access Token.`);
+    }
 
-      try {
-        const repoRes = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}`, { headers, timeout: 7000 });
-        repoInfo = {
-          stars: repoRes.data.stargazers_count,
-          forks: repoRes.data.forks_count,
-          openIssues: repoRes.data.open_issues_count
-        };
+    const isRateLimit = status === 403 && (
+      ghMessage.toLowerCase().includes('rate limit') ||
+      ghErr.response?.headers?.['x-ratelimit-remaining'] === '0'
+    );
+    const isNetworkError = !ghErr.response;
 
-        const commitsRes = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/commits?per_page=30`, { headers, timeout: 7000 });
-        commits = commitsRes.data.map(c => ({
-          sha: c.sha.substring(0, 7),
-          message: c.commit.message,
-          author: {
-            login: c.author ? c.author.login : c.commit.author.name,
-            name: c.commit.author.name,
-            avatar: c.author ? c.author.avatar_url : 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'
-          },
-          timestamp: c.commit.author.date
-        }));
-
-        const pullsRes = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/pulls?state=all&per_page=30`, { headers, timeout: 7000 });
-        pulls = pullsRes.data.map(p => ({
-          number: p.number,
-          title: p.title,
-          state: p.merged_at ? 'merged' : p.state,
-          mergedAt: p.merged_at,
-          author: {
-            login: p.user ? p.user.login : 'contributor',
-            name: p.user ? p.user.login : 'Contributor',
-            avatar: p.user ? p.user.avatar_url : 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'
-          },
-          additions: 150,
-          deletions: 25
-        }));
-
-        const issuesRes = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/issues?state=all&per_page=30`, { headers, timeout: 7000 });
-        issues = issuesRes.data
-          .filter(i => !i.pull_request)
-          .map(i => ({
-            number: i.number,
-            title: i.title,
-            state: i.state,
-            closedAt: i.closed_at,
-            author: {
-              login: i.user ? i.user.login : 'user',
-              name: i.user ? i.user.login : 'User'
-            }
-          }));
-
-        const contribRes = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/contributors?per_page=15`, { headers, timeout: 7000 });
-        contributors = contribRes.data.map(c => ({
-          login: c.login,
-          name: c.login,
-          avatar: c.avatar_url,
-          commits: c.contributions,
-          additions: c.contributions * 45,
-          deletions: c.contributions * 12
-        }));
-      } catch (ghErr) {
-        console.warn(`[IntegrationService] Real GitHub fetch returned error (${ghErr.message}). Generating high-fidelity sandbox snapshot to keep platform resilient.`);
-        const demo = generateDemoData(repoOwner, repoName);
-        commits = demo.commits;
-        pulls = demo.pulls;
-        issues = demo.issues;
-        contributors = demo.contributors;
-      }
-    } else {
-      // High-fidelity demo data
+    // Fall back to existing mock/sandbox dataset ONLY when rate-limited or network down AND fallback is enabled
+    if (useDemoMode && (isRateLimit || isNetworkError || (status && status >= 500))) {
+      syncWarning = isRateLimit
+        ? 'GitHub API rate limit reached (60 req/hr unauthenticated limit). Operating in resilient sandbox fallback mode.'
+        : `GitHub API unreachable (${ghMessage}). Operating in resilient sandbox fallback mode.`;
+      console.warn(`[IntegrationService] Fallback activated: ${syncWarning}`);
       const demo = generateDemoData(repoOwner, repoName);
       commits = demo.commits;
       pulls = demo.pulls;
       issues = demo.issues;
       contributors = demo.contributors;
+      repoInfo = { stars: 12, forks: 3, openIssues: 2 };
+      isLive = false;
+    } else {
+      if (isRateLimit) {
+        throw new Error('GitHub API rate limit exceeded (60 req/hr unauthenticated limit). Provide a GitHub Personal Access Token or enable sandbox fallback.');
+      }
+      throw new Error(`GitHub API request failed (${status || 'Network Error'}): ${ghMessage}`);
     }
-
-    // Atomic update to integration_db
-    await commitsCollection.deleteMany({ projectId });
-    await pullsCollection.deleteMany({ projectId });
-    await issuesCollection.deleteMany({ projectId });
-    await contributorsCollection.deleteMany({ projectId });
-
-    if (commits.length > 0) await commitsCollection.insertMany(commits.map(c => ({ ...c, projectId })));
-    if (pulls.length > 0) await pullsCollection.insertMany(pulls.map(p => ({ ...p, projectId })));
-    if (issues.length > 0) await issuesCollection.insertMany(issues.map(i => ({ ...i, projectId })));
-    if (contributors.length > 0) await contributorsCollection.insertMany(contributors.map(c => ({ ...c, projectId })));
-
-    const finishedAt = new Date().toISOString();
-    const stats = {
-      totalCommits: commits.length,
-      totalPRs: pulls.length,
-      mergedPRs: pulls.filter(p => p.state === 'merged').length,
-      openPRs: pulls.filter(p => p.state === 'open').length,
-      closedIssues: issues.filter(i => i.state === 'closed').length,
-      openIssues: issues.filter(i => i.state === 'open').length,
-      totalContributors: contributors.length
-    };
-
-    // Update connection snapshot
-    await connectionsCollection.updateOne(
-      { projectId },
-      {
-        $set: {
-          lastSyncedAt: finishedAt,
-          syncStatus: 'synced',
-          syncError: null,
-          stars: repoInfo.stars,
-          forks: repoInfo.forks,
-          openIssues: repoInfo.openIssues,
-          stats
-        }
-      }
-    );
-
-    // Save sync audit record
-    await syncLogsCollection.insertOne({
-      projectId,
-      startedAt,
-      finishedAt,
-      status: 'success',
-      stats
-    });
-
-    console.log(`[IntegrationService] Sync succeeded for project ${projectId}. Found ${stats.totalCommits} commits, ${stats.totalPRs} PRs.`);
-
-    // Publish SyncCompleted event to RabbitMQ / EventBus
-    await eventBus.publish('SyncCompleted', {
-      projectId,
-      stats,
-      syncedAt: finishedAt
-    });
-
-    return stats;
-  } catch (err) {
-    console.error(`[IntegrationService] Sync failed for project ${projectId}:`, err);
-    // RESILIENCE RULE: Never delete previously valid synced data on failure. Keep status flagged.
-    await connectionsCollection.updateOne(
-      { projectId },
-      {
-        $set: {
-          syncStatus: 'failed',
-          syncError: err.message,
-          lastFailedSyncAt: new Date().toISOString()
-        }
-      }
-    );
-
-    await syncLogsCollection.insertOne({
-      projectId,
-      startedAt,
-      finishedAt: new Date().toISOString(),
-      status: 'failed',
-      error: err.message
-    });
-
-    throw err;
   }
+
+  // Atomic update to integration_db
+  await commitsCollection.deleteMany({ projectId });
+  await pullsCollection.deleteMany({ projectId });
+  await issuesCollection.deleteMany({ projectId });
+  await contributorsCollection.deleteMany({ projectId });
+
+  if (commits.length > 0) await commitsCollection.insertMany(commits.map(c => ({ ...c, projectId })));
+  if (pulls.length > 0) await pullsCollection.insertMany(pulls.map(p => ({ ...p, projectId })));
+  if (issues.length > 0) await issuesCollection.insertMany(issues.map(i => ({ ...i, projectId })));
+  if (contributors.length > 0) await contributorsCollection.insertMany(contributors.map(c => ({ ...c, projectId })));
+
+  const finishedAt = new Date().toISOString();
+  const stats = {
+    totalCommits: commits.length,
+    totalPRs: pulls.length,
+    mergedPRs: pulls.filter(p => p.state === 'merged').length,
+    openPRs: pulls.filter(p => p.state === 'open').length,
+    closedIssues: issues.filter(i => i.state === 'closed').length,
+    openIssues: issues.filter(i => i.state === 'open').length,
+    totalContributors: contributors.length
+  };
+
+  // Update connection snapshot
+  await connectionsCollection.updateOne(
+    { projectId },
+    {
+      $set: {
+        lastSyncedAt: finishedAt,
+        syncStatus: 'synced',
+        syncError: null,
+        syncWarning: syncWarning || null,
+        dataSource: isLive ? 'live' : 'mock',
+        stars: repoInfo.stars,
+        forks: repoInfo.forks,
+        openIssues: repoInfo.openIssues,
+        stats
+      }
+    }
+  );
+
+  // Save sync audit record
+  await syncLogsCollection.insertOne({
+    projectId,
+    startedAt,
+    finishedAt,
+    status: 'success',
+    dataSource: isLive ? 'live' : 'mock',
+    warning: syncWarning || null,
+    stats
+  });
+
+  console.log(`[IntegrationService] Sync finished for project ${projectId}. Source: [${isLive ? 'LIVE GITHUB' : 'MOCK SANDBOX'}]. Total Commits: ${stats.totalCommits}, PRs: ${stats.totalPRs}.`);
+
+  // Publish SyncCompleted event to RabbitMQ / EventBus
+  await eventBus.publish('SyncCompleted', {
+    projectId,
+    stats,
+    dataSource: isLive ? 'live' : 'mock',
+    syncedAt: finishedAt
+  });
+
+  return { ...stats, dataSource: isLive ? 'live' : 'mock', syncWarning };
 }
 
 // Trigger synchronization
@@ -344,6 +448,8 @@ app.post('/github/:projectId/sync', authenticate, async (req, res) => {
       message: 'GitHub synchronization completed successfully',
       lastSyncedAt: new Date().toISOString(),
       syncStatus: 'synced',
+      dataSource: stats.dataSource,
+      syncWarning: stats.syncWarning || null,
       stats
     });
   } catch (err) {
@@ -351,8 +457,8 @@ app.post('/github/:projectId/sync', authenticate, async (req, res) => {
   }
 });
 
-// Get repository connection status & overview
-app.get('/github/:projectId/status', authenticate, async (req, res) => {
+// Get repository connection status & overview (Permits reading by user and internal microservices)
+app.get('/github/:projectId/status', async (req, res) => {
   try {
     const { projectId } = req.params;
     const connection = await connectionsCollection.findOne({ projectId });
@@ -366,7 +472,7 @@ app.get('/github/:projectId/status', authenticate, async (req, res) => {
     const contributorsCount = await contributorsCollection.countDocuments({ projectId });
 
     res.json({
-      connected: true,
+      connected: connection.syncStatus !== 'failed' && Boolean(connection.repoFullName),
       repoFullName: connection.repoFullName,
       repoUrl: connection.repoUrl,
       stars: connection.stars || 0,
@@ -375,7 +481,9 @@ app.get('/github/:projectId/status', authenticate, async (req, res) => {
       lastSyncedAt: connection.lastSyncedAt,
       syncStatus: connection.syncStatus || 'synced',
       syncError: connection.syncError || null,
+      syncWarning: connection.syncWarning || null,
       useDemoMode: connection.useDemoMode,
+      dataSource: connection.dataSource || 'live',
       stats: {
         totalCommits: commitsCount,
         totalPRs: pulls.length,
@@ -476,6 +584,8 @@ app.get('/github/:projectId/evidence', async (req, res) => {
       repoUrl: connection.repoUrl,
       lastSyncedAt: connection.lastSyncedAt,
       syncStatus: connection.syncStatus,
+      dataSource: connection.dataSource || 'live',
+      syncWarning: connection.syncWarning || null,
       totalCommits: commits.length,
       totalPRs: pulls.length,
       mergedPRs: pulls.filter(p => p.state === 'merged').length,

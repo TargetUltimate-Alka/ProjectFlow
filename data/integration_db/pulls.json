@@ -1,10 +1,10 @@
 [
   {
-    "_id": "3bffcc2e21e8af83b91837e0",
+    "_id": "cea3c38a56534c149bbdafe9",
     "number": 104,
     "title": "feat: Real-time milestone evidence synchronization",
     "state": "merged",
-    "mergedAt": "2026-09-15T18:36:50.155Z",
+    "mergedAt": "2026-09-23T17:12:02.309Z",
     "author": {
       "login": "alex-chen",
       "name": "Alex Chen",
@@ -14,14 +14,14 @@
     "additions": 420,
     "deletions": 65,
     "projectId": "91c22b3a5381ee085ce4d576",
-    "createdAt": "2026-09-15T20:06:50.180Z"
+    "createdAt": "2026-09-23T18:42:02.331Z"
   },
   {
-    "_id": "5ed5ffd62b88e8eda4f40864",
+    "_id": "823a263b53be4c0d9b27dcf1",
     "number": 103,
     "title": "feat: Rubric scoring engine and evaluation feedback",
     "state": "merged",
-    "mergedAt": "2026-09-15T15:06:50.155Z",
+    "mergedAt": "2026-09-23T13:42:02.309Z",
     "author": {
       "login": "marcus-vance",
       "name": "Marcus Vance",
@@ -31,14 +31,14 @@
     "additions": 280,
     "deletions": 40,
     "projectId": "91c22b3a5381ee085ce4d576",
-    "createdAt": "2026-09-15T20:06:50.180Z"
+    "createdAt": "2026-09-23T18:42:02.331Z"
   },
   {
-    "_id": "2903f7d7e14aa475c59545b8",
+    "_id": "7de546d480d0feb6d06ac7d9",
     "number": 102,
     "title": "feat: Add secure JWT authorization and gateway proxying",
     "state": "merged",
-    "mergedAt": "2026-09-15T00:06:50.155Z",
+    "mergedAt": "2026-09-22T22:42:02.309Z",
     "author": {
       "login": "priya-patel",
       "name": "Priya Patel",
@@ -48,10 +48,10 @@
     "additions": 510,
     "deletions": 110,
     "projectId": "91c22b3a5381ee085ce4d576",
-    "createdAt": "2026-09-15T20:06:50.180Z"
+    "createdAt": "2026-09-23T18:42:02.331Z"
   },
   {
-    "_id": "008073765008a16fd6534ca1",
+    "_id": "293b0d470f1e604e2f0175be",
     "number": 101,
     "title": "docs: Requirements traceability matrix and SRS review",
     "state": "closed",
@@ -65,10 +65,10 @@
     "additions": 90,
     "deletions": 12,
     "projectId": "91c22b3a5381ee085ce4d576",
-    "createdAt": "2026-09-15T20:06:50.180Z"
+    "createdAt": "2026-09-23T18:42:02.331Z"
   },
   {
-    "_id": "39b2ce33753f929fe4b8542d",
+    "_id": "d82dedf4dcebaf4008dcc84b",
     "number": 105,
     "title": "test: End-to-end task workflow coverage",
     "state": "open",
@@ -82,6 +82,6 @@
     "additions": 140,
     "deletions": 18,
     "projectId": "91c22b3a5381ee085ce4d576",
-    "createdAt": "2026-09-15T20:06:50.180Z"
+    "createdAt": "2026-09-23T18:42:02.331Z"
   }
 ]

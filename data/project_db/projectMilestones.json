@@ -14,9 +14,9 @@
       "✓ Issues Closed: 4/1 completed issues",
       "✓ Document Artifact: SRS verified in Documents"
     ],
-    "lastCheckedAt": "2026-09-15T20:26:10.144Z",
+    "lastCheckedAt": "2026-10-11T15:38:42.804Z",
     "createdAt": "2026-09-15T19:54:06.760Z",
-    "updatedAt": "2026-09-15T20:26:10.161Z"
+    "updatedAt": "2026-10-11T15:38:42.818Z"
   },
   {
     "_id": "5a4eabcff335b2898ca5bf9e",
@@ -33,9 +33,9 @@
       "✓ Issues Closed: 4/3 completed issues",
       "✓ Document Artifact: Architecture Design verified in Documents"
     ],
-    "lastCheckedAt": "2026-09-15T20:26:10.181Z",
+    "lastCheckedAt": "2026-10-11T15:38:42.871Z",
     "createdAt": "2026-09-15T19:54:06.760Z",
-    "updatedAt": "2026-09-15T20:26:10.188Z"
+    "updatedAt": "2026-10-11T15:38:42.872Z"
   },
   {
     "_id": "2301a41814ec3631e60b8585",
@@ -52,8 +52,8 @@
       "⏳ Issues Closed: 4/5 closed",
       "⏳ Document Artifact: Final Report required (upload in Documents)"
     ],
-    "lastCheckedAt": "2026-09-15T20:26:10.206Z",
+    "lastCheckedAt": "2026-10-11T15:38:42.877Z",
     "createdAt": "2026-09-15T19:54:06.760Z",
-    "updatedAt": "2026-09-15T20:26:10.210Z"
+    "updatedAt": "2026-10-11T15:38:42.879Z"
   }
 ]
