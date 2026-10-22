@@ -39,15 +39,5 @@
     "isLeader": false,
     "addedAt": "2026-09-15T19:54:06.754Z",
     "createdAt": "2026-09-15T19:54:06.755Z"
-  },
-  {
-    "_id": "b35993f5de482078c1e08450",
-    "projectId": "91c22b3a5381ee085ce4d576",
-    "name": "abc",
-    "email": "gradualka62026@gmail.com",
-    "role": "Fullstack Developer",
-    "isLeader": false,
-    "addedAt": "2026-09-24T08:34:56.645Z",
-    "createdAt": "2026-09-24T08:34:56.648Z"
   }
 ]

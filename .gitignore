@@ -4,6 +4,7 @@ node_modules/
 services/*/node_modules/
 gateway/node_modules/
 frontend/node_modules/
+dist/
 
 # Environment variables
 .env
