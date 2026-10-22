@@ -1,4 +1,6 @@
-const BASE_URL = '/api';
+import { mockService } from './mockData';
+
+const BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '') || '/api';
 
 export function getToken() {
   return localStorage.getItem('projectflow_token');
@@ -25,98 +27,210 @@ export function setUser(user) {
   }
 }
 
-async function request(endpoint, options = {}) {
-  const token = getToken();
-  const headers = {
-    'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    ...(options.headers || {})
-  };
+async function request(endpoint, options = {}, fallbackFn = null) {
+  try {
+    const token = getToken();
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers || {})
+    };
 
-  const config = {
-    ...options,
-    headers
-  };
+    const config = {
+      ...options,
+      headers
+    };
 
-  const response = await fetch(`${BASE_URL}${endpoint}`, config);
-  const data = await response.json().catch(() => ({}));
+    const response = await fetch(`${BASE_URL}${endpoint}`, config);
+    const contentType = response.headers.get('content-type') || '';
 
-  if (!response.ok) {
-    throw new Error(data.error || `HTTP error ${response.status}`);
+    // If Netlify redirected the API request to index.html (SPA catch-all), or received non-JSON
+    if (contentType.includes('text/html')) {
+      if (fallbackFn) return await fallbackFn();
+      throw new Error(`Endpoint returned HTML (backend not available at ${BASE_URL})`);
+    }
+
+    if (!response.ok) {
+      if (fallbackFn) return await fallbackFn();
+      const data = await response.json().catch(() => ({}));
+      throw new Error(data.error || `HTTP error ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (err) {
+    if (fallbackFn) {
+      console.info(`[ProjectFlow Demo Fallback] Used for ${endpoint}:`, err.message);
+      return await fallbackFn();
+    }
+    throw err;
   }
-
-  return data;
 }
 
 export const api = {
   // Auth
-  login: (credentials) => request('/auth/login', { method: 'POST', body: JSON.stringify(credentials) }),
-  register: (userData) => request('/auth/register', { method: 'POST', body: JSON.stringify(userData) }),
-  getMe: () => request('/auth/me'),
-  getUsers: () => request('/auth/users'),
-  getFaculty: () => request('/auth/faculty'),
-  createUser: (userData) => request('/auth/users', { method: 'POST', body: JSON.stringify(userData) }),
-  updateUser: (id, data) => request(`/auth/users/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  login: (credentials) =>
+    request('/auth/login', { method: 'POST', body: JSON.stringify(credentials) }, () => mockService.login(credentials)),
+
+  register: (userData) =>
+    request('/auth/register', { method: 'POST', body: JSON.stringify(userData) }, () => mockService.register(userData)),
+
+  getMe: () =>
+    request('/auth/me', {}, () => mockService.getMe(getToken())),
+
+  getUsers: () =>
+    request('/auth/users', {}, () => mockService.getUsers()),
+
+  getFaculty: () =>
+    request('/auth/faculty', {}, () => mockService.getFaculty()),
+
+  createUser: (userData) =>
+    request('/auth/users', { method: 'POST', body: JSON.stringify(userData) }, () => mockService.createUser(userData)),
+
+  updateUser: (id, data) =>
+    request(`/auth/users/${id}`, { method: 'PUT', body: JSON.stringify(data) }, () => mockService.updateUser(id, data)),
 
   // Projects
   getProjects: (params = {}) => {
     const qs = new URLSearchParams(params).toString();
-    return request(`/projects${qs ? '?' + qs : ''}`);
+    return request(`/projects${qs ? '?' + qs : ''}`, {}, () => mockService.getProjects());
   },
-  getProject: (id) => request(`/projects/${id}`),
-  createProject: (data) => request('/projects', { method: 'POST', body: JSON.stringify(data) }),
-  updateProject: (id, data) => request(`/projects/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
-  deleteProject: (id) => request(`/projects/${id}`, { method: 'DELETE' }),
-  getProjectOverview: (id) => request(`/projects/${id}/overview`),
+
+  getProject: (id) =>
+    request(`/projects/${id}`, {}, () => mockService.getProject(id)),
+
+  createProject: (data) =>
+    request('/projects', { method: 'POST', body: JSON.stringify(data) }, () => mockService.createProject(data)),
+
+  updateProject: (id, data) =>
+    request(`/projects/${id}`, { method: 'PUT', body: JSON.stringify(data) }, () => mockService.updateProject(id, data)),
+
+  deleteProject: (id) =>
+    request(`/projects/${id}`, { method: 'DELETE' }, () => mockService.deleteProject(id)),
+
+  getProjectOverview: (id) =>
+    request(`/projects/${id}/overview`, {}, () => mockService.getProjectOverview(id)),
 
   // Team
-  getTeam: (projectId) => request(`/projects/${projectId}/team`),
-  addTeamMember: (projectId, memberData) => request(`/projects/${projectId}/team/members`, { method: 'POST', body: JSON.stringify(memberData) }),
-  removeTeamMember: (projectId, memberId) => request(`/projects/${projectId}/team/members/${memberId}`, { method: 'DELETE' }),
+  getTeam: (projectId) =>
+    request(`/projects/${projectId}/team`, {}, () => mockService.getTeam(projectId)),
+
+  addTeamMember: (projectId, memberData) =>
+    request(`/projects/${projectId}/team/members`, { method: 'POST', body: JSON.stringify(memberData) }, () =>
+      mockService.addTeamMember(projectId, memberData)
+    ),
+
+  removeTeamMember: (projectId, memberId) =>
+    request(`/projects/${projectId}/team/members/${memberId}`, { method: 'DELETE' }, () =>
+      mockService.removeTeamMember(projectId, memberId)
+    ),
 
   // Requirements (manually entered by students per SRS)
-  getRequirements: (projectId) => request(`/projects/${projectId}/requirements`),
-  createRequirement: (projectId, data) => request(`/projects/${projectId}/requirements`, { method: 'POST', body: JSON.stringify(data) }),
-  updateRequirement: (projectId, reqId, data) => request(`/projects/${projectId}/requirements/${reqId}`, { method: 'PUT', body: JSON.stringify(data) }),
-  deleteRequirement: (projectId, reqId) => request(`/projects/${projectId}/requirements/${reqId}`, { method: 'DELETE' }),
+  getRequirements: (projectId) =>
+    request(`/projects/${projectId}/requirements`, {}, () => mockService.getRequirements(projectId)),
+
+  createRequirement: (projectId, data) =>
+    request(`/projects/${projectId}/requirements`, { method: 'POST', body: JSON.stringify(data) }, () =>
+      mockService.createRequirement(projectId, data)
+    ),
+
+  updateRequirement: (projectId, reqId, data) =>
+    request(`/projects/${projectId}/requirements/${reqId}`, { method: 'PUT', body: JSON.stringify(data) }, () =>
+      mockService.updateRequirement(projectId, reqId, data)
+    ),
+
+  deleteRequirement: (projectId, reqId) =>
+    request(`/projects/${projectId}/requirements/${reqId}`, { method: 'DELETE' }, () =>
+      mockService.deleteRequirement(projectId, reqId)
+    ),
 
   // Milestones & Criteria
-  getMilestones: (projectId) => request(`/projects/${projectId}/milestones`),
-  recalculateMilestones: (projectId) => request(`/projects/${projectId}/milestones/recalculate`, { method: 'POST' }),
-  getCriteria: () => request('/criteria'),
-  createCriteria: (data) => request('/criteria', { method: 'POST', body: JSON.stringify(data) }),
-  updateCriteria: (id, data) => request(`/criteria/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
-  deleteCriteria: (id) => request(`/criteria/${id}`, { method: 'DELETE' }),
+  getMilestones: (projectId) =>
+    request(`/projects/${projectId}/milestones`, {}, () => mockService.getMilestones(projectId)),
+
+  recalculateMilestones: (projectId) =>
+    request(`/projects/${projectId}/milestones/recalculate`, { method: 'POST' }, () =>
+      mockService.recalculateMilestones(projectId)
+    ),
+
+  getCriteria: () =>
+    request('/criteria', {}, () => mockService.getCriteria()),
+
+  createCriteria: (data) =>
+    request('/criteria', { method: 'POST', body: JSON.stringify(data) }, () => mockService.createCriteria(data)),
+
+  updateCriteria: (id, data) =>
+    request(`/criteria/${id}`, { method: 'PUT', body: JSON.stringify(data) }, () => mockService.updateCriteria(id, data)),
+
+  deleteCriteria: (id) =>
+    request(`/criteria/${id}`, { method: 'DELETE' }, () => mockService.deleteCriteria(id)),
 
   // Documents
-  getDocuments: (projectId) => request(`/projects/${projectId}/documents`),
-  uploadDocument: (projectId, data) => request(`/projects/${projectId}/documents`, { method: 'POST', body: JSON.stringify(data) }),
-  deleteDocument: (projectId, docId) => request(`/projects/${projectId}/documents/${docId}`, { method: 'DELETE' }),
+  getDocuments: (projectId) =>
+    request(`/projects/${projectId}/documents`, {}, () => mockService.getDocuments(projectId)),
+
+  uploadDocument: (projectId, data) =>
+    request(`/projects/${projectId}/documents`, { method: 'POST', body: JSON.stringify(data) }, () =>
+      mockService.uploadDocument(projectId, data)
+    ),
+
+  deleteDocument: (projectId, docId) =>
+    request(`/projects/${projectId}/documents/${docId}`, { method: 'DELETE' }, () =>
+      mockService.deleteDocument(projectId, docId)
+    ),
 
   // Tasks
   getTasks: (projectId, filter = {}) => {
     const qs = new URLSearchParams(filter).toString();
-    return request(`/tasks/projects/${projectId}/tasks${qs ? '?' + qs : ''}`);
+    return request(`/tasks/projects/${projectId}/tasks${qs ? '?' + qs : ''}`, {}, () =>
+      mockService.getTasks(projectId, filter)
+    );
   },
-  createTask: (data) => request('/tasks', { method: 'POST', body: JSON.stringify(data) }),
-  updateTask: (id, data) => request(`/tasks/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
-  deleteTask: (id) => request(`/tasks/${id}`, { method: 'DELETE' }),
+
+  createTask: (data) =>
+    request('/tasks', { method: 'POST', body: JSON.stringify(data) }, () => mockService.createTask(data)),
+
+  updateTask: (id, data) =>
+    request(`/tasks/${id}`, { method: 'PUT', body: JSON.stringify(data) }, () => mockService.updateTask(id, data)),
+
+  deleteTask: (id) =>
+    request(`/tasks/${id}`, { method: 'DELETE' }, () => mockService.deleteTask(id)),
 
   // GitHub Integration
-  connectGitHub: (data) => request('/github/connect', { method: 'POST', body: JSON.stringify(data) }),
-  syncGitHub: (projectId) => request(`/github/${projectId}/sync`, { method: 'POST' }),
-  getGitHubStatus: (projectId) => request(`/github/${projectId}/status`),
-  getGitHubActivity: (projectId) => request(`/github/${projectId}/activity`),
-  getGitHubEvidence: (projectId) => request(`/github/${projectId}/evidence`),
+  connectGitHub: (data) =>
+    request('/github/connect', { method: 'POST', body: JSON.stringify(data) }, () => mockService.connectGitHub(data)),
+
+  syncGitHub: (projectId) =>
+    request(`/github/${projectId}/sync`, { method: 'POST' }, () => mockService.syncGitHub(projectId)),
+
+  getGitHubStatus: (projectId) =>
+    request(`/github/${projectId}/status`, {}, () => mockService.getGitHubStatus(projectId)),
+
+  getGitHubActivity: (projectId) =>
+    request(`/github/${projectId}/activity`, {}, () => mockService.getGitHubActivity(projectId)),
+
+  getGitHubEvidence: (projectId) =>
+    request(`/github/${projectId}/evidence`, {}, () => mockService.getGitHubEvidence(projectId)),
 
   // Evaluation
-  getEvaluations: (projectId) => request(`/evaluations/${projectId}`),
-  createEvaluation: (data) => request('/evaluations', { method: 'POST', body: JSON.stringify(data) }),
-  updateEvaluation: (id, data) => request(`/evaluations/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
-  getRubricTemplate: () => request('/evaluations/rubric-template'),
+  getEvaluations: (projectId) =>
+    request(`/evaluations/${projectId}`, {}, () => mockService.getEvaluations(projectId)),
+
+  createEvaluation: (data) =>
+    request('/evaluations', { method: 'POST', body: JSON.stringify(data) }, () => mockService.createEvaluation(data)),
+
+  updateEvaluation: (id, data) =>
+    request(`/evaluations/${id}`, { method: 'PUT', body: JSON.stringify(data) }, () => mockService.updateEvaluation(id, data)),
+
+  getRubricTemplate: () =>
+    request('/evaluations/rubric-template', {}, () => mockService.getRubricTemplate()),
 
   // Notifications
-  getNotifications: () => request('/notifications'),
-  markNotificationRead: (id) => request(`/notifications/${id}/read`, { method: 'PUT' }),
-  markAllNotificationsRead: () => request('/notifications/read-all', { method: 'PUT' })
+  getNotifications: () =>
+    request('/notifications', {}, () => mockService.getNotifications()),
+
+  markNotificationRead: (id) =>
+    request(`/notifications/${id}/read`, { method: 'PUT' }, () => mockService.markNotificationRead(id)),
+
+  markAllNotificationsRead: () =>
+    request('/notifications/read-all', { method: 'PUT' }, () => mockService.markAllNotificationsRead())
 };

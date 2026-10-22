@@ -4,6 +4,7 @@
   "description": "Microservice-based academic software project lifecycle and evaluation platform",
   "private": true,
   "scripts": {
+    "build": "npm --prefix client install && npm --prefix client run build",
     "start": "node scripts/start-all.js",
     "seed": "node scripts/seed.js",
     "dev:gateway": "node gateway/server.js",

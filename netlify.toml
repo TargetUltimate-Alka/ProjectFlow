@@ -1,0 +1,18 @@
+# Netlify Build & Deploy Configuration for ProjectFlow
+
+[build]
+  # Base directory where client code lives
+  base = "client"
+  # Directory where Vite outputs the production build
+  publish = "dist"
+  # Build command executed inside the base directory
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Redirect all frontend routes to index.html for Single Page Application (SPA) routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

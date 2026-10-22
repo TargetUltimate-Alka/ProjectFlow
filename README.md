@@ -143,6 +143,21 @@ The gateway exposes a health endpoint:
 curl http://localhost:5000/health
 ```
 
+## Netlify Deployment
+
+This repository is pre-configured with `netlify.toml` and `_redirects` for turnkey deployment on Netlify:
+
+1. **Import Repository**: In your Netlify dashboard, connect this GitHub repository (`TargetUltimate-Alka/projectFlow`).
+2. **Build Settings**: Netlify automatically detects the configuration from `netlify.toml`:
+   - **Base directory**: `client`
+   - **Build command**: `npm run build`
+   - **Publish directory**: `dist` (or `client/dist` if base is repository root)
+3. **Client-Side Routing**: Handled automatically via `_redirects` and `netlify.toml` (`/* /index.html 200`).
+4. **API Integration**:
+   - For standalone static demo & evaluation (e.g. grading or preview), the frontend includes an automatic offline demo dataset supporting all 1-Click Instant Demo roles (Student, Faculty, Admin).
+   - To connect to a live hosted backend (e.g. on Render, Railway, or AWS), set the environment variable in Netlify Site Settings: `VITE_API_URL=https://your-backend-api.com/api`.
+
+
 ## Documentation
 
 Project documentation is organized in the `docs/` directory and includes:
