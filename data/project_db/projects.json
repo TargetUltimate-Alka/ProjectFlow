@@ -1,15 +1,15 @@
 [
   {
-    "_id": "91c22b3a5381ee085ce4d576",
+    "_id": "d2261c3db3ed41210a017045",
     "name": "Distributed Real-time Cloud Pipeline (ProjectFlow)",
     "description": "A fault-tolerant microservices platform with automated GitHub synchronization and dynamic milestone evaluation for academic software teams.",
     "status": "In Progress",
-    "leadId": "6a6d2015893749fb5c124969",
+    "leadId": "0d9bcc1e93fd29444d9c8503",
     "leadName": "Alex Chen",
     "leadEmail": "alex.chen@student.edu",
-    "facultyId": "496891d6755313abe36601d4",
-    "facultyName": "Dr. Sarah Patel",
-    "createdAt": "2026-09-01T19:54:06.753Z",
-    "updatedAt": "2026-09-19T13:29:15.943Z"
+    "facultyId": "e40eccb0e168f2fe934ccca7",
+    "facultyName": "Dr. Robert Harrison",
+    "createdAt": "2026-10-09T17:44:25.056Z",
+    "updatedAt": "2026-10-23T17:44:25.056Z"
   }
 ]

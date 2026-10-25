@@ -327,7 +327,7 @@ export function StudentDashboard({ onNavigate }) {
                     </span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px', fontSize: '0.725rem', color: '#94a3b8' }}>
-                    <span>{item.author}</span>
+                    <span>{typeof item.author === 'object' ? (item.author?.name || item.author?.login || 'Contributor') : (item.author || 'Contributor')}</span>
                     <span>•</span>
                     <span>{new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                   </div>

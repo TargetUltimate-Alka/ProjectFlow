@@ -58,3 +58,9 @@ Thumbs.db
 # Docker
 docker-compose.override.yml
 /docs/
+
+# Redundant duplicate folder safeguards
+services/services/
+gateway/gateway/
+client/client/
+frontend/

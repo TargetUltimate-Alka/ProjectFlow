@@ -1,54 +1,54 @@
 [
   {
-    "_id": "b14eac1de7082c3c1e6760c4",
-    "projectId": "91c22b3a5381ee085ce4d576",
+    "_id": "b4fd5838ffcd09bb34bf2be0",
+    "projectId": "d2261c3db3ed41210a017045",
     "reqCode": "REQ-01",
     "title": "Decoupled Microservice Architecture with Independent Databases",
     "description": "Each service must maintain an isolated database with zero cross-database joins and communicate strictly via REST or messaging.",
     "priority": "High",
     "category": "Architecture",
     "status": "Verified",
-    "createdBy": "6a6d2015893749fb5c124969",
+    "createdBy": "0d9bcc1e93fd29444d9c8503",
     "createdByName": "Alex Chen",
-    "createdAt": "2026-09-15T19:54:06.756Z"
+    "createdAt": "2026-10-23T17:44:25.059Z"
   },
   {
-    "_id": "af9f8689bd2eb2e5e0130e95",
-    "projectId": "91c22b3a5381ee085ce4d576",
+    "_id": "31f64e251142cdf634a67fdd",
+    "projectId": "d2261c3db3ed41210a017045",
     "reqCode": "REQ-02",
     "title": "Automated GitHub Sync Pipeline for Commits & PRs",
     "description": "Never permit manual commit or PR entry; all development metrics must sync directly from GitHub REST API.",
     "priority": "High",
     "category": "Integration",
     "status": "Verified",
-    "createdBy": "6a6d2015893749fb5c124969",
+    "createdBy": "0d9bcc1e93fd29444d9c8503",
     "createdByName": "Alex Chen",
-    "createdAt": "2026-09-15T19:54:06.756Z"
+    "createdAt": "2026-10-23T17:44:25.059Z"
   },
   {
-    "_id": "5dc48dfa5b10066b9f15fbda",
-    "projectId": "91c22b3a5381ee085ce4d576",
+    "_id": "4f8c0cb9311c776e69e9ec45",
+    "projectId": "d2261c3db3ed41210a017045",
     "reqCode": "REQ-03",
     "title": "Automated Milestone Evidence Calculation Engine",
     "description": "Milestones must evaluate progress dynamically based on confirmed GitHub facts (commits, PRs, issues) and uploaded academic artifacts.",
     "priority": "High",
     "category": "Milestones",
     "status": "Verified",
-    "createdBy": "6a6d2015893749fb5c124969",
+    "createdBy": "0d9bcc1e93fd29444d9c8503",
     "createdByName": "Alex Chen",
-    "createdAt": "2026-09-15T19:54:06.756Z"
+    "createdAt": "2026-10-23T17:44:25.059Z"
   },
   {
-    "_id": "2feb71ff3548d2bc15dea199",
-    "projectId": "91c22b3a5381ee085ce4d576",
+    "_id": "1fe7e13c9e7929cd3774d78f",
+    "projectId": "d2261c3db3ed41210a017045",
     "reqCode": "REQ-04",
     "title": "Role-Specific Distinct Dashboard Shells",
     "description": "Students, Faculty, and Administrators must have dedicated UI shells with distinct action sets.",
     "priority": "Medium",
     "category": "Frontend",
     "status": "In Progress",
-    "createdBy": "6a6d2015893749fb5c124969",
+    "createdBy": "0d9bcc1e93fd29444d9c8503",
     "createdByName": "Alex Chen",
-    "createdAt": "2026-09-15T19:54:06.756Z"
+    "createdAt": "2026-10-23T17:44:25.059Z"
   }
 ]

@@ -417,7 +417,7 @@ export function GitHubPage() {
                         {ev.title}
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', color: '#94a3b8', marginTop: '2px' }}>
-                        <span>Author: <strong>{ev.author}</strong></span>
+                        <span>Author: <strong>{typeof ev.author === 'object' ? (ev.author?.name || ev.author?.login || 'Contributor') : (ev.author || 'Contributor')}</strong></span>
                         <span>•</span>
                         <span>{new Date(ev.timestamp).toLocaleString()}</span>
                       </div>

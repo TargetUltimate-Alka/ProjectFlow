@@ -1,7 +1,7 @@
 // Turnkey Mock & Offline Demo Data for ProjectFlow
 // Automatically activated when running as a static build on Netlify without live backend microservices
 
-const MOCK_STORAGE_KEY = 'projectflow_mock_db_v1';
+const MOCK_STORAGE_KEY = 'projectflow_mock_db_v2';
 
 const defaultAuthors = [
   { login: 'alex-chen', name: 'Alex Chen', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100' },
@@ -351,12 +351,12 @@ export const INITIAL_DATA = {
     }
   },
   githubActivity: [
-    { type: 'commit', id: 'act_1', sha: 'e4a1b09', message: 'feat: implement JWT auth middleware with refresh tokens', author: defaultAuthors[1], timestamp: '2026-10-22T07:15:00.000Z' },
-    { type: 'pull', id: 'act_2', number: 104, title: 'feat: Real-time milestone evidence synchronization', state: 'merged', author: defaultAuthors[0], timestamp: '2026-10-22T06:30:00.000Z' },
-    { type: 'commit', id: 'act_3', sha: '7b2c9df', message: 'fix: resolve race condition in milestone recalculation engine', author: defaultAuthors[0], timestamp: '2026-10-22T05:00:00.000Z' },
-    { type: 'issue', id: 'act_4', number: 12, title: 'Validate foreign key ID boundaries across microservice APIs', state: 'closed', author: defaultAuthors[0], timestamp: '2026-10-22T04:00:00.000Z' },
-    { type: 'pull', id: 'act_5', number: 103, title: 'feat: Rubric scoring engine and evaluation feedback', state: 'merged', author: defaultAuthors[2], timestamp: '2026-10-22T03:00:00.000Z' },
-    { type: 'commit', id: 'act_6', sha: '91f82c1', message: 'feat: add rubric evaluation calculations and scoring API', author: defaultAuthors[2], timestamp: '2026-10-22T02:00:00.000Z' }
+    { type: 'commit', id: 'act_1', sha: 'e4a1b09', message: 'feat: implement JWT auth middleware with refresh tokens', author: defaultAuthors[1].name, authorData: defaultAuthors[1], timestamp: '2026-10-22T07:15:00.000Z' },
+    { type: 'pull', id: 'act_2', number: 104, title: 'feat: Real-time milestone evidence synchronization', state: 'merged', author: defaultAuthors[0].name, authorData: defaultAuthors[0], timestamp: '2026-10-22T06:30:00.000Z' },
+    { type: 'commit', id: 'act_3', sha: '7b2c9df', message: 'fix: resolve race condition in milestone recalculation engine', author: defaultAuthors[0].name, authorData: defaultAuthors[0], timestamp: '2026-10-22T05:00:00.000Z' },
+    { type: 'issue', id: 'act_4', number: 12, title: 'Validate foreign key ID boundaries across microservice APIs', state: 'closed', author: defaultAuthors[0].name, authorData: defaultAuthors[0], timestamp: '2026-10-22T04:00:00.000Z' },
+    { type: 'pull', id: 'act_5', number: 103, title: 'feat: Rubric scoring engine and evaluation feedback', state: 'merged', author: defaultAuthors[2].name, authorData: defaultAuthors[2], timestamp: '2026-10-22T03:00:00.000Z' },
+    { type: 'commit', id: 'act_6', sha: '91f82c1', message: 'feat: add rubric evaluation calculations and scoring API', author: defaultAuthors[2].name, authorData: defaultAuthors[2], timestamp: '2026-10-22T02:00:00.000Z' }
   ],
   evaluations: [
     {

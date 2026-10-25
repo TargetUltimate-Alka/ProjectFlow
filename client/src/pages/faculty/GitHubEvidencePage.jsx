@@ -231,7 +231,7 @@ export function GitHubEvidencePage({ selectedProjectId }) {
                   <div>
                     <div style={{ fontWeight: 600, fontSize: '0.875rem' }}>{pr.title}</div>
                     <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '2px' }}>
-                      PR #{pr.number} by <strong>{pr.author?.name}</strong>
+                      PR #{pr.number} by <strong>{typeof pr.author === 'object' ? (pr.author?.name || pr.author?.login || 'Contributor') : (pr.author || 'Contributor')}</strong>
                     </div>
                   </div>
                 </div>

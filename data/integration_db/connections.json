@@ -1,19 +1,19 @@
 [
   {
-    "_id": "999bcee822431887db3370ed",
-    "projectId": "91c22b3a5381ee085ce4d576",
+    "_id": "fdb611015a5d475883560b18",
+    "projectId": "d2261c3db3ed41210a017045",
     "repoOwner": "projectflow-team",
     "repoName": "academic-capstone-project",
     "repoFullName": "projectflow-team/academic-capstone-project",
     "repoUrl": "https://github.com/projectflow-team/academic-capstone-project",
-    "stars": 12,
-    "forks": 3,
-    "openIssues": 2,
-    "lastSyncedAt": "2026-09-23T18:42:02.341Z",
+    "stars": 24,
+    "forks": 7,
+    "openIssues": 3,
+    "lastSyncedAt": "2026-10-23T17:32:28.277Z",
     "syncStatus": "syncing",
     "useDemoMode": true,
     "stats": {
-      "totalCommits": 10,
+      "totalCommits": 14,
       "totalPRs": 5,
       "mergedPRs": 3,
       "openPRs": 1,
@@ -21,8 +21,7 @@
       "openIssues": 1,
       "totalContributors": 4
     },
-    "createdAt": "2026-09-15T19:54:09.228Z",
-    "updatedAt": "2026-09-24T07:49:43.561Z",
-    "syncError": null
+    "createdAt": "2026-10-23T17:44:28.277Z",
+    "updatedAt": "2026-10-25T16:24:12.715Z"
   }
 ]

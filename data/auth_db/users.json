@@ -1,94 +1,72 @@
 [
   {
-    "_id": "c8f87315359c47b198daf61f",
+    "_id": "0bf90b6059aaa58c5cea9776",
     "name": "Dr. Arthur Vance",
     "email": "admin@projectflow.edu",
-    "passwordHash": "$2a$10$zXKUPjDe5hUimX7YvolzB.vtX02OEFdc8JMtwgFHGrsUTswWDX8T.",
+    "passwordHash": "$2a$10$HAy/eNvIlLdCdtBK/wMKVuxFDz.GYye9m3X0LAlgz4KasY3XdEf3G",
     "role": "Admin",
     "status": "active",
     "department": "Academic Administration & Capstone Oversight",
-    "createdAt": "2026-09-15T19:54:05.468Z"
+    "createdAt": "2026-10-23T17:44:23.432Z"
   },
   {
-    "_id": "f114140c2c5a78bed1251d8b",
+    "_id": "e40eccb0e168f2fe934ccca7",
     "name": "Dr. Robert Harrison",
     "email": "dr.harrison@projectflow.edu",
-    "passwordHash": "$2a$10$/hQpsMFC5Nc.9yqnCIDqJuQDJGH7yK6yaTUG6BF/WsjlIM/hRa8F.",
+    "passwordHash": "$2a$10$SZ8GOXyXDCxxOjau1fu4o.PYmnsAP8WaJTtdqsZbRcIfoNKDLNWIm",
     "role": "Faculty",
     "status": "active",
     "department": "Computer Science - Systems & Networking",
-    "createdAt": "2026-09-15T19:54:05.469Z",
-    "updatedAt": "2026-09-19T13:27:05.340Z"
+    "createdAt": "2026-10-23T17:44:23.434Z"
   },
   {
-    "_id": "496891d6755313abe36601d4",
+    "_id": "72f37d22dbeb416f262ea2db",
     "name": "Dr. Sarah Patel",
     "email": "dr.patel@projectflow.edu",
-    "passwordHash": "$2a$10$/hQpsMFC5Nc.9yqnCIDqJuQDJGH7yK6yaTUG6BF/WsjlIM/hRa8F.",
+    "passwordHash": "$2a$10$SZ8GOXyXDCxxOjau1fu4o.PYmnsAP8WaJTtdqsZbRcIfoNKDLNWIm",
     "role": "Faculty",
     "status": "active",
     "department": "Computer Science - Software Architecture",
-    "createdAt": "2026-09-15T19:54:05.469Z"
+    "createdAt": "2026-10-23T17:44:23.434Z"
   },
   {
-    "_id": "6a6d2015893749fb5c124969",
+    "_id": "0d9bcc1e93fd29444d9c8503",
     "name": "Alex Chen",
     "email": "alex.chen@student.edu",
-    "passwordHash": "$2a$10$/hQpsMFC5Nc.9yqnCIDqJuQDJGH7yK6yaTUG6BF/WsjlIM/hRa8F.",
+    "passwordHash": "$2a$10$SZ8GOXyXDCxxOjau1fu4o.PYmnsAP8WaJTtdqsZbRcIfoNKDLNWIm",
     "role": "Student",
     "status": "active",
     "department": "Computer Science & Engineering",
-    "createdAt": "2026-09-15T19:54:05.469Z",
-    "updatedAt": "2026-09-24T08:41:01.548Z"
+    "createdAt": "2026-10-23T17:44:23.434Z"
   },
   {
-    "_id": "3a381f47eb0727ec613c12a2",
+    "_id": "939613d01094258782d1d8ed",
     "name": "Priya Patel",
     "email": "priya.patel@student.edu",
-    "passwordHash": "$2a$10$/hQpsMFC5Nc.9yqnCIDqJuQDJGH7yK6yaTUG6BF/WsjlIM/hRa8F.",
+    "passwordHash": "$2a$10$SZ8GOXyXDCxxOjau1fu4o.PYmnsAP8WaJTtdqsZbRcIfoNKDLNWIm",
     "role": "Student",
     "status": "active",
     "department": "Computer Science & Engineering",
-    "createdAt": "2026-09-15T19:54:05.469Z"
+    "createdAt": "2026-10-23T17:44:23.434Z"
   },
   {
-    "_id": "509ff19bfbf337cb95dbcb8a",
+    "_id": "dac1d1c3d084192769ca3ef6",
     "name": "Marcus Vance",
     "email": "marcus.vance@student.edu",
-    "passwordHash": "$2a$10$/hQpsMFC5Nc.9yqnCIDqJuQDJGH7yK6yaTUG6BF/WsjlIM/hRa8F.",
+    "passwordHash": "$2a$10$SZ8GOXyXDCxxOjau1fu4o.PYmnsAP8WaJTtdqsZbRcIfoNKDLNWIm",
     "role": "Student",
     "status": "active",
     "department": "Computer Science & Engineering",
-    "createdAt": "2026-09-15T19:54:05.469Z"
+    "createdAt": "2026-10-23T17:44:23.434Z"
   },
   {
-    "_id": "fcec51637271ba7419db7085",
+    "_id": "4014e7748a138e28811b28d8",
     "name": "Elena Rostova",
     "email": "elena.rostova@student.edu",
-    "passwordHash": "$2a$10$/hQpsMFC5Nc.9yqnCIDqJuQDJGH7yK6yaTUG6BF/WsjlIM/hRa8F.",
+    "passwordHash": "$2a$10$SZ8GOXyXDCxxOjau1fu4o.PYmnsAP8WaJTtdqsZbRcIfoNKDLNWIm",
     "role": "Student",
     "status": "active",
     "department": "Computer Science & Engineering",
-    "createdAt": "2026-09-15T19:54:05.469Z"
-  },
-  {
-    "_id": "126ee7247860ab2a760fd15d",
-    "name": "Dr.  Alka",
-    "email": "alka@2947",
-    "passwordHash": "$2a$10$YwuQSOVZdkv3QU5EhNdVTu7FSr6Ll1J6syJLson1Jb1gYK6OSYTn2",
-    "role": "Faculty",
-    "department": "Computer Science & Engineering",
-    "status": "active",
-    "createdAt": "2026-09-19T13:28:28.982Z"
-  },
-  {
-    "_id": "c7cbccace7992094920478c7",
-    "name": "Radhika",
-    "email": "gradualka62026@gmail.com",
-    "passwordHash": "$2a$10$6vntxpH30YE1ZV/evD99BOXloqC/DhtejtXr7G33YuRzWUoYbHhay",
-    "role": "Student",
-    "status": "active",
-    "department": "Computer Science & Engineering",
-    "createdAt": "2026-09-24T08:33:40.660Z"
+    "createdAt": "2026-10-23T17:44:23.434Z"
   }
 ]

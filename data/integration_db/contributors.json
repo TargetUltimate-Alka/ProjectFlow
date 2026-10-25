@@ -1,46 +1,46 @@
 [
   {
-    "_id": "918e8a45aa39c3c99ddcc6d3",
+    "_id": "2bb4cc9f83e1bd5280f63c43",
+    "projectId": "d2261c3db3ed41210a017045",
     "login": "alex-chen",
     "name": "Alex Chen",
     "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100",
-    "commits": 14,
-    "additions": 1250,
-    "deletions": 310,
-    "projectId": "91c22b3a5381ee085ce4d576",
-    "createdAt": "2026-09-23T18:42:02.333Z"
+    "commits": 6,
+    "additions": 1420,
+    "deletions": 210,
+    "createdAt": "2026-10-23T17:44:28.295Z"
   },
   {
-    "_id": "2c24f075abb26802273de7ab",
+    "_id": "5c2ed04739ba32f4bbbb6a20",
+    "projectId": "d2261c3db3ed41210a017045",
     "login": "priya-patel",
     "name": "Priya Patel",
     "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100",
-    "commits": 11,
-    "additions": 980,
-    "deletions": 215,
-    "projectId": "91c22b3a5381ee085ce4d576",
-    "createdAt": "2026-09-23T18:42:02.333Z"
+    "commits": 4,
+    "additions": 890,
+    "deletions": 140,
+    "createdAt": "2026-10-23T17:44:28.295Z"
   },
   {
-    "_id": "4b3af77e395ab9a9794d71fd",
+    "_id": "61fcb2b19bbd1c9c88b66cd4",
+    "projectId": "d2261c3db3ed41210a017045",
     "login": "marcus-vance",
     "name": "Marcus Vance",
     "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100",
-    "commits": 9,
-    "additions": 740,
-    "deletions": 180,
-    "projectId": "91c22b3a5381ee085ce4d576",
-    "createdAt": "2026-09-23T18:42:02.333Z"
+    "commits": 3,
+    "additions": 650,
+    "deletions": 80,
+    "createdAt": "2026-10-23T17:44:28.295Z"
   },
   {
-    "_id": "c8ae2fcb36bf287481a5ff91",
+    "_id": "1c94b96ed10bcce47b122ddb",
+    "projectId": "d2261c3db3ed41210a017045",
     "login": "elena-rostova",
     "name": "Elena Rostova",
     "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100",
-    "commits": 6,
-    "additions": 350,
-    "deletions": 45,
-    "projectId": "91c22b3a5381ee085ce4d576",
-    "createdAt": "2026-09-23T18:42:02.333Z"
+    "commits": 1,
+    "additions": 230,
+    "deletions": 35,
+    "createdAt": "2026-10-23T17:44:28.295Z"
   }
 ]

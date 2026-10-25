@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 const crypto = require('crypto');
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 
 function generateId() {
   return crypto.randomBytes(12).toString('hex');
@@ -217,28 +218,110 @@ class EmbeddedCollection {
   }
 }
 
+function normalizeFilter(filter) {
+  if (!filter || typeof filter !== 'object') return filter;
+  const normalized = { ...filter };
+
+  if (normalized._id !== undefined) {
+    if (typeof normalized._id === 'string' && ObjectId.isValid(normalized._id) && normalized._id.length === 24) {
+      // Support finding documents whether stored with string _id or ObjectId
+      normalized._id = { $in: [normalized._id, new ObjectId(normalized._id)] };
+    }
+  }
+
+  return normalized;
+}
+
+class MongoCollectionWrapper {
+  constructor(rawCollection) {
+    this.raw = rawCollection;
+  }
+
+  find(filter = {}, options = {}) {
+    return this.raw.find(normalizeFilter(filter), options);
+  }
+
+  async findOne(filter = {}, options = {}) {
+    return await this.raw.findOne(normalizeFilter(filter), options);
+  }
+
+  async insertOne(doc, options = {}) {
+    const newDoc = {
+      _id: doc._id || generateId(),
+      ...doc,
+      createdAt: doc.createdAt || new Date().toISOString()
+    };
+    const result = await this.raw.insertOne(newDoc, options);
+    return {
+      acknowledged: result.acknowledged,
+      insertedId: newDoc._id
+    };
+  }
+
+  async insertMany(docs, options = {}) {
+    const prepared = docs.map(d => ({
+      _id: d._id || generateId(),
+      ...d,
+      createdAt: d.createdAt || new Date().toISOString()
+    }));
+    const result = await this.raw.insertMany(prepared, options);
+    return {
+      acknowledged: result.acknowledged,
+      insertedIds: prepared.map(d => d._id)
+    };
+  }
+
+  async updateOne(filter, update, options = {}) {
+    return await this.raw.updateOne(normalizeFilter(filter), update, options);
+  }
+
+  async updateMany(filter, update, options = {}) {
+    return await this.raw.updateMany(normalizeFilter(filter), update, options);
+  }
+
+  async deleteOne(filter, options = {}) {
+    return await this.raw.deleteOne(normalizeFilter(filter), options);
+  }
+
+  async deleteMany(filter, options = {}) {
+    return await this.raw.deleteMany(normalizeFilter(filter), options);
+  }
+
+  async countDocuments(filter = {}, options = {}) {
+    return await this.raw.countDocuments(normalizeFilter(filter), options);
+  }
+}
+
+// Global cache for Mongo client instances to prevent connection pool exhaustion
+const cachedClients = {};
+
 async function createDatabase(serviceName, dbName) {
-  const mongoUri = process.env.MONGODB_URI || `mongodb://localhost:27017/${dbName}`;
+  const baseUri = process.env.MONGODB_URI;
+  const mongoUri = baseUri || `mongodb://localhost:27017/${dbName}`;
   let client = null;
   let useMongo = false;
 
   try {
-    client = new MongoClient(mongoUri, { serverSelectionTimeoutMS: 1200 });
-    await client.connect();
+    if (!cachedClients[mongoUri]) {
+      const c = new MongoClient(mongoUri, { serverSelectionTimeoutMS: 1500 });
+      await c.connect();
+      cachedClients[mongoUri] = c;
+    }
+    client = cachedClients[mongoUri];
     // Verify connection by pinging
     await client.db(dbName).command({ ping: 1 });
     useMongo = true;
-    console.log(`[${serviceName}] Connected to external MongoDB (${dbName})`);
+    console.log(`[${serviceName}] Connected to real MongoDB database: '${dbName}'`);
   } catch (err) {
     useMongo = false;
-    console.log(`[${serviceName}] MongoDB offline (${err.message}). Using isolated embedded database for '${dbName}'.`);
+    console.log(`[${serviceName}] MongoDB offline (${err.message}). Using fallback embedded JSON database for '${dbName}'.`);
   }
 
   if (useMongo) {
     const db = client.db(dbName);
     return {
       type: 'mongodb',
-      collection: (name) => db.collection(name),
+      collection: (name) => new MongoCollectionWrapper(db.collection(name)),
       close: () => client.close()
     };
   }
@@ -252,4 +335,4 @@ async function createDatabase(serviceName, dbName) {
   };
 }
 
-module.exports = { createDatabase, generateId };
+module.exports = { createDatabase, generateId, normalizeFilter, MongoCollectionWrapper };

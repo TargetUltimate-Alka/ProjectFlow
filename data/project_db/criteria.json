@@ -1,6 +1,6 @@
 [
   {
-    "_id": "e5f687eb7382dc20e208b449",
+    "_id": "2f1e18f93a846b635fc647b5",
     "code": "M1",
     "name": "Milestone 1: Project Genesis & Scaffolding",
     "description": "Initial repository setup, architectural scaffolding, initial commits, and Requirements Document (SRS).",
@@ -10,10 +10,10 @@
     "minClosedIssues": 1,
     "requiredDocType": "SRS",
     "order": 1,
-    "createdAt": "2026-09-15T19:54:06.751Z"
+    "createdAt": "2026-10-23T17:44:25.054Z"
   },
   {
-    "_id": "f0685aea1df5cf7808c38c78",
+    "_id": "0bdd6c50d6f624a29f29581e",
     "code": "M2",
     "name": "Milestone 2: Core Development & Architecture",
     "description": "Full microservice development, team collaboration PRs, closed feature issues, and Architecture Documentation.",
@@ -23,10 +23,10 @@
     "minClosedIssues": 3,
     "requiredDocType": "Architecture Design",
     "order": 2,
-    "createdAt": "2026-09-15T19:54:06.752Z"
+    "createdAt": "2026-10-23T17:44:25.054Z"
   },
   {
-    "_id": "d9953f1789d8b4c5b5acf853",
+    "_id": "5556cc4454c93e5b511aa9e4",
     "code": "M3",
     "name": "Milestone 3: Evaluation, Testing & Final Report",
     "description": "Comprehensive test coverage, final pull requests merged, resolved issues, and Final Capstone Report.",
@@ -36,6 +36,6 @@
     "minClosedIssues": 5,
     "requiredDocType": "Final Report",
     "order": 3,
-    "createdAt": "2026-09-15T19:54:06.752Z"
+    "createdAt": "2026-10-23T17:44:25.055Z"
   }
 ]

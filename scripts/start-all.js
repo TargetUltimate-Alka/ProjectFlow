@@ -1,5 +1,6 @@
 const { spawn } = require('child_process');
 const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 
 const SERVICES = [
   { name: 'Auth', script: 'services/auth/server.js', port: 5001, color: '\x1b[36m' },

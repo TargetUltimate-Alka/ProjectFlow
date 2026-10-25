@@ -1,66 +1,63 @@
 [
   {
-    "_id": "941be2b28acaa785c1566d5e",
+    "_id": "c32a9a56455a044b50c6ea5e",
+    "projectId": "d2261c3db3ed41210a017045",
     "number": 12,
     "title": "Validate foreign key ID boundaries across microservice APIs",
     "state": "closed",
-    "closedAt": "2026-09-23T14:42:02.309Z",
+    "closedAt": "2026-10-23T13:44:28.312Z",
     "author": {
       "login": "alex-chen",
       "name": "Alex Chen",
-      "role": "Team Lead",
       "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
     },
-    "projectId": "91c22b3a5381ee085ce4d576",
-    "createdAt": "2026-09-23T18:42:02.332Z"
+    "createdAt": "2026-10-23T17:44:28.312Z"
   },
   {
-    "_id": "1066c22dc97100ee90d26d1b",
+    "_id": "2e889e8de7173899ef7a0b5e",
+    "projectId": "d2261c3db3ed41210a017045",
     "number": 11,
     "title": "Ensure failed GitHub sync does not overwrite previous good snapshot",
     "state": "closed",
-    "closedAt": "2026-09-23T08:42:02.309Z",
+    "closedAt": "2026-10-23T07:44:28.312Z",
     "author": {
       "login": "marcus-vance",
       "name": "Marcus Vance",
-      "role": "Backend Dev",
       "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
     },
-    "projectId": "91c22b3a5381ee085ce4d576",
-    "createdAt": "2026-09-23T18:42:02.332Z"
+    "createdAt": "2026-10-23T17:44:28.312Z"
   },
   {
-    "_id": "caaa1391c8ce693fced8ca9d",
+    "_id": "eef594938ffbdb93cbebe660",
+    "projectId": "d2261c3db3ed41210a017045",
     "number": 10,
     "title": "Support dark glassmorphic styling tokens across all dashboard shells",
     "state": "closed",
-    "closedAt": "2026-09-22T17:42:02.309Z",
+    "closedAt": "2026-10-22T16:44:28.312Z",
     "author": {
       "login": "priya-patel",
       "name": "Priya Patel",
-      "role": "Fullstack Dev",
       "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
     },
-    "projectId": "91c22b3a5381ee085ce4d576",
-    "createdAt": "2026-09-23T18:42:02.332Z"
+    "createdAt": "2026-10-23T17:44:28.312Z"
   },
   {
-    "_id": "b3776368f9cb12f730941dc5",
+    "_id": "ad076f117f3d193bdf34cc71",
+    "projectId": "d2261c3db3ed41210a017045",
     "number": 9,
     "title": "Rate-limiting backoff for external GitHub API requests",
     "state": "closed",
-    "closedAt": "2026-09-22T01:02:02.309Z",
+    "closedAt": "2026-10-22T00:04:28.312Z",
     "author": {
       "login": "alex-chen",
       "name": "Alex Chen",
-      "role": "Team Lead",
       "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
     },
-    "projectId": "91c22b3a5381ee085ce4d576",
-    "createdAt": "2026-09-23T18:42:02.332Z"
+    "createdAt": "2026-10-23T17:44:28.312Z"
   },
   {
-    "_id": "96e788c71d9bc54889385d30",
+    "_id": "a9a84a9d995287b5159e9e85",
+    "projectId": "d2261c3db3ed41210a017045",
     "number": 13,
     "title": "Faculty rubric scoring validation and lock after submit",
     "state": "open",
@@ -68,10 +65,8 @@
     "author": {
       "login": "marcus-vance",
       "name": "Marcus Vance",
-      "role": "Backend Dev",
       "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
     },
-    "projectId": "91c22b3a5381ee085ce4d576",
-    "createdAt": "2026-09-23T18:42:02.332Z"
+    "createdAt": "2026-10-23T17:44:28.312Z"
   }
 ]
