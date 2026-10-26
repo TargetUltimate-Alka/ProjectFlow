@@ -3,7 +3,7 @@ import { api } from '../../api';
 import { Modal } from '../../components/Modal';
 import { Sliders, Plus, Edit2, Trash2, Shield, GitCommit, GitPullRequest, FileText, CheckCircle2 } from 'lucide-react';
 
-export function CriteriaPage() {
+export function CriteriaPage({ onNavigateToEvaluation }) {
   const [criteria, setCriteria] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -103,16 +103,23 @@ export function CriteriaPage() {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <h1 style={{ fontSize: '1.6rem', fontWeight: 800 }}>Milestone Automation Criteria Engine</h1>
-            <span className="badge badge-rose">Admin Configuration</span>
+            <span className="badge badge-cyan">Faculty Evaluation Standards</span>
           </div>
           <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '4px' }}>
-            Configure the quantitative thresholds and required artifacts that automatically drive student milestone progression.
+            Configure quantitative verification thresholds and required artifacts that automatically drive student milestone progress and inform evaluations.
           </p>
         </div>
 
-        <button onClick={openCreateModal} className="btn btn-primary">
-          <Plus size={16} /> Create Criteria Rule
-        </button>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          {onNavigateToEvaluation && (
+            <button onClick={onNavigateToEvaluation} className="btn btn-secondary">
+              Go to Project Evaluation &rarr;
+            </button>
+          )}
+          <button onClick={openCreateModal} className="btn btn-primary">
+            <Plus size={16} /> Create Criteria Rule
+          </button>
+        </div>
       </div>
 
       {/* Criteria Cards */}

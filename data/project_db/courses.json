@@ -1,0 +1,241 @@
+[
+  {
+    "_id": "course_cs543",
+    "code": "CS543",
+    "name": "Web Services",
+    "facultyName": "Dr. R. Sharma",
+    "facultyEmail": "dr.sharma@projectflow.edu",
+    "batch": "2026-2028",
+    "semester": "3rd Semester",
+    "department": "Computer Science & Engineering",
+    "color": "#0284c7",
+    "icon": "globe",
+    "description": "Advanced distributed web services, RESTful architectural design, microservices communication, and cloud API integration.",
+    "enrolledEmails": [
+      "alka123@iitv.ac.in",
+      "alkaj29@gmail.com",
+      "aarav.sharma@student.edu",
+      "alex.chen@student.edu",
+      "priya.patel@student.edu",
+      "marcus.vance@student.edu",
+      "elena.rostova@student.edu",
+      "rohan.verma@student.edu",
+      "rohit.kumar@student.edu",
+      "neha.verma@student.edu",
+      "amit.raj@student.edu",
+      "suresh.sen@student.edu",
+      "kavita.roy@student.edu",
+      "priya.singh@student.edu",
+      "karan.dave@student.edu",
+      "simran.kaur@student.edu",
+      "deepak.joshi@student.edu",
+      "vikram.mehta@student.edu",
+      "ananya.roy@student.edu",
+      "rohan.gupta@student.edu",
+      "divya.nair@student.edu",
+      "harsh.vardhan@student.edu",
+      "rahul50@iitv.ac.in",
+      "sneha51@iitv.ac.in",
+      "aman52@iitv.ac.in",
+      "pooja53@iitv.ac.in"
+    ],
+    "instructorMessage": {
+      "author": "Dr. R. Sharma",
+      "date": "20 Oct 2026",
+      "title": "Message from Course Instructor",
+      "content": "Dear Students,\nPlease read the following before forming your team:\n• Team Size: 4-5 members\n• Each member must be from the same batch.\n• Use your Roll Number and Institute Email ID.\n• Each student can be part of only one team.\n• Topics: Choose from the list provided in 'Resources'.\n• Submit team by 25 Oct 2026.\n• Project proposal format is attached.",
+      "attachments": [
+        {
+          "name": "Project_Guidelines.pdf",
+          "size": "2.4 MB",
+          "type": "pdf"
+        }
+      ]
+    },
+    "announcements": [
+      {
+        "id": "ann_cs543_1",
+        "title": "General Guidelines for Project Teams",
+        "courseCode": "CS543",
+        "courseName": "Web Services",
+        "facultyName": "Dr. R. Sharma",
+        "date": "22 Oct 2026",
+        "content": "Please ensure team members are finalized and topics are selected before the deadline. Project proposal templates must be submitted via the portal."
+      }
+    ],
+    "resources": [
+      {
+        "name": "Course Syllabus & Lab Manual",
+        "type": "pdf",
+        "size": "1.4 MB"
+      },
+      {
+        "name": "Approved Capstone Project Topics 2026",
+        "type": "pdf",
+        "size": "820 KB"
+      }
+    ],
+    "createdAt": "2026-08-01T00:00:00.000Z"
+  },
+  {
+    "_id": "course_cs541",
+    "code": "CS541",
+    "name": "Design and Analysis of Algorithms",
+    "facultyName": "Dr. P. Singh",
+    "facultyEmail": "dr.singh@projectflow.edu",
+    "batch": "2026-2028",
+    "semester": "3rd Semester",
+    "department": "Computer Science & Engineering",
+    "color": "#8b5cf6",
+    "icon": "cpu",
+    "description": "Algorithm design paradigms, graph theory algorithms, dynamic programming, NP-completeness, and performance analysis.",
+    "enrolledEmails": [
+      "alex.chen@student.edu",
+      "alkaj29@gmail.com",
+      "alka123@iitv.ac.in",
+      "priya.patel@student.edu",
+      "elena.rostova@student.edu"
+    ],
+    "instructorMessage": {
+      "author": "Dr. P. Singh",
+      "date": "19 Oct 2026",
+      "title": "Algorithm Lab Project Guidelines",
+      "content": "Dear Students,\nFor the Algorithm Analysis capstone project:\n• Choose from dynamic programming, network flow, or approximation algorithms.\n• Implement in C++ or Python with empirical benchmark plots.\n• Group submissions must adhere to reproducible evaluation metrics.",
+      "attachments": [
+        {
+          "name": "Algorithm_Project_Syllabus.pdf",
+          "size": "1.8 MB",
+          "type": "pdf"
+        }
+      ]
+    },
+    "announcements": [
+      {
+        "id": "ann_cs541_1",
+        "title": "Team Formation Deadline Extended",
+        "courseCode": "CS541",
+        "courseName": "Design and Analysis of Algorithms",
+        "facultyName": "Dr. P. Singh",
+        "date": "20 Oct 2026",
+        "content": "Team formation deadline for Algorithms capstone projects has been extended to 28 Oct 2026."
+      }
+    ],
+    "resources": [
+      {
+        "name": "Algorithm Benchmark Datasets",
+        "type": "zip",
+        "size": "14.2 MB"
+      },
+      {
+        "name": "Complexity Analysis Cheat Sheet",
+        "type": "pdf",
+        "size": "650 KB"
+      }
+    ],
+    "createdAt": "2026-08-01T00:00:00.000Z"
+  },
+  {
+    "_id": "course_cs542",
+    "code": "CS542",
+    "name": "Database Systems",
+    "facultyName": "Dr. M. Verma",
+    "facultyEmail": "dr.verma@projectflow.edu",
+    "batch": "2026-2028",
+    "semester": "3rd Semester",
+    "department": "Computer Science & Engineering",
+    "color": "#f97316",
+    "icon": "database",
+    "description": "Database engine internals, query execution plans, transactions and isolation, indexing strategies, and distributed NoSQL storage.",
+    "enrolledEmails": [
+      "alex.chen@student.edu",
+      "alkaj29@gmail.com",
+      "alka123@iitv.ac.in",
+      "priya.patel@student.edu",
+      "marcus.vance@student.edu"
+    ],
+    "instructorMessage": {
+      "author": "Dr. M. Verma",
+      "date": "18 Oct 2026",
+      "title": "Database System Design Project Specifications",
+      "content": "Welcome to CS542.\nYour semester project involves designing a fully normalized schema with replication, fault tolerance, and query indexing benchmarks.\nReview the proposal format in the resources tab.",
+      "attachments": [
+        {
+          "name": "DB_Project_Proposal_Format.docx",
+          "size": "950 KB",
+          "type": "doc"
+        }
+      ]
+    },
+    "announcements": [
+      {
+        "id": "ann_cs542_1",
+        "title": "Submit Project Proposal Format",
+        "courseCode": "CS542",
+        "courseName": "Database Systems",
+        "facultyName": "Dr. M. Verma",
+        "date": "18 Oct 2026",
+        "content": "Use the approved institute proposal format attached in course resources before submitting your proposal."
+      }
+    ],
+    "resources": [
+      {
+        "name": "Relational Database Schema Design Rubric",
+        "type": "pdf",
+        "size": "1.1 MB"
+      }
+    ],
+    "createdAt": "2026-08-01T00:00:00.000Z"
+  },
+  {
+    "_id": "course_cs544",
+    "code": "CS544",
+    "name": "Software Engineering",
+    "facultyName": "Dr. S. Nair",
+    "facultyEmail": "dr.nair@projectflow.edu",
+    "batch": "2026-2028",
+    "semester": "3rd Semester",
+    "department": "Computer Science & Engineering",
+    "color": "#10b981",
+    "icon": "layers",
+    "description": "Software development lifecycle, Agile methodologies, CI/CD automated testing, clean code architecture, and capstone milestones.",
+    "enrolledEmails": [
+      "alex.chen@student.edu",
+      "alkaj29@gmail.com",
+      "alka123@iitv.ac.in",
+      "priya.patel@student.edu",
+      "elena.rostova@student.edu"
+    ],
+    "instructorMessage": {
+      "author": "Dr. S. Nair",
+      "date": "17 Oct 2026",
+      "title": "Software Engineering Project Milestones",
+      "content": "Welcome to CS544 Software Engineering.\nAll groups are required to use GitHub issues and pull requests to track development.\nMilestone audits will occur bi-weekly with automated criteria evaluation.",
+      "attachments": [
+        {
+          "name": "SE_Milestone_Rubric.pdf",
+          "size": "1.2 MB",
+          "type": "pdf"
+        }
+      ]
+    },
+    "announcements": [
+      {
+        "id": "ann_cs544_1",
+        "title": "Sprint Planning Session Schedule",
+        "courseCode": "CS544",
+        "courseName": "Software Engineering",
+        "facultyName": "Dr. S. Nair",
+        "date": "16 Oct 2026",
+        "content": "Sprint 1 planning sessions will be scheduled during the lab hours next week. Review Agile guidelines."
+      }
+    ],
+    "resources": [
+      {
+        "name": "Agile Sprint Template",
+        "type": "pdf",
+        "size": "780 KB"
+      }
+    ],
+    "createdAt": "2026-08-01T00:00:00.000Z"
+  }
+]

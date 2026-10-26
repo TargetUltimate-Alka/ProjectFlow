@@ -38,8 +38,8 @@ app.get('/health', async (req, res) => {
 
 // Authentication extraction middleware at Gateway level
 function gatewayAuth(req, res, next) {
-  // Allow public auth endpoints and health check
-  const publicPaths = ['/api/auth/login', '/api/auth/register', '/api/auth/refresh', '/health'];
+  // Allow public auth endpoints, webhook receiver, and health check
+  const publicPaths = ['/api/auth/login', '/api/auth/register', '/api/auth/refresh', '/api/github/webhook', '/health'];
   if (publicPaths.some(p => req.path.startsWith(p))) {
     return next();
   }
@@ -79,14 +79,35 @@ async function proxyRequest(targetUrl, req, res) {
       headers['authorization'] = req.headers.authorization;
     }
 
+    const isAttachment = req.url.includes('/attachments/');
     const response = await axios({
       method: req.method,
-      url: targetUrl,
+      url: targetUrl.split('?')[0],
       params: req.query,
       data: req.body,
       headers,
+      responseType: isAttachment ? 'arraybuffer' : 'json',
       validateStatus: () => true // Allow handling downstream status codes
     });
+
+    if (response.headers['content-type']) {
+      res.setHeader('content-type', response.headers['content-type']);
+    }
+    if (response.headers['content-disposition']) {
+      res.setHeader('content-disposition', response.headers['content-disposition']);
+    }
+
+    if (isAttachment) {
+      if (response.status >= 400) {
+        try {
+          const errorObj = JSON.parse(Buffer.from(response.data).toString('utf-8'));
+          return res.status(response.status).json(errorObj);
+        } catch (e) {
+          return res.status(response.status).send(response.data);
+        }
+      }
+      return res.status(response.status).send(Buffer.from(response.data));
+    }
 
     res.status(response.status).json(response.data);
   } catch (err) {
@@ -111,6 +132,11 @@ app.all('/api/projects*', (req, res) => {
 });
 
 app.all('/api/criteria*', (req, res) => {
+  const subPath = req.url.replace('/api', '');
+  proxyRequest(`${SERVICES.project}${subPath}`, req, res);
+});
+
+app.all('/api/courses*', (req, res) => {
   const subPath = req.url.replace('/api', '');
   proxyRequest(`${SERVICES.project}${subPath}`, req, res);
 });

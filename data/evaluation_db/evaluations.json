@@ -1,9 +1,9 @@
 [
   {
-    "_id": "2c51cadce0bfab948824baf2",
-    "projectId": "d2261c3db3ed41210a017045",
+    "_id": "49fd13f30a8feffb9b411b34",
+    "projectId": "b503fcaeb7f9f3732992009b",
     "projectName": "Distributed Real-time Cloud Pipeline (ProjectFlow)",
-    "facultyId": "e40eccb0e168f2fe934ccca7",
+    "facultyId": "a53893a033b8c2dfaf4c8993",
     "facultyName": "Dr. Robert Harrison",
     "facultyEmail": "dr.harrison@projectflow.edu",
     "scores": {
@@ -19,9 +19,9 @@
     "feedback": "Outstanding software architecture and demonstrable Git hygiene. The microservice isolation is pristine and the automated milestone tracking is well-demonstrated.",
     "recommendations": "Ensure comprehensive stress-testing on the event bus before final capstone symposium defense.",
     "status": "submitted",
-    "evaluatedAt": "2026-10-23T14:44:30.106Z",
-    "updatedAt": "2026-10-23T14:44:30.106Z",
+    "evaluatedAt": "2026-10-25T14:13:18.214Z",
+    "updatedAt": "2026-10-25T14:13:18.214Z",
     "disclaimer": "GitHub evidence informs the evaluation, but the score itself is an academic faculty decision.",
-    "createdAt": "2026-10-23T17:44:30.107Z"
+    "createdAt": "2026-10-25T17:13:18.219Z"
   }
 ]

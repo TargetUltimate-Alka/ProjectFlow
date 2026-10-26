@@ -1,1 +1,117 @@
-[]
+[
+  {
+    "_id": "4592663c546acdb888b61914",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "startedAt": "2026-10-25T17:48:48.171Z",
+    "finishedAt": "2026-10-25T17:48:51.288Z",
+    "status": "success",
+    "dataSource": "live",
+    "warning": null,
+    "stats": {
+      "totalCommits": 16,
+      "totalPRs": 0,
+      "mergedPRs": 0,
+      "openPRs": 0,
+      "closedIssues": 0,
+      "openIssues": 0,
+      "totalContributors": 2
+    },
+    "createdAt": "2026-10-25T17:48:51.292Z"
+  },
+  {
+    "_id": "ab67e688fbe421681ba21862",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "startedAt": "2026-10-25T18:09:10.832Z",
+    "finishedAt": "2026-10-25T18:09:11.512Z",
+    "status": "success",
+    "dataSource": "live",
+    "warning": null,
+    "rateLimit": {
+      "limit": 60,
+      "remaining": 42,
+      "reset": "2026-10-25T18:26:56.000Z"
+    },
+    "stats": {
+      "totalCommits": 16,
+      "totalPRs": 0,
+      "mergedPRs": 0,
+      "openPRs": 0,
+      "closedIssues": 0,
+      "openIssues": 0,
+      "totalContributors": 2
+    },
+    "createdAt": "2026-10-25T18:09:11.557Z"
+  },
+  {
+    "_id": "00abc86f74436dc11944a73c",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "startedAt": "2026-10-25T18:09:29.882Z",
+    "finishedAt": "2026-10-25T18:09:31.443Z",
+    "status": "success",
+    "dataSource": "live",
+    "warning": null,
+    "rateLimit": {
+      "limit": 60,
+      "remaining": 36,
+      "reset": "2026-10-25T18:26:56.000Z"
+    },
+    "stats": {
+      "totalCommits": 16,
+      "totalPRs": 0,
+      "mergedPRs": 0,
+      "openPRs": 0,
+      "closedIssues": 0,
+      "openIssues": 0,
+      "totalContributors": 2
+    },
+    "createdAt": "2026-10-25T18:09:31.445Z"
+  },
+  {
+    "_id": "2c4ba0322dba24dc2ad18e66",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "startedAt": "2026-10-25T18:27:05.401Z",
+    "finishedAt": "2026-10-25T18:27:06.775Z",
+    "status": "success",
+    "dataSource": "live",
+    "warning": null,
+    "rateLimit": {
+      "limit": 60,
+      "remaining": 58,
+      "reset": "2026-10-25T19:27:05.000Z"
+    },
+    "stats": {
+      "totalCommits": 50,
+      "totalPRs": 3,
+      "mergedPRs": 2,
+      "openPRs": 1,
+      "closedIssues": 0,
+      "openIssues": 0,
+      "totalContributors": 4
+    },
+    "createdAt": "2026-10-25T18:27:06.825Z"
+  },
+  {
+    "_id": "3eb644eb3b81c6abb877cf2d",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "startedAt": "2026-10-25T18:29:10.578Z",
+    "finishedAt": "2026-10-25T18:29:12.052Z",
+    "status": "success",
+    "dataSource": "live",
+    "warning": null,
+    "rateLimit": {
+      "limit": 60,
+      "remaining": 54,
+      "reset": "2026-10-25T19:27:05.000Z"
+    },
+    "stats": {
+      "totalCommits": 5,
+      "totalPRs": 0,
+      "mergedPRs": 0,
+      "openPRs": 0,
+      "closedIssues": 0,
+      "openIssues": 0,
+      "totalContributors": 1
+    },
+    "createdAt": "2026-10-25T18:29:12.099Z"
+  }
+]

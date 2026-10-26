@@ -1,0 +1,167 @@
+[
+  {
+    "_id": "team_alpha",
+    "courseId": "course_cs543",
+    "courseCode": "CS543",
+    "name": "Team Alpha",
+    "description": "Cloud microservices orchestration platform with automated CI/CD and monitoring telemetry.",
+    "teamLead": "Aarav Sharma",
+    "teamLeadEmail": "aarav.sharma@student.edu",
+    "memberCount": 4,
+    "maxMembers": 5,
+    "status": "Available",
+    "members": [
+      {
+        "name": "Aarav Sharma",
+        "email": "aarav.sharma@student.edu",
+        "rollNumber": "20251651010",
+        "isLeader": true
+      },
+      {
+        "name": "Alex Chen",
+        "email": "alex.chen@student.edu",
+        "rollNumber": "20251651001",
+        "isLeader": false
+      },
+      {
+        "name": "Priya Patel",
+        "email": "priya.patel@student.edu",
+        "rollNumber": "20251651002",
+        "isLeader": false
+      },
+      {
+        "name": "Marcus Vance",
+        "email": "marcus.vance@student.edu",
+        "rollNumber": "20251651003",
+        "isLeader": false
+      }
+    ],
+    "createdAt": "2026-10-15T10:00:00.000Z"
+  },
+  {
+    "_id": "team_innovators",
+    "courseId": "course_cs543",
+    "courseCode": "CS543",
+    "name": "Team Innovators",
+    "teamLead": "Rohit Kumar",
+    "teamLeadEmail": "rohit.kumar@student.edu",
+    "memberCount": 5,
+    "maxMembers": 5,
+    "status": "Full",
+    "members": [
+      {
+        "name": "Rohit Kumar",
+        "email": "rohit.kumar@student.edu",
+        "rollNumber": "20251651020",
+        "isLeader": true
+      },
+      {
+        "name": "Neha Verma",
+        "email": "neha.verma@student.edu",
+        "rollNumber": "20251651021",
+        "isLeader": false
+      },
+      {
+        "name": "Amit Raj",
+        "email": "amit.raj@student.edu",
+        "rollNumber": "20251651022",
+        "isLeader": false
+      },
+      {
+        "name": "Suresh Sen",
+        "email": "suresh.sen@student.edu",
+        "rollNumber": "20251651023",
+        "isLeader": false
+      },
+      {
+        "name": "Kavita Roy",
+        "email": "kavita.roy@student.edu",
+        "rollNumber": "20251651024",
+        "isLeader": false
+      }
+    ],
+    "createdAt": "2026-10-16T11:00:00.000Z"
+  },
+  {
+    "_id": "team_codecraft",
+    "courseId": "course_cs543",
+    "courseCode": "CS543",
+    "name": "Team CodeCraft",
+    "teamLead": "Priya Singh",
+    "teamLeadEmail": "priya.singh@student.edu",
+    "memberCount": 4,
+    "maxMembers": 5,
+    "status": "Open",
+    "members": [
+      {
+        "name": "Priya Singh",
+        "email": "priya.singh@student.edu",
+        "rollNumber": "20251651030",
+        "isLeader": true
+      },
+      {
+        "name": "Karan Malhotra",
+        "email": "karan.m@student.edu",
+        "rollNumber": "20251651031",
+        "isLeader": false
+      },
+      {
+        "name": "Deepak Joshi",
+        "email": "deepak.j@student.edu",
+        "rollNumber": "20251651032",
+        "isLeader": false
+      },
+      {
+        "name": "Meera Shah",
+        "email": "meera.s@student.edu",
+        "rollNumber": "20251651033",
+        "isLeader": false
+      }
+    ],
+    "createdAt": "2026-10-17T09:30:00.000Z"
+  },
+  {
+    "_id": "team_nextgen",
+    "courseId": "course_cs543",
+    "courseCode": "CS543",
+    "name": "Team NextGen",
+    "teamLead": "Neha Verma",
+    "teamLeadEmail": "neha.v@student.edu",
+    "memberCount": 5,
+    "maxMembers": 5,
+    "status": "Full",
+    "members": [
+      {
+        "name": "Neha Verma",
+        "email": "neha.v@student.edu",
+        "rollNumber": "20251651040",
+        "isLeader": true
+      },
+      {
+        "name": "Rohan Gupta",
+        "email": "rohan.g@student.edu",
+        "rollNumber": "20251651041",
+        "isLeader": false
+      },
+      {
+        "name": "Simran Kaur",
+        "email": "simran.k@student.edu",
+        "rollNumber": "20251651042",
+        "isLeader": false
+      },
+      {
+        "name": "Aditya Nair",
+        "email": "aditya.n@student.edu",
+        "rollNumber": "20251651043",
+        "isLeader": false
+      },
+      {
+        "name": "Pooja Hegde",
+        "email": "pooja.h@student.edu",
+        "rollNumber": "20251651044",
+        "isLeader": false
+      }
+    ],
+    "createdAt": "2026-10-18T14:15:00.000Z"
+  }
+]

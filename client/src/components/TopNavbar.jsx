@@ -37,12 +37,19 @@ export function TopNavbar({ activeTab, onOpenNotifications }) {
     await quickSwitchUser(email, password);
   };
 
+  const getTitle = () => {
+    if (activeTab === 'courses' || activeTab === 'dashboard') return 'Course Dashboard';
+    if (activeTab === 'course-details') return 'Course Information';
+    if (activeTab === 'profile') return 'Student Profile';
+    return activeTab.replace('-', ' ');
+  };
+
   return (
     <header className="app-topbar">
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <h2 style={{ fontSize: '1.2rem', fontWeight: 700, textTransform: 'capitalize' }}>
-            {activeTab.replace('-', ' ')}
+            {getTitle()}
           </h2>
         </div>
       </div>
@@ -77,7 +84,7 @@ export function TopNavbar({ activeTab, onOpenNotifications }) {
                 1-Click Switch Persona
               </div>
               <button
-                onClick={() => handleQuickSwitch('alex.chen@student.edu', 'password123')}
+                onClick={() => handleQuickSwitch('alka123@iitv.ac.in', 'password123')}
                 style={{
                   width: '100%',
                   padding: '8px 10px',
@@ -98,7 +105,7 @@ export function TopNavbar({ activeTab, onOpenNotifications }) {
                 <GraduationCap size={16} color="#34d399" />
                 <div>
                   <div style={{ fontWeight: 600 }}>Alka Jha (Student)</div>
-                  <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Student Dashboard Shell</div>
+                  <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Student Courses Dashboard</div>
                 </div>
               </button>
 

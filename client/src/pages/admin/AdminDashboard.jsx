@@ -53,7 +53,7 @@ export function AdminDashboard({ onNavigate }) {
             <span className="badge badge-rose">Institutional Governance</span>
           </div>
           <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '4px' }}>
-            Global capstone directory, role provisioning, faculty allocation, and milestone evaluation criteria.
+            Global capstone directory, user role provisioning, faculty allocation, and institutional oversight.
           </p>
         </div>
       </div>
@@ -89,11 +89,11 @@ export function AdminDashboard({ onNavigate }) {
 
         <div className="glass-panel" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600 }}>Milestone Rule Sets</span>
-            <Sliders size={18} style={{ color: '#f59e0b' }} />
+            <span style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600 }}>Evaluation Governance</span>
+            <ShieldCheck size={18} style={{ color: '#f59e0b' }} />
           </div>
-          <div style={{ fontSize: '2rem', fontWeight: 800, marginTop: '10px' }}>{criteria.length}</div>
-          <span style={{ fontSize: '0.725rem', color: '#fbbf24' }}>Active Verification Rules</span>
+          <div style={{ fontSize: '1.4rem', fontWeight: 800, marginTop: '14px', color: '#fbbf24' }}>Faculty Led</div>
+          <span style={{ fontSize: '0.725rem', color: '#94a3b8' }}>Milestone Rules Managed by Faculty</span>
         </div>
       </div>
 

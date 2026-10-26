@@ -41,12 +41,72 @@ async function seed() {
       createdAt: new Date().toISOString()
     },
     {
+      name: 'Dr. R. Sharma',
+      email: 'dr.sharma@projectflow.edu',
+      passwordHash: defaultPasswordHash,
+      role: 'Faculty',
+      status: 'active',
+      department: 'Computer Science - Web & Cloud Systems',
+      createdAt: new Date().toISOString()
+    },
+    {
+      name: 'Dr. P. Singh',
+      email: 'dr.singh@projectflow.edu',
+      passwordHash: defaultPasswordHash,
+      role: 'Faculty',
+      status: 'active',
+      department: 'Computer Science - Algorithms & Theory',
+      createdAt: new Date().toISOString()
+    },
+    {
+      name: 'Dr. M. Verma',
+      email: 'dr.verma@projectflow.edu',
+      passwordHash: defaultPasswordHash,
+      role: 'Faculty',
+      status: 'active',
+      department: 'Computer Science - Data Engineering',
+      createdAt: new Date().toISOString()
+    },
+    {
+      name: 'Dr. S. Nair',
+      email: 'dr.nair@projectflow.edu',
+      passwordHash: defaultPasswordHash,
+      role: 'Faculty',
+      status: 'active',
+      department: 'Computer Science - Software Engineering',
+      createdAt: new Date().toISOString()
+    },
+    {
       name: 'Alex Chen',
       email: 'alex.chen@student.edu',
       passwordHash: defaultPasswordHash,
       role: 'Student',
       status: 'active',
       department: 'Computer Science & Engineering',
+      rollNumber: '20251651001',
+      batch: '2026-2028',
+      createdAt: new Date().toISOString()
+    },
+    {
+      name: 'Alka Jha',
+      email: 'alkaj29@gmail.com',
+      passwordHash: defaultPasswordHash,
+      role: 'Student',
+      status: 'active',
+      department: 'Computer Science & Engineering',
+      rollNumber: '20251651013',
+      batch: '2026-2028',
+      createdAt: new Date().toISOString()
+    },
+    {
+      name: 'Alka Jha',
+      email: 'alka123@iitv.ac.in',
+      passwordHash: defaultPasswordHash,
+      role: 'Student',
+      status: 'active',
+      department: 'Computer Science & Engineering',
+      rollNumber: '20251651013',
+      batch: '2026-2028',
       createdAt: new Date().toISOString()
     },
     {
@@ -56,6 +116,8 @@ async function seed() {
       role: 'Student',
       status: 'active',
       department: 'Computer Science & Engineering',
+      rollNumber: '20251651002',
+      batch: '2026-2028',
       createdAt: new Date().toISOString()
     },
     {
@@ -65,6 +127,8 @@ async function seed() {
       role: 'Student',
       status: 'active',
       department: 'Computer Science & Engineering',
+      rollNumber: '20251651003',
+      batch: '2026-2028',
       createdAt: new Date().toISOString()
     },
     {
@@ -74,6 +138,8 @@ async function seed() {
       role: 'Student',
       status: 'active',
       department: 'Computer Science & Engineering',
+      rollNumber: '20251651004',
+      batch: '2026-2028',
       createdAt: new Date().toISOString()
     }
   ];
@@ -81,7 +147,7 @@ async function seed() {
   await usersCol.insertMany(users);
   const studentAlex = await usersCol.findOne({ email: 'alex.chen@student.edu' });
   const facultyHarrison = await usersCol.findOne({ email: 'dr.harrison@projectflow.edu' });
-  console.log('✓ Seeded 7 users into auth_db (1 Admin, 2 Faculty, 4 Students)');
+  console.log('✓ Seeded users into auth_db (1 Admin, 6 Faculty, 5 Students)');
 
   // 2. Project Service Database (project_db)
   const projDb = await createDatabase('seed-proj', 'project_db');
@@ -91,6 +157,9 @@ async function seed() {
   const critCol = projDb.collection('criteria');
   const msCol = projDb.collection('projectMilestones');
   const docsCol = projDb.collection('documents');
+  const coursesCol = projDb.collection('courses');
+  const announcementsCol = projDb.collection('announcements');
+  const courseTeamsCol = projDb.collection('courseTeams');
 
   await projectsCol.deleteMany({});
   await teamCol.deleteMany({});
@@ -98,6 +167,379 @@ async function seed() {
   await critCol.deleteMany({});
   await msCol.deleteMany({});
   await docsCol.deleteMany({});
+  await coursesCol.deleteMany({});
+  await announcementsCol.deleteMany({});
+  await courseTeamsCol.deleteMany({});
+
+  // Seed Academic Courses
+  const courses = [
+    {
+      code: 'CS543',
+      name: 'Web Services',
+      facultyName: 'Dr. R. Sharma',
+      facultyEmail: 'dr.sharma@projectflow.edu',
+      batch: '2026-2028',
+      semester: '3rd Semester',
+      department: 'Computer Science & Engineering',
+      color: '#0284c7',
+      icon: 'globe',
+      description: 'Advanced distributed web services, RESTful architectural design, microservices communication, and cloud API integration.',
+      enrolledEmails: [
+        'alex.chen@student.edu',
+        'alkaj29@gmail.com',
+        'alka123@iitv.ac.in',
+        'priya.patel@student.edu',
+        'marcus.vance@student.edu'
+      ],
+      instructorMessage: {
+        author: 'Dr. R. Sharma',
+        date: '20 Oct 2026',
+        title: 'Message from Course Instructor',
+        content: `Dear Students,\nPlease read the following before forming your team:\n• Team Size: 4-5 members\n• Each member must be from the same batch.\n• Use your Roll Number and Institute Email ID.\n• Each student can be part of only one team.\n• Topics: Choose from the list provided in 'Resources'.\n• Submit team by 25 Oct 2026.\n• Project proposal format is attached.`,
+        attachments: [
+          { name: 'Project_Guidelines.pdf', size: '2.4 MB', type: 'pdf' }
+        ]
+      },
+      announcements: [
+        {
+          id: 'ann_cs543_1',
+          title: 'General Guidelines for Project Teams',
+          courseCode: 'CS543',
+          courseName: 'Web Services',
+          facultyName: 'Dr. R. Sharma',
+          date: '22 Oct 2026',
+          content: 'Please ensure team members are finalized and topics are selected before the deadline. Project proposal templates must be submitted via the portal.'
+        }
+      ],
+      resources: [
+        { name: 'Course Syllabus & Lab Manual', type: 'pdf', size: '1.4 MB' },
+        { name: 'Approved Capstone Project Topics 2026', type: 'pdf', size: '820 KB' }
+      ]
+    },
+    {
+      code: 'CS541',
+      name: 'Design and Analysis of Algorithms',
+      facultyName: 'Dr. P. Singh',
+      facultyEmail: 'dr.singh@projectflow.edu',
+      batch: '2026-2028',
+      semester: '3rd Semester',
+      department: 'Computer Science & Engineering',
+      color: '#8b5cf6',
+      icon: 'cpu',
+      description: 'Algorithm design paradigms, graph theory algorithms, dynamic programming, NP-completeness, and performance analysis.',
+      enrolledEmails: [
+        'alex.chen@student.edu',
+        'alkaj29@gmail.com',
+        'alka123@iitv.ac.in',
+        'priya.patel@student.edu',
+        'elena.rostova@student.edu'
+      ],
+      instructorMessage: {
+        author: 'Dr. P. Singh',
+        date: '19 Oct 2026',
+        title: 'Algorithm Lab Project Guidelines',
+        content: `Dear Students,\nFor the Algorithm Analysis capstone project:\n• Choose from dynamic programming, network flow, or approximation algorithms.\n• Implement in C++ or Python with empirical benchmark plots.\n• Group submissions must adhere to reproducible evaluation metrics.`,
+        attachments: [
+          { name: 'Algorithm_Project_Syllabus.pdf', size: '1.8 MB', type: 'pdf' }
+        ]
+      },
+      announcements: [
+        {
+          id: 'ann_cs541_1',
+          title: 'Team Formation Deadline Extended',
+          courseCode: 'CS541',
+          courseName: 'Design and Analysis of Algorithms',
+          facultyName: 'Dr. P. Singh',
+          date: '20 Oct 2026',
+          content: 'Team formation deadline for Algorithms capstone projects has been extended to 28 Oct 2026.'
+        }
+      ],
+      resources: [
+        { name: 'Algorithm Benchmark Datasets', type: 'zip', size: '14.2 MB' },
+        { name: 'Complexity Analysis Cheat Sheet', type: 'pdf', size: '650 KB' }
+      ]
+    },
+    {
+      code: 'CS542',
+      name: 'Database Systems',
+      facultyName: 'Dr. M. Verma',
+      facultyEmail: 'dr.verma@projectflow.edu',
+      batch: '2026-2028',
+      semester: '3rd Semester',
+      department: 'Computer Science & Engineering',
+      color: '#f97316',
+      icon: 'database',
+      description: 'Database engine internals, query execution plans, transactions and isolation, indexing strategies, and distributed NoSQL storage.',
+      enrolledEmails: [
+        'alex.chen@student.edu',
+        'alkaj29@gmail.com',
+        'alka123@iitv.ac.in',
+        'priya.patel@student.edu',
+        'marcus.vance@student.edu'
+      ],
+      instructorMessage: {
+        author: 'Dr. M. Verma',
+        date: '18 Oct 2026',
+        title: 'Database System Design Project Specifications',
+        content: `Welcome to CS542.\nYour semester project involves designing a fully normalized schema with replication, fault tolerance, and query indexing benchmarks.\nReview the proposal format in the resources tab.`,
+        attachments: [
+          { name: 'DB_Project_Proposal_Format.docx', size: '950 KB', type: 'doc' }
+        ]
+      },
+      announcements: [
+        {
+          id: 'ann_cs542_1',
+          title: 'Submit Project Proposal Format',
+          courseCode: 'CS542',
+          courseName: 'Database Systems',
+          facultyName: 'Dr. M. Verma',
+          date: '18 Oct 2026',
+          content: 'Use the approved institute proposal format attached in course resources before submitting your proposal.'
+        }
+      ],
+      resources: [
+        { name: 'Relational Database Schema Design Rubric', type: 'pdf', size: '1.1 MB' }
+      ]
+    },
+    {
+      code: 'CS544',
+      name: 'Software Engineering',
+      facultyName: 'Dr. S. Nair',
+      facultyEmail: 'dr.nair@projectflow.edu',
+      batch: '2026-2028',
+      semester: '3rd Semester',
+      department: 'Computer Science & Engineering',
+      color: '#10b981',
+      icon: 'layers',
+      description: 'Software development lifecycle, Agile methodologies, CI/CD automated testing, clean code architecture, and capstone milestones.',
+      enrolledEmails: [
+        'alex.chen@student.edu',
+        'alkaj29@gmail.com',
+        'alka123@iitv.ac.in',
+        'priya.patel@student.edu',
+        'elena.rostova@student.edu'
+      ],
+      instructorMessage: {
+        author: 'Dr. S. Nair',
+        date: '17 Oct 2026',
+        title: 'Software Engineering Project Milestones',
+        content: `Welcome to CS544 Software Engineering.\nAll groups are required to use GitHub issues and pull requests to track development.\nMilestone audits will occur bi-weekly with automated criteria evaluation.`,
+        attachments: [
+          { name: 'SE_Milestone_Rubric.pdf', size: '1.2 MB', type: 'pdf' }
+        ]
+      },
+      announcements: [
+        {
+          id: 'ann_cs544_1',
+          title: 'Sprint Planning Session Schedule',
+          courseCode: 'CS544',
+          courseName: 'Software Engineering',
+          facultyName: 'Dr. S. Nair',
+          date: '16 Oct 2026',
+          content: 'Sprint 1 planning sessions will be scheduled during the lab hours next week. Review Agile guidelines.'
+        }
+      ],
+      resources: [
+        { name: 'Agile Sprint Template', type: 'pdf', size: '780 KB' }
+      ]
+    }
+  ];
+  await coursesCol.insertMany(courses);
+  console.log('✓ Seeded 4 academic courses into project_db');
+
+  const announcements = [
+    {
+      _id: 'ann_cs543_team_guidelines',
+      courseId: 'course_cs543',
+      courseCode: 'CS543',
+      courseName: 'Web Services',
+      title: 'Project Team Formation Guidelines',
+      content: `Dear Students,\n\nPlease read and strictly follow the team formation guidelines before submitting your project groups:\n\n• Each team must contain 4–5 students.\n• All members must belong to the same academic batch (2026-2028).\n• Every member must have a unique roll number and institutional email.\n• Each student can belong to only one team in the course.\n• Students must select a topic from the faculty-approved list in Resources.\n• Project proposals must be submitted before the faculty-defined deadline (25 Oct 2026).\n\nProject proposal format and evaluation criteria are attached below. Contact the course instructor during office hours for topic approvals.`,
+      facultyId: 'user_fac_sharma',
+      facultyName: 'Dr. R. Sharma',
+      facultyEmail: 'dr.sharma@projectflow.edu',
+      isPinned: true,
+      isImportant: true,
+      publishedAt: '2026-10-20T10:00:00.000Z',
+      date: '20 Oct 2026, 10:00 AM',
+      attachments: [
+        {
+          id: 'att_guidelines_pdf',
+          name: 'Project_Guidelines.pdf',
+          size: '2.4 MB',
+          type: 'pdf',
+          downloadUrl: '/api/courses/CS543/attachments/Project_Guidelines.pdf'
+        },
+        {
+          id: 'att_proposal_doc',
+          name: 'Project_Proposal_Format.docx',
+          size: '850 KB',
+          type: 'doc',
+          downloadUrl: '/api/courses/CS543/attachments/Project_Proposal_Format.docx'
+        }
+      ],
+      readBy: [
+        'alex.chen@student.edu'
+      ]
+    },
+    {
+      _id: 'ann_cs543_api_specs',
+      courseId: 'course_cs543',
+      courseCode: 'CS543',
+      courseName: 'Web Services',
+      title: 'Updated REST & GraphQL API Specification Standards',
+      content: 'All teams developing web service microservices must use OpenAPI 3.0 / YAML specifications for API contracts. Docker-compose configuration for service discovery must be committed to your team repository by Milestone 1.',
+      facultyId: 'user_fac_sharma',
+      facultyName: 'Dr. R. Sharma',
+      facultyEmail: 'dr.sharma@projectflow.edu',
+      isPinned: false,
+      isImportant: false,
+      publishedAt: '2026-10-22T14:30:00.000Z',
+      date: '22 Oct 2026, 02:30 PM',
+      attachments: [
+        {
+          id: 'att_api_std_pdf',
+          name: 'API_Specification_Standards_v2.pdf',
+          size: '1.1 MB',
+          type: 'pdf',
+          downloadUrl: '/api/courses/CS543/attachments/API_Specification_Standards_v2.pdf'
+        }
+      ],
+      readBy: []
+    },
+    {
+      _id: 'ann_cs541_deadline',
+      courseId: 'course_cs541',
+      courseCode: 'CS541',
+      courseName: 'Design and Analysis of Algorithms',
+      title: 'Team Formation Deadline Extended',
+      content: 'The deadline for algorithm capstone project groups has been extended to 28 Oct 2026. Review benchmark dataset resources in the course page.',
+      facultyId: 'user_fac_singh',
+      facultyName: 'Dr. P. Singh',
+      facultyEmail: 'dr.singh@projectflow.edu',
+      isPinned: true,
+      isImportant: false,
+      publishedAt: '2026-10-20T11:00:00.000Z',
+      date: '20 Oct 2026, 11:00 AM',
+      attachments: [],
+      readBy: []
+    },
+    {
+      _id: 'ann_cs542_proposal',
+      courseId: 'course_cs542',
+      courseCode: 'CS542',
+      courseName: 'Database Systems',
+      title: 'Submit Project Proposal Format',
+      content: 'Submit your database schema proposals using the approved institute format before the upcoming laboratory session.',
+      facultyId: 'user_fac_verma',
+      facultyName: 'Dr. M. Verma',
+      facultyEmail: 'dr.verma@projectflow.edu',
+      isPinned: false,
+      isImportant: true,
+      publishedAt: '2026-10-18T09:00:00.000Z',
+      date: '18 Oct 2026, 09:00 AM',
+      attachments: [],
+      readBy: []
+    },
+    {
+      _id: 'ann_cs544_sprint',
+      courseId: 'course_cs544',
+      courseCode: 'CS544',
+      courseName: 'Software Engineering',
+      title: 'Sprint Planning Session Schedule',
+      content: 'Sprint 1 planning sessions will be scheduled during the lab hours next week. Review Agile guidelines.',
+      facultyId: 'user_fac_nair',
+      facultyName: 'Dr. S. Nair',
+      facultyEmail: 'dr.nair@projectflow.edu',
+      isPinned: false,
+      isImportant: false,
+      publishedAt: '2026-10-16T15:00:00.000Z',
+      date: '16 Oct 2026, 03:00 PM',
+      attachments: [],
+      readBy: []
+    }
+  ];
+  await announcementsCol.insertMany(announcements);
+  console.log('✓ Seeded 5 broadcast announcements into project_db');
+
+  const courseTeams = [
+    {
+      _id: 'team_alpha',
+      courseId: 'course_cs543',
+      courseCode: 'CS543',
+      name: 'Team Alpha',
+      teamLead: 'Alka Jha',
+      teamLeadEmail: 'alka123@iitv.ac.in',
+      memberCount: 4,
+      maxMembers: 5,
+      status: 'Joined',
+      members: [
+        { name: 'Alka Jha', email: 'alka123@iitv.ac.in', rollNumber: '20251651013', isLeader: true },
+        { name: 'Alex Chen', email: 'alex.chen@student.edu', rollNumber: '20251651001', isLeader: false },
+        { name: 'Priya Patel', email: 'priya.patel@student.edu', rollNumber: '20251651002', isLeader: false },
+        { name: 'Marcus Vance', email: 'marcus.vance@student.edu', rollNumber: '20251651003', isLeader: false }
+      ],
+      createdAt: '2026-10-15T10:00:00.000Z'
+    },
+    {
+      _id: 'team_innovators',
+      courseId: 'course_cs543',
+      courseCode: 'CS543',
+      name: 'Team Innovators',
+      teamLead: 'Rohit Kumar',
+      teamLeadEmail: 'rohit.kumar@student.edu',
+      memberCount: 5,
+      maxMembers: 5,
+      status: 'Full',
+      members: [
+        { name: 'Rohit Kumar', email: 'rohit.kumar@student.edu', rollNumber: '20251651020', isLeader: true },
+        { name: 'Neha Verma', email: 'neha.verma@student.edu', rollNumber: '20251651021', isLeader: false },
+        { name: 'Amit Raj', email: 'amit.raj@student.edu', rollNumber: '20251651022', isLeader: false },
+        { name: 'Suresh Sen', email: 'suresh.sen@student.edu', rollNumber: '20251651023', isLeader: false },
+        { name: 'Kavita Roy', email: 'kavita.roy@student.edu', rollNumber: '20251651024', isLeader: false }
+      ],
+      createdAt: '2026-10-16T11:00:00.000Z'
+    },
+    {
+      _id: 'team_codecraft',
+      courseId: 'course_cs543',
+      courseCode: 'CS543',
+      name: 'Team CodeCraft',
+      teamLead: 'Priya Singh',
+      teamLeadEmail: 'priya.singh@student.edu',
+      memberCount: 4,
+      maxMembers: 5,
+      status: 'Open',
+      members: [
+        { name: 'Priya Singh', email: 'priya.singh@student.edu', rollNumber: '20251651030', isLeader: true },
+        { name: 'Karan Dave', email: 'karan.dave@student.edu', rollNumber: '20251651031', isLeader: false },
+        { name: 'Simran Kaur', email: 'simran.kaur@student.edu', rollNumber: '20251651032', isLeader: false },
+        { name: 'Deepak Joshi', email: 'deepak.joshi@student.edu', rollNumber: '20251651033', isLeader: false }
+      ],
+      createdAt: '2026-10-17T09:30:00.000Z'
+    },
+    {
+      _id: 'team_nextgen',
+      courseId: 'course_cs543',
+      courseCode: 'CS543',
+      name: 'Team NextGen',
+      teamLead: 'Vikram Mehta',
+      teamLeadEmail: 'vikram.mehta@student.edu',
+      memberCount: 5,
+      maxMembers: 5,
+      status: 'Full',
+      members: [
+        { name: 'Vikram Mehta', email: 'vikram.mehta@student.edu', rollNumber: '20251651040', isLeader: true },
+        { name: 'Ananya Roy', email: 'ananya.roy@student.edu', rollNumber: '20251651041', isLeader: false },
+        { name: 'Rohan Gupta', email: 'rohan.gupta@student.edu', rollNumber: '20251651042', isLeader: false },
+        { name: 'Divya Nair', email: 'divya.nair@student.edu', rollNumber: '20251651043', isLeader: false },
+        { name: 'Harsh Vardhan', email: 'harsh.vardhan@student.edu', rollNumber: '20251651044', isLeader: false }
+      ],
+      createdAt: '2026-10-18T14:15:00.000Z'
+    }
+  ];
+  await courseTeamsCol.insertMany(courseTeams);
+  console.log('✓ Seeded 4 course teams into project_db');
 
   // Seed Criteria
   const criteria = [

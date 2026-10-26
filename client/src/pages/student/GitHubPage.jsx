@@ -27,7 +27,7 @@ export function GitHubPage() {
   const [activeSubTab, setActiveSubTab] = useState('overview'); // 'overview' | 'activity'
 
   // Connect form fields
-  const [repoUrl, setRepoUrl] = useState('https://github.com/Nandinikanaujiya/ProjectFlow');
+  const [repoUrl, setRepoUrl] = useState('https://github.com/TargetUltimate-Alka/projectFlow/');
   const [token, setToken] = useState('');
   const [useDemoMode, setUseDemoMode] = useState(true);
 
@@ -43,6 +43,9 @@ export function GitHubPage() {
           api.getGitHubActivity(proj.id)
         ]);
         setGithubStatus(status);
+        if (status?.repoUrl) {
+          setRepoUrl(status.repoUrl);
+        }
         setActivity(act);
       }
     } catch (err) {
@@ -86,6 +89,67 @@ export function GitHubPage() {
       setSyncing(false);
     }
   };
+
+  const renderConnectModal = () => (
+    <Modal isOpen={isConnectModalOpen} onClose={() => setIsConnectModalOpen(false)} title="Connect GitHub Repository">
+      <form onSubmit={handleConnect}>
+        <div className="form-group">
+          <label className="form-label">Repository URL or Owner/Repo</label>
+          <input
+            type="text"
+            required
+            className="form-control"
+            value={repoUrl}
+            onChange={e => setRepoUrl(e.target.value)}
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Personal Access Token (Optional)</label>
+          <input
+            type="password"
+            placeholder="ghp_••••••••••••••••••••"
+            className="form-control"
+            value={token}
+            onChange={e => setToken(e.target.value)}
+          />
+          <span style={{ fontSize: '0.7rem', color: '#64748b', marginTop: '4px' }}>
+            Required for private repositories or to elevate API rate limit to 5,000 req/hr. Never exposed to the frontend.
+          </span>
+        </div>
+
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          padding: '12px',
+          borderRadius: '8px',
+          background: 'rgba(56, 189, 248, 0.08)',
+          border: '1px solid rgba(56, 189, 248, 0.2)',
+          marginTop: '16px'
+        }}>
+          <input
+            type="checkbox"
+            id="demoMode"
+            checked={useDemoMode}
+            onChange={e => setUseDemoMode(e.target.checked)}
+          />
+          <label htmlFor="demoMode" style={{ fontSize: '0.8rem', color: '#e2e8f0', cursor: 'pointer' }}>
+            Enable high-fidelity simulated sandbox data if API rate limits occur
+          </label>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '24px' }}>
+          <button type="button" onClick={() => setIsConnectModalOpen(false)} className="btn btn-secondary">
+            Cancel
+          </button>
+          <button type="submit" disabled={syncing} className="btn btn-primary">
+            {syncing ? 'Connecting...' : 'Authorize & Connect'}
+          </button>
+        </div>
+      </form>
+    </Modal>
+  );
 
   if (loading) return <div style={{ padding: '40px', color: '#94a3b8' }}>Loading GitHub status...</div>;
 
@@ -161,65 +225,7 @@ export function GitHubPage() {
           </button>
         </div>
 
-        {/* Connect Modal */}
-        <Modal isOpen={isConnectModalOpen} onClose={() => setIsConnectModalOpen(false)} title="Connect GitHub Repository">
-          <form onSubmit={handleConnect}>
-            <div className="form-group">
-              <label className="form-label">Repository URL or Owner/Repo</label>
-              <input
-                type="text"
-                required
-                className="form-control"
-                value={repoUrl}
-                onChange={e => setRepoUrl(e.target.value)}
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Personal Access Token (Optional)</label>
-              <input
-                type="password"
-                placeholder="ghp_••••••••••••••••••••"
-                className="form-control"
-                value={token}
-                onChange={e => setToken(e.target.value)}
-              />
-              <span style={{ fontSize: '0.7rem', color: '#64748b', marginTop: '4px' }}>
-                Required for private repositories. Never exposed to the frontend.
-              </span>
-            </div>
-
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              padding: '12px',
-              borderRadius: '8px',
-              background: 'rgba(56, 189, 248, 0.08)',
-              border: '1px solid rgba(56, 189, 248, 0.2)',
-              marginTop: '16px'
-            }}>
-              <input
-                type="checkbox"
-                id="demoMode"
-                checked={useDemoMode}
-                onChange={e => setUseDemoMode(e.target.checked)}
-              />
-              <label htmlFor="demoMode" style={{ fontSize: '0.8rem', color: '#e2e8f0', cursor: 'pointer' }}>
-                Enable high-fidelity simulated sandbox data if API rate limits occur
-              </label>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '24px' }}>
-              <button type="button" onClick={() => setIsConnectModalOpen(false)} className="btn btn-secondary">
-                Cancel
-              </button>
-              <button type="submit" disabled={syncing} className="btn btn-primary">
-                {syncing ? 'Connecting...' : 'Authorize & Connect'}
-              </button>
-            </div>
-          </form>
-        </Modal>
+        {renderConnectModal()}
       </div>
     );
   }
@@ -244,6 +250,13 @@ export function GitHubPage() {
         </div>
 
         <div style={{ display: 'flex', gap: '10px' }}>
+          <button
+            onClick={() => setIsConnectModalOpen(true)}
+            className="btn btn-secondary"
+            style={{ fontSize: '0.85rem' }}
+          >
+            <Github size={15} /> Switch / Reconnect
+          </button>
           <a
             href={githubStatus.repoUrl}
             target="_blank"
@@ -288,8 +301,19 @@ export function GitHubPage() {
             <Github size={24} />
           </div>
           <div>
-            <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fff' }}>{githubStatus.repoFullName}</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '0.75rem', color: '#94a3b8', marginTop: '2px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fff' }}>{githubStatus.repoFullName}</div>
+              {githubStatus.dataSource === 'live' ? (
+                <span className="badge badge-emerald" style={{ fontSize: '0.7rem' }}>
+                  <CheckCircle2 size={11} style={{ marginRight: '4px' }} /> Live GitHub API
+                </span>
+              ) : (
+                <span className="badge badge-cyan" style={{ fontSize: '0.7rem' }}>
+                  <Clock size={11} style={{ marginRight: '4px' }} /> Resilient Sandbox
+                </span>
+              )}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '0.75rem', color: '#94a3b8', marginTop: '4px' }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <Star size={13} style={{ color: '#f59e0b' }} /> {githubStatus.stars} Stars
               </span>
@@ -299,6 +323,11 @@ export function GitHubPage() {
               <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <AlertCircle size={13} style={{ color: '#38bdf8' }} /> {githubStatus.openIssues} Open Issues
               </span>
+              {githubStatus.rateLimit?.remaining !== null && githubStatus.rateLimit?.remaining !== undefined && (
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#34d399' }}>
+                  • API Quota: {githubStatus.rateLimit.remaining}/{githubStatus.rateLimit.limit} req/hr
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -455,6 +484,8 @@ export function GitHubPage() {
           </div>
         </div>
       )}
+
+      {renderConnectModal()}
     </div>
   );
 }

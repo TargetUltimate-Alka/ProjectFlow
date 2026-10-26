@@ -51,15 +51,23 @@ async function request(endpoint, options = {}, fallbackFn = null) {
     }
 
     if (!response.ok) {
-      if (fallbackFn) return await fallbackFn();
       const data = await response.json().catch(() => ({}));
-      throw new Error(data.error || `HTTP error ${response.status}`);
+      const err = new Error(data.error || `HTTP error ${response.status}`);
+      err.status = response.status;
+      err.isServerError = true;
+      throw err;
     }
 
     return await response.json();
   } catch (err) {
+    // If the server explicitly rejected with 401, 403, 400, 409 etc, throw immediately
+    if (err.isServerError || (err.status >= 400 && err.status < 500)) {
+      throw err;
+    }
+
+    // Only fallback if the network request completely failed (e.g. backend offline or Netlify static build)
     if (fallbackFn) {
-      console.info(`[ProjectFlow Demo Fallback] Used for ${endpoint}:`, err.message);
+      console.info(`[ProjectFlow Offline Fallback] Used for ${endpoint}:`, err.message);
       return await fallbackFn();
     }
     throw err;
@@ -88,6 +96,81 @@ export const api = {
 
   updateUser: (id, data) =>
     request(`/auth/users/${id}`, { method: 'PUT', body: JSON.stringify(data) }, () => mockService.updateUser(id, data)),
+
+  // Academic Courses (Google Classroom Model)
+  getCourses: (params = {}) => {
+    const qs = new URLSearchParams(params).toString();
+    return request(`/courses${qs ? '?' + qs : ''}`, {}, () => mockService.getCourses(params));
+  },
+
+  getCourse: (idOrCode) =>
+    request(`/courses/${idOrCode}`, {}, () => mockService.getCourse(idOrCode)),
+
+  getCourseBroadcasts: () =>
+    request('/courses/broadcasts', {}, () => mockService.getCourseBroadcasts()),
+
+  getCourseAnnouncements: (courseId, params = {}) => {
+    const qs = new URLSearchParams(params).toString();
+    return request(`/courses/${courseId}/announcements${qs ? '?' + qs : ''}`, {}, () => mockService.getCourseAnnouncements(courseId, params));
+  },
+
+  getCourseAnnouncement: (courseId, announcementId) =>
+    request(`/courses/${courseId}/announcements/${announcementId}`, {}, () => mockService.getCourseAnnouncement(courseId, announcementId)),
+
+  createCourseAnnouncement: (courseId, data) =>
+    request(`/courses/${courseId}/announcements`, { method: 'POST', body: JSON.stringify(data) }, () => mockService.createCourseAnnouncement(courseId, data)),
+
+  updateCourseAnnouncement: (courseId, announcementId, data) =>
+    request(`/courses/${courseId}/announcements/${announcementId}`, { method: 'PUT', body: JSON.stringify(data) }, () => mockService.updateCourseAnnouncement(courseId, announcementId, data)),
+
+  deleteCourseAnnouncement: (courseId, announcementId) =>
+    request(`/courses/${courseId}/announcements/${announcementId}`, { method: 'DELETE' }, () => mockService.deleteCourseAnnouncement(courseId, announcementId)),
+
+  markAnnouncementRead: (courseId, announcementId, unread = false) =>
+    request(`/courses/${courseId}/announcements/${announcementId}/read`, { method: 'PUT', body: JSON.stringify({ unread }) }, () => mockService.markAnnouncementRead(courseId, announcementId, unread)),
+
+  getCourseTeams: (courseId) =>
+    request(`/courses/${courseId}/teams`, {}, () => mockService.getCourseTeams(courseId)),
+
+  getMyCourseTeam: (courseId) =>
+    request(`/courses/${courseId}/my-team`, {}, () => mockService.getMyCourseTeam(courseId)),
+
+  createCourseTeam: (courseId, data) =>
+    request(`/courses/${courseId}/teams`, { method: 'POST', body: JSON.stringify(data) }, () =>
+      mockService.createCourseTeam(courseId, data)
+    ),
+
+  joinCourseTeam: (courseId, teamId) =>
+    request(`/courses/${courseId}/teams/${teamId}/join`, { method: 'POST' }, () =>
+      mockService.joinCourseTeam(courseId, teamId)
+    ),
+
+  leaveCourseTeam: (courseId, teamId) =>
+    request(`/courses/${courseId}/teams/${teamId}/leave`, { method: 'POST' }, () =>
+      mockService.leaveCourseTeam(courseId, teamId)
+    ),
+
+  downloadCourseAttachment: async (courseId, filename) => {
+    const token = getToken();
+    const url = `${BASE_URL}/courses/${courseId}/attachments/${encodeURIComponent(filename)}`;
+    const res = await fetch(url, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    });
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || `Failed to download file (HTTP ${res.status})`);
+    }
+    const blob = await res.blob();
+    const blobUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(blobUrl);
+    return true;
+  },
 
   // Projects
   getProjects: (params = {}) => {

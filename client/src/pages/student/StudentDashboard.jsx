@@ -1,342 +1,668 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../api';
-import { EvidenceList } from '../../components/EvidenceList';
 import {
-  FolderGit2,
-  CheckSquare,
-  Award,
-  Github,
-  RefreshCw,
-  GitCommit,
-  GitPullRequest,
-  Users,
-  AlertCircle,
-  ArrowUpRight,
-  Sparkles,
+  Search,
+  X,
+  Globe,
+  Cpu,
+  Database,
+  Layers,
+  BookOpen,
+  ArrowRight,
+  Megaphone,
   Calendar,
-  CheckCircle2,
-  Clock
+  User,
+  AlertCircle,
+  RefreshCw,
+  Sparkles,
+  GraduationCap
 } from 'lucide-react';
 
-export function StudentDashboard({ onNavigate }) {
-  const [project, setProject] = useState(null);
-  const [tasks, setTasks] = useState([]);
-  const [milestones, setMilestones] = useState([]);
-  const [githubStatus, setGithubStatus] = useState(null);
-  const [activity, setActivity] = useState([]);
+export function StudentDashboard({ onSelectCourse }) {
+  const [courses, setCourses] = useState([]);
+  const [broadcasts, setBroadcasts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
-  const [syncing, setSyncing] = useState(false);
+  const [error, setError] = useState(null);
+  const [showAllAnnouncements, setShowAllAnnouncements] = useState(false);
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
 
-  const loadDashboardData = async () => {
+  const fetchCoursesAndBroadcasts = async () => {
     try {
       setLoading(true);
-      const projects = await api.getProjects();
-      if (projects.length > 0) {
-        const activeProj = projects[0];
-        setProject(activeProj);
-
-        const [tData, mData, ghData, actData] = await Promise.all([
-          api.getTasks(activeProj.id).catch(() => []),
-          api.getMilestones(activeProj.id).catch(() => []),
-          api.getGitHubStatus(activeProj.id).catch(() => null),
-          api.getGitHubActivity(activeProj.id).catch(() => [])
-        ]);
-
-        setTasks(tData);
-        setMilestones(mData);
-        setGithubStatus(ghData);
-        setActivity(actData);
-      }
+      setError(null);
+      const [coursesData, broadcastsData] = await Promise.all([
+        api.getCourses(),
+        api.getCourseBroadcasts().catch(() => [])
+      ]);
+      setCourses(coursesData || []);
+      setBroadcasts(broadcastsData || []);
     } catch (err) {
-      console.error('Failed to load student dashboard:', err);
+      console.error('Failed to load student courses:', err);
+      setError(err.message || 'Unable to load authorized courses. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadDashboardData();
+    fetchCoursesAndBroadcasts();
   }, []);
 
-  const handleSyncNow = async () => {
-    if (!project) return;
-    try {
-      setSyncing(true);
-      await api.syncGitHub(project.id);
-      await loadDashboardData();
-    } catch (err) {
-      alert('Sync error: ' + err.message);
-    } finally {
-      setSyncing(false);
+  // Filter courses locally in real time as student types
+  const filteredCourses = courses.filter((course) => {
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.trim().toLowerCase();
+    return (
+      (course.code || '').toLowerCase().includes(q) ||
+      (course.name || '').toLowerCase().includes(q) ||
+      (course.facultyName || '').toLowerCase().includes(q) ||
+      (course.batch || '').toLowerCase().includes(q) ||
+      (course.semester || '').toLowerCase().includes(q)
+    );
+  });
+
+  // Helper to pick the appropriate themed icon for each course
+  const getCourseIcon = (iconName, color) => {
+    const props = { size: 26, style: { color: color || '#38bdf8' } };
+    switch ((iconName || '').toLowerCase()) {
+      case 'globe':
+      case 'server':
+        return <Globe {...props} />;
+      case 'cpu':
+      case 'algo':
+        return <Cpu {...props} />;
+      case 'database':
+        return <Database {...props} />;
+      case 'layers':
+      case 'workflow':
+        return <Layers {...props} />;
+      default:
+        return <BookOpen {...props} />;
     }
   };
 
-  if (loading) {
-    return (
-      <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>
-        Loading student project workspace...
-      </div>
-    );
-  }
-
-  if (!project) {
-    return (
-      <div className="glass-panel" style={{ padding: '60px', textAlign: 'center' }}>
-        <FolderGit2 size={48} style={{ margin: '0 auto 16px auto', color: '#38bdf8' }} />
-        <h2 style={{ fontSize: '1.4rem', fontWeight: 700 }}>No Project Initialized</h2>
-        <p style={{ color: '#94a3b8', maxWidth: '460px', margin: '8px auto 24px auto' }}>
-          You have not created or joined a capstone software project yet. Initialize your project to begin tracking milestones and GitHub synchronization.
-        </p>
-        <button onClick={() => onNavigate('my-project')} className="btn btn-primary">
-          Create New Project
-        </button>
-      </div>
-    );
-  }
-
-  const completedTasks = tasks.filter(t => t.status === 'completed').length;
-  const completedMilestones = milestones.filter(m => m.status === 'Completed').length;
-  const overallProgress = project.progressPercentage || 0;
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
-      {/* Welcome Banner */}
-      <div className="glass-panel" style={{
-        padding: '24px 28px',
-        background: 'linear-gradient(135deg, rgba(2, 132, 199, 0.15) 0%, rgba(99, 102, 241, 0.08) 100%)',
-        border: '1px solid rgba(56, 189, 248, 0.25)',
+    <div className="student-dashboard-classroom" style={{ maxWidth: '1280px', margin: '0 auto', paddingBottom: '40px' }}>
+      {/* Top Header Bar: Title + Real-time Search */}
+      <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        gap: '16px'
+        gap: '16px',
+        marginBottom: '24px'
       }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span className="badge badge-cyan">Capstone v1.0</span>
-            <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Assigned Faculty: <strong style={{ color: '#fff' }}>{project.facultyName || 'Dr. Robert Harrison'}</strong></span>
-          </div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginTop: '6px' }}>
-            {project.name}
+          <h1 style={{ fontSize: '1.85rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#fff' }}>
+            My Courses
           </h1>
-          <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '4px', maxWidth: '650px' }}>
-            {project.description}
+          <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginTop: '4px' }}>
+            Academic software lifecycle & capstone project courses
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button
-            onClick={handleSyncNow}
-            disabled={syncing}
-            className="btn btn-secondary"
-            style={{ fontSize: '0.85rem' }}
-          >
-            <RefreshCw size={15} className={syncing ? 'animate-spin' : ''} />
-            {syncing ? 'Synchronizing GitHub...' : 'Sync GitHub Now'}
-          </button>
-          <button
-            onClick={() => onNavigate('my-project')}
-            className="btn btn-primary"
-            style={{ fontSize: '0.85rem' }}
-          >
-            Manage Project <ArrowUpRight size={15} />
-          </button>
+        {/* Search Bar matching Google Classroom UX */}
+        <div style={{
+          position: 'relative',
+          width: '100%',
+          maxWidth: '360px'
+        }}>
+          <Search
+            size={18}
+            style={{
+              position: 'absolute',
+              left: '14px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              color: '#64748b'
+            }}
+          />
+          <input
+            id="course-search-input"
+            type="text"
+            placeholder="Search courses..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '11px 40px 11px 42px',
+              borderRadius: '12px',
+              backgroundColor: 'rgba(15, 23, 42, 0.7)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              color: '#fff',
+              fontSize: '0.9rem',
+              outline: 'none',
+              transition: 'all 0.2s ease',
+              backdropFilter: 'blur(8px)'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#0284c7';
+              e.target.style.boxShadow = '0 0 0 3px rgba(2, 132, 199, 0.25)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+              e.target.style.boxShadow = 'none';
+            }}
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              style={{
+                position: 'absolute',
+                right: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'transparent',
+                border: 'none',
+                color: '#94a3b8',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '4px'
+              }}
+              title="Clear search"
+            >
+              <X size={16} />
+            </button>
+          )}
         </div>
       </div>
 
-      {/* 4 Header Stat Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
-        {/* Stat 1: Overall Progress */}
-        <div className="glass-panel" style={{ padding: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#94a3b8' }}>Milestone Delivery</span>
-            <div style={{ padding: '8px', borderRadius: '8px', background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
-              <Award size={18} />
+      {/* Announcements From Faculties Section (Panel 3 reference mockup) */}
+      {broadcasts.length > 0 && !error && (
+        <section style={{
+          marginBottom: '32px',
+          borderRadius: '16px',
+          background: 'rgba(18, 24, 38, 0.65)',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          backdropFilter: 'blur(16px)',
+          overflow: 'hidden',
+          boxShadow: '0 8px 30px rgba(0, 0, 0, 0.25)'
+        }}>
+          {/* Header of Announcements */}
+          <div style={{
+            padding: '14px 20px',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            background: 'linear-gradient(90deg, rgba(2, 132, 199, 0.08) 0%, transparent 100%)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '8px',
+                background: 'rgba(239, 68, 68, 0.15)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#ef4444'
+              }}>
+                <Megaphone size={16} />
+              </div>
+              <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>
+                Announcements from Faculties
+              </h2>
             </div>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '12px' }}>
-            <span style={{ fontSize: '1.9rem', fontWeight: 800 }}>{overallProgress}%</span>
-            <span style={{ fontSize: '0.8rem', color: '#34d399' }}>{completedMilestones}/{milestones.length} Delivered</span>
-          </div>
-          <div className="progress-bar-track" style={{ marginTop: '14px' }}>
-            <div className="progress-bar-fill" style={{ width: `${overallProgress}%` }} />
-          </div>
-        </div>
-
-        {/* Stat 2: Tasks Completed */}
-        <div className="glass-panel" style={{ padding: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#94a3b8' }}>Tasks Overview</span>
-            <div style={{ padding: '8px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}>
-              <CheckSquare size={18} />
-            </div>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '12px' }}>
-            <span style={{ fontSize: '1.9rem', fontWeight: 800 }}>{completedTasks}/{tasks.length}</span>
-            <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Completed</span>
-          </div>
-          <div className="progress-bar-track" style={{ marginTop: '14px' }}>
-            <div
-              className="progress-bar-fill emerald"
-              style={{ width: `${tasks.length > 0 ? (completedTasks / tasks.length) * 100 : 0}%` }}
-            />
-          </div>
-        </div>
-
-        {/* Stat 3: GitHub Commits & PRs */}
-        <div className="glass-panel" style={{ padding: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#94a3b8' }}>GitHub Code Evidence</span>
-            <div style={{ padding: '8px', borderRadius: '8px', background: 'rgba(99, 102, 241, 0.1)', color: '#818cf8' }}>
-              <Github size={18} />
-            </div>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginTop: '12px' }}>
-            <span style={{ fontSize: '1.9rem', fontWeight: 800 }}>{githubStatus?.stats?.totalCommits || 0}</span>
-            <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-              Commits • <strong>{githubStatus?.stats?.mergedPRs || 0}</strong> Merged PRs
-            </span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '14px', fontSize: '0.75rem', color: '#64748b' }}>
-            <span className="pulse-dot" />
-            <span>Sync: {githubStatus?.lastSyncedAt ? new Date(githubStatus.lastSyncedAt).toLocaleTimeString() : 'Pending'}</span>
-          </div>
-        </div>
-
-        {/* Stat 4: Team Contributors */}
-        <div className="glass-panel" style={{ padding: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#94a3b8' }}>Team Participation</span>
-            <div style={{ padding: '8px', borderRadius: '8px', background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b' }}>
-              <Users size={18} />
-            </div>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '12px' }}>
-            <span style={{ fontSize: '1.9rem', fontWeight: 800 }}>{project.teamSize || 4}</span>
-            <span style={{ fontSize: '0.8rem', color: '#38bdf8' }}>Active Contributors</span>
-          </div>
-          <div style={{ marginTop: '14px', fontSize: '0.75rem', color: '#94a3b8' }}>
-            Lead: <strong style={{ color: '#fff' }}>{project.leadName}</strong>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Grid: Milestones & GitHub Activity */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '24px' }}>
-        {/* Left: Milestones Summary Card */}
-        <div className="glass-panel" style={{ padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-            <div>
-              <h2 style={{ fontSize: '1.1rem', fontWeight: 700 }}>Milestone Automation Pipeline</h2>
-              <p style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '2px' }}>
-                Rule-evaluated progress strictly driven by GitHub evidence
-              </p>
-            </div>
-            <button onClick={() => onNavigate('milestones')} className="btn btn-secondary btn-sm">
-              Inspect Evidence
+            <button
+              onClick={() => setShowAllAnnouncements(true)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#38bdf8',
+                fontSize: '0.82rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'opacity 0.2s'
+              }}
+              onMouseEnter={(e) => e.target.style.opacity = '0.7'}
+              onMouseLeave={(e) => e.target.style.opacity = '1'}
+            >
+              View All ({broadcasts.length})
             </button>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {milestones.map((ms) => {
-              const isDone = ms.status === 'Completed';
+          {/* Broadcast Items List */}
+          <div style={{ padding: '8px 16px' }}>
+            {broadcasts.slice(0, 3).map((item, idx) => (
+              <div
+                key={item.id || idx}
+                onClick={() => setSelectedAnnouncement(item)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '12px 14px',
+                  borderRadius: '10px',
+                  margin: '4px 0',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.15s ease',
+                  border: '1px solid transparent'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.04)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.borderColor = 'transparent';
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
+                  <div style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    backgroundColor: item.color || '#38bdf8',
+                    flexShrink: 0
+                  }} />
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {item.title}
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
+                      <span style={{ color: item.color || '#38bdf8', fontWeight: 600 }}>{item.courseCode}</span>
+                      <span>•</span>
+                      <span>{item.facultyName}</span>
+                      <span>•</span>
+                      <span>{item.date}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ color: '#64748b', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span>Read</span>
+                  <ArrowRight size={14} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ERROR STATE */}
+      {error && (
+        <div style={{
+          padding: '24px',
+          borderRadius: '16px',
+          background: 'rgba(239, 68, 68, 0.1)',
+          border: '1px solid rgba(239, 68, 68, 0.3)',
+          textAlign: 'center',
+          marginBottom: '32px'
+        }}>
+          <AlertCircle size={36} style={{ color: '#ef4444', margin: '0 auto 12px auto' }} />
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fca5a5' }}>Failed to Load Courses</h3>
+          <p style={{ color: '#94a3b8', fontSize: '0.875rem', margin: '6px 0 16px 0' }}>{error}</p>
+          <button
+            onClick={fetchCoursesAndBroadcasts}
+            className="btn btn-primary"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+          >
+            <RefreshCw size={16} />
+            <span>Try Again</span>
+          </button>
+        </div>
+      )}
+
+      {/* LOADING SKELETON STATE */}
+      {loading && !error && (
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+          gap: '24px'
+        }}>
+          {[1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              style={{
+                borderRadius: '16px',
+                background: 'rgba(18, 24, 38, 0.5)',
+                border: '1px solid rgba(255, 255, 255, 0.05)',
+                padding: '24px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+                minHeight: '260px'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)' }} />
+                <div style={{ flex: 1 }}>
+                  <div style={{ width: '60%', height: '18px', borderRadius: '6px', background: 'rgba(255,255,255,0.08)', marginBottom: '8px' }} />
+                  <div style={{ width: '80%', height: '14px', borderRadius: '4px', background: 'rgba(255,255,255,0.04)' }} />
+                </div>
+              </div>
+              <div style={{ width: '100%', height: '40px', borderRadius: '6px', background: 'rgba(255,255,255,0.03)' }} />
+              <div style={{ marginTop: 'auto', width: '100%', height: '42px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)' }} />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* EMPTY SEARCH STATE */}
+      {!loading && !error && filteredCourses.length === 0 && searchQuery && (
+        <div style={{
+          padding: '60px 24px',
+          textAlign: 'center',
+          borderRadius: '16px',
+          background: 'rgba(18, 24, 38, 0.5)',
+          border: '1px solid rgba(255, 255, 255, 0.08)'
+        }}>
+          <Search size={44} style={{ color: '#64748b', margin: '0 auto 16px auto' }} />
+          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#f8fafc' }}>
+            No courses matching "{searchQuery}"
+          </h3>
+          <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginTop: '6px', maxWidth: '420px', margin: '6px auto 20px auto' }}>
+            Check for typos or try searching with a course code (e.g., CS543) or faculty name.
+          </p>
+          <button
+            onClick={() => setSearchQuery('')}
+            className="btn btn-secondary"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+          >
+            <X size={16} />
+            <span>Clear Search Filter</span>
+          </button>
+        </div>
+      )}
+
+      {/* EMPTY AUTHORIZED COURSES STATE (Zero courses enrolled) */}
+      {!loading && !error && courses.length === 0 && !searchQuery && (
+        <div style={{
+          padding: '60px 24px',
+          textAlign: 'center',
+          borderRadius: '16px',
+          background: 'rgba(18, 24, 38, 0.5)',
+          border: '1px solid rgba(255, 255, 255, 0.08)'
+        }}>
+          <GraduationCap size={48} style={{ color: '#0284c7', margin: '0 auto 16px auto' }} />
+          <h3 style={{ fontSize: '1.3rem', fontWeight: 700, color: '#f8fafc' }}>
+            No Enrolled Courses Found
+          </h3>
+          <p style={{ color: '#94a3b8', fontSize: '0.9rem', maxWidth: '460px', margin: '8px auto 0 auto' }}>
+            You are not currently enrolled in any academic courses for this semester. Contact your course instructor or department administrator for access authorization.
+          </p>
+        </div>
+      )}
+
+      {/* MAIN COURSES GRID (Google Classroom Pattern) */}
+      {!loading && !error && filteredCourses.length > 0 && (
+        <div>
+          {searchQuery && (
+            <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '16px' }}>
+              Showing {filteredCourses.length} {filteredCourses.length === 1 ? 'course' : 'courses'} for <strong style={{ color: '#38bdf8' }}>"{searchQuery}"</strong>
+            </div>
+          )}
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+            gap: '24px'
+          }}>
+            {filteredCourses.map((course) => {
+              const themeColor = course.color || '#0284c7';
               return (
                 <div
-                  key={ms._id || ms.criteriaCode}
+                  key={course.id || course.code}
+                  className="glass-panel glass-panel-hoverable"
                   style={{
-                    padding: '16px',
-                    borderRadius: '12px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.02)',
-                    border: `1px solid ${isDone ? 'rgba(16, 185, 129, 0.25)' : 'rgba(255, 255, 255, 0.06)'}`
+                    borderRadius: '16px',
+                    padding: '24px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    background: 'rgba(18, 24, 38, 0.75)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
+                    minHeight: '270px'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = themeColor;
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = `0 12px 30px -4px ${themeColor}25, 0 4px 12px rgba(0, 0, 0, 0.4)`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 8px 32px 0 rgba(0, 0, 0, 0.37)';
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span className={`badge ${isDone ? 'badge-emerald' : 'badge-amber'}`}>
-                        {ms.criteriaCode}
-                      </span>
-                      <h3 style={{ fontSize: '0.9rem', fontWeight: 600 }}>{ms.name}</h3>
+                  {/* Subtle Top Gradient Accent Strip */}
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '4px',
+                    background: `linear-gradient(90deg, ${themeColor} 0%, ${themeColor}88 100%)`
+                  }} />
+
+                  {/* Card Body */}
+                  <div>
+                    {/* Course Code & Visual Identifier Icon */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+                      <div style={{
+                        width: '50px',
+                        height: '50px',
+                        borderRadius: '14px',
+                        background: `${themeColor}18`,
+                        border: `1px solid ${themeColor}35`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
+                      }}>
+                        {getCourseIcon(course.icon, themeColor)}
+                      </div>
+
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{
+                          display: 'inline-block',
+                          fontSize: '0.75rem',
+                          fontWeight: 800,
+                          padding: '3px 8px',
+                          borderRadius: '6px',
+                          backgroundColor: `${themeColor}20`,
+                          color: themeColor,
+                          letterSpacing: '0.04em',
+                          marginBottom: '4px'
+                        }}>
+                          {course.code}
+                        </div>
+                        <h3 style={{
+                          fontSize: '1.15rem',
+                          fontWeight: 700,
+                          color: '#fff',
+                          lineHeight: 1.3,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical'
+                        }}>
+                          {course.name}
+                        </h3>
+                      </div>
                     </div>
-                    <span style={{ fontSize: '0.9rem', fontWeight: 700, color: isDone ? '#34d399' : '#f59e0b' }}>
-                      {ms.percentage}%
-                    </span>
+
+                    {/* Metadata: Faculty & Batch/Semester */}
+                    <div style={{
+                      padding: '12px 0',
+                      borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '6px',
+                      fontSize: '0.825rem'
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#cbd5e1' }}>
+                        <User size={14} style={{ color: '#94a3b8' }} />
+                        <span>Faculty: <strong style={{ color: '#f1f5f9' }}>{course.facultyName}</strong></span>
+                      </div>
+
+                      {(course.batch || course.semester) && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#94a3b8' }}>
+                          <Calendar size={14} style={{ color: '#64748b' }} />
+                          <span>
+                            {course.batch && `Batch: ${course.batch}`}
+                            {course.batch && course.semester && ' • '}
+                            {course.semester && course.semester}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="progress-bar-track" style={{ marginTop: '10px' }}>
-                    <div
-                      className={`progress-bar-fill ${isDone ? 'emerald' : 'amber'}`}
-                      style={{ width: `${ms.percentage}%` }}
-                    />
+                  {/* "View Course" Action Button */}
+                  <div style={{ marginTop: '16px' }}>
+                    <button
+                      onClick={() => onSelectCourse && onSelectCourse(course)}
+                      className="btn"
+                      style={{
+                        width: '100%',
+                        padding: '10px 16px',
+                        borderRadius: '10px',
+                        background: `linear-gradient(135deg, ${themeColor} 0%, #0284c7 100%)`,
+                        border: 'none',
+                        color: '#fff',
+                        fontWeight: 600,
+                        fontSize: '0.875rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px',
+                        cursor: 'pointer',
+                        boxShadow: `0 4px 14px ${themeColor}35`,
+                        transition: 'all 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.filter = 'brightness(1.1)';
+                        e.currentTarget.style.transform = 'scale(1.02)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.filter = 'brightness(1)';
+                        e.currentTarget.style.transform = 'scale(1)';
+                      }}
+                    >
+                      <span>View Course</span>
+                      <ArrowRight size={16} />
+                    </button>
                   </div>
-
-                  <EvidenceList evidenceList={ms.evidenceList} lastCheckedAt={ms.lastCheckedAt} />
                 </div>
               );
             })}
           </div>
         </div>
+      )}
 
-        {/* Right: Live GitHub Activity Stream */}
-        <div className="glass-panel" style={{ padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Github size={18} style={{ color: '#38bdf8' }} />
-                <h2 style={{ fontSize: '1.1rem', fontWeight: 700 }}>Synchronized GitHub Activity</h2>
+      {/* Announcement Detail / All Announcements Modal */}
+      {(showAllAnnouncements || selectedAnnouncement) && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.75)',
+          backdropFilter: 'blur(8px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '20px',
+          zIndex: 1000
+        }}>
+          <div style={{
+            width: '100%',
+            maxWidth: '600px',
+            backgroundColor: '#0f172a',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            borderRadius: '16px',
+            padding: '24px',
+            maxHeight: '85vh',
+            overflowY: 'auto',
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.6)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Megaphone size={20} style={{ color: '#38bdf8' }} />
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff' }}>
+                  {selectedAnnouncement ? 'Course Announcement' : 'All Faculty Announcements'}
+                </h3>
               </div>
-              <p style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '2px' }}>
-                {githubStatus?.repoFullName || 'Repository Stream'} (Never manually entered)
-              </p>
-            </div>
-            <button onClick={() => onNavigate('github')} className="btn btn-secondary btn-sm">
-              View Repository
-            </button>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {activity.slice(0, 7).map((item) => (
-              <div
-                key={item.id}
+              <button
+                onClick={() => {
+                  setShowAllAnnouncements(false);
+                  setSelectedAnnouncement(null);
+                }}
                 style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '12px',
-                  padding: '12px',
-                  borderRadius: '10px',
-                  backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                  border: '1px solid rgba(255, 255, 255, 0.04)'
+                  background: 'none',
+                  border: 'none',
+                  color: '#94a3b8',
+                  cursor: 'pointer',
+                  padding: '4px'
                 }}
               >
-                <div style={{
-                  padding: '6px',
-                  borderRadius: '6px',
-                  background: item.type === 'commit' ? 'rgba(56, 189, 248, 0.1)' : 'rgba(99, 102, 241, 0.1)',
-                  color: item.type === 'commit' ? '#38bdf8' : '#818cf8',
-                  marginTop: '2px'
-                }}>
-                  {item.type === 'commit' ? <GitCommit size={14} /> : <GitPullRequest size={14} />}
-                </div>
+                <X size={20} />
+              </button>
+            </div>
 
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f1f5f9', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {item.title}
-                    </span>
-                    <span className="badge badge-cyan" style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)' }}>
-                      {item.badge}
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px', fontSize: '0.725rem', color: '#94a3b8' }}>
-                    <span>{typeof item.author === 'object' ? (item.author?.name || item.author?.login || 'Contributor') : (item.author || 'Contributor')}</span>
-                    <span>•</span>
-                    <span>{new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                  </div>
+            {selectedAnnouncement ? (
+              <div>
+                <div style={{
+                  display: 'inline-block',
+                  padding: '3px 8px',
+                  borderRadius: '6px',
+                  backgroundColor: 'rgba(2, 132, 199, 0.15)',
+                  color: '#38bdf8',
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  marginBottom: '8px'
+                }}>
+                  {selectedAnnouncement.courseCode} — {selectedAnnouncement.courseName}
                 </div>
+                <h4 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#f8fafc', marginBottom: '8px' }}>
+                  {selectedAnnouncement.title}
+                </h4>
+                <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginBottom: '16px' }}>
+                  Posted by <strong>{selectedAnnouncement.facultyName}</strong> on {selectedAnnouncement.date}
+                </div>
+                <p style={{ color: '#cbd5e1', fontSize: '0.9rem', lineHeight: 1.6, whiteSpace: 'pre-line' }}>
+                  {selectedAnnouncement.content}
+                </p>
               </div>
-            ))}
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {broadcasts.map((ann, idx) => (
+                  <div
+                    key={idx}
+                    onClick={() => setSelectedAnnouncement(ann)}
+                    style={{
+                      padding: '14px',
+                      borderRadius: '10px',
+                      background: 'rgba(255, 255, 255, 0.04)',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <div style={{ fontSize: '0.75rem', color: ann.color || '#38bdf8', fontWeight: 700 }}>
+                      {ann.courseCode} • {ann.date}
+                    </div>
+                    <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#fff', margin: '4px 0' }}>
+                      {ann.title}
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                      Faculty: {ann.facultyName}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

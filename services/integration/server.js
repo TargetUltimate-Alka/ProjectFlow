@@ -91,9 +91,9 @@ function parseGitHubUrl(input) {
   return null;
 }
 
-// Fetch live repository facts directly from GitHub REST API
+// Fetch live repository facts concurrently from GitHub REST API v3
 async function fetchLiveGitHubData(repoOwner, repoName, token) {
-  const effectiveToken = token || process.env.GITHUB_TOKEN || process.env.GITHUB_PAT || null;
+  const effectiveToken = (token || process.env.GITHUB_TOKEN || process.env.GITHUB_PAT || '').trim() || null;
   const headers = {
     'User-Agent': 'ProjectFlow-Sync-Agent/1.0',
     'Accept': 'application/vnd.github.v3+json'
@@ -102,8 +102,21 @@ async function fetchLiveGitHubData(repoOwner, repoName, token) {
     headers['Authorization'] = `Bearer ${effectiveToken}`;
   }
 
-  // 1. Fetch Repository Info
-  const repoRes = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}`, { headers, timeout: 8000 });
+  // Execute independent GitHub REST calls in parallel for maximum speed and throughput
+  const [repoResult, commitsResult, pullsResult, issuesResult, contribResult] = await Promise.allSettled([
+    axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}`, { headers, timeout: 10000 }),
+    axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/commits?per_page=50`, { headers, timeout: 10000 }),
+    axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/pulls?state=all&per_page=50`, { headers, timeout: 10000 }),
+    axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/issues?state=all&per_page=50`, { headers, timeout: 10000 }),
+    axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/contributors?per_page=30`, { headers, timeout: 10000 })
+  ]);
+
+  // Primary check: if repository metadata call failed, check status code
+  if (repoResult.status === 'rejected') {
+    throw repoResult.reason;
+  }
+
+  const repoRes = repoResult.value;
   const repoData = repoRes.data || {};
   const repoInfo = {
     stars: repoData.stargazers_count ?? 0,
@@ -111,13 +124,19 @@ async function fetchLiveGitHubData(repoOwner, repoName, token) {
     openIssues: repoData.open_issues_count ?? 0
   };
 
-  // 2. Fetch Commits (handle 409 for empty repositories)
+  // Extract GitHub Rate Limit headers
+  const rateLimit = {
+    limit: repoRes.headers?.['x-ratelimit-limit'] ? parseInt(repoRes.headers['x-ratelimit-limit'], 10) : null,
+    remaining: repoRes.headers?.['x-ratelimit-remaining'] ? parseInt(repoRes.headers['x-ratelimit-remaining'], 10) : null,
+    reset: repoRes.headers?.['x-ratelimit-reset'] ? new Date(parseInt(repoRes.headers['x-ratelimit-reset'], 10) * 1000).toISOString() : null
+  };
+
+  // Commits mapping
   let commits = [];
-  try {
-    const commitsRes = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/commits?per_page=30`, { headers, timeout: 8000 });
-    commits = (commitsRes.data || []).map(c => ({
+  if (commitsResult.status === 'fulfilled' && Array.isArray(commitsResult.value.data)) {
+    commits = commitsResult.value.data.map(c => ({
       sha: c.sha ? c.sha.substring(0, 7) : 'commit',
-      message: c.commit?.message || 'Commit message',
+      message: (c.commit?.message || 'Commit message').split('\n')[0],
       author: {
         login: c.author?.login || c.commit?.author?.name || 'contributor',
         name: c.commit?.author?.name || c.author?.login || 'Contributor',
@@ -125,19 +144,12 @@ async function fetchLiveGitHubData(repoOwner, repoName, token) {
       },
       timestamp: c.commit?.author?.date || c.commit?.committer?.date || new Date().toISOString()
     }));
-  } catch (err) {
-    if (err.response?.status === 409) {
-      commits = [];
-    } else {
-      throw err;
-    }
   }
 
-  // 3. Fetch Pull Requests
+  // Pull Requests mapping
   let pulls = [];
-  try {
-    const pullsRes = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/pulls?state=all&per_page=30`, { headers, timeout: 8000 });
-    pulls = (pullsRes.data || []).map(p => ({
+  if (pullsResult.status === 'fulfilled' && Array.isArray(pullsResult.value.data)) {
+    pulls = pullsResult.value.data.map(p => ({
       number: p.number,
       title: p.title || `PR #${p.number}`,
       state: p.merged_at ? 'merged' : (p.state || 'open'),
@@ -151,15 +163,12 @@ async function fetchLiveGitHubData(repoOwner, repoName, token) {
       additions: 150,
       deletions: 25
     }));
-  } catch (err) {
-    pulls = [];
   }
 
-  // 4. Fetch Issues (excluding PRs)
+  // Issues mapping (excluding pull requests)
   let issues = [];
-  try {
-    const issuesRes = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/issues?state=all&per_page=30`, { headers, timeout: 8000 });
-    issues = (issuesRes.data || [])
+  if (issuesResult.status === 'fulfilled' && Array.isArray(issuesResult.value.data)) {
+    issues = issuesResult.value.data
       .filter(i => !i.pull_request)
       .map(i => ({
         number: i.number,
@@ -172,27 +181,22 @@ async function fetchLiveGitHubData(repoOwner, repoName, token) {
           name: i.user?.login || 'User'
         }
       }));
-  } catch (err) {
-    issues = [];
   }
 
-  // 5. Fetch Contributors
+  // Contributors mapping
   let contributors = [];
-  try {
-    const contribRes = await axios.get(`https://api.github.com/repos/${repoOwner}/${repoName}/contributors?per_page=15`, { headers, timeout: 8000 });
-    contributors = Array.isArray(contribRes.data) ? contribRes.data.map(c => ({
+  if (contribResult.status === 'fulfilled' && Array.isArray(contribResult.value.data)) {
+    contributors = contribResult.value.data.map(c => ({
       login: c.login,
       name: c.login,
       avatar: c.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100',
       commits: c.contributions || 1,
       additions: (c.contributions || 1) * 45,
       deletions: (c.contributions || 1) * 12
-    })) : [];
-  } catch (err) {
-    contributors = [];
+    }));
   }
 
-  return { repoInfo, commits, pulls, issues, contributors };
+  return { repoInfo, commits, pulls, issues, contributors, rateLimit };
 }
 
 // Health check
@@ -305,6 +309,7 @@ async function performSync(projectId, repoOwner, repoName, token, useDemoMode) {
   let issues = [];
   let contributors = [];
   let repoInfo = { stars: 0, forks: 0, openIssues: 0 };
+  let rateLimit = null;
   let isLive = false;
   let syncWarning = null;
 
@@ -317,6 +322,7 @@ async function performSync(projectId, repoOwner, repoName, token, useDemoMode) {
     issues = liveData.issues;
     contributors = liveData.contributors;
     repoInfo = liveData.repoInfo;
+    rateLimit = liveData.rateLimit;
     isLive = true;
     console.log(`[IntegrationService] LIVE GitHub data retrieved: ${commits.length} commits, ${pulls.length} PRs, ${contributors.length} contributors.`);
   } catch (ghErr) {
@@ -394,6 +400,7 @@ async function performSync(projectId, repoOwner, repoName, token, useDemoMode) {
         stars: repoInfo.stars,
         forks: repoInfo.forks,
         openIssues: repoInfo.openIssues,
+        rateLimit: rateLimit || null,
         stats
       }
     }
@@ -407,6 +414,7 @@ async function performSync(projectId, repoOwner, repoName, token, useDemoMode) {
     status: 'success',
     dataSource: isLive ? 'live' : 'mock',
     warning: syncWarning || null,
+    rateLimit: rateLimit || null,
     stats
   });
 
@@ -420,7 +428,23 @@ async function performSync(projectId, repoOwner, repoName, token, useDemoMode) {
     syncedAt: finishedAt
   });
 
-  return { ...stats, dataSource: isLive ? 'live' : 'mock', syncWarning };
+  // Direct notification to ProjectService for immediate milestone recalculation
+  try {
+    const projectServiceUrl = process.env.PROJECT_SERVICE_URL || 'http://localhost:5002';
+    await axios.post(
+      `${projectServiceUrl}/projects/${projectId}/milestones/recalculate`,
+      {},
+      {
+        headers: { 'x-internal-service': 'integration-service' },
+        timeout: 4000
+      }
+    );
+    console.log(`[IntegrationService] Successfully notified ProjectService to recalculate milestones for project ${projectId}.`);
+  } catch (projErr) {
+    console.warn(`[IntegrationService] Note: Direct milestone recalculation ping skipped: ${projErr.message}`);
+  }
+
+  return { ...stats, dataSource: isLive ? 'live' : 'mock', rateLimit, syncWarning };
 }
 
 // Trigger synchronization
@@ -449,11 +473,59 @@ app.post('/github/:projectId/sync', authenticate, async (req, res) => {
       lastSyncedAt: new Date().toISOString(),
       syncStatus: 'synced',
       dataSource: stats.dataSource,
+      rateLimit: stats.rateLimit || null,
       syncWarning: stats.syncWarning || null,
       stats
     });
   } catch (err) {
     res.status(500).json({ error: 'Sync failed: ' + err.message });
+  }
+});
+
+// GitHub Webhook listener for real-time automated push/pull_request event synchronization
+app.post('/github/webhook', async (req, res) => {
+  try {
+    const repoFullName = req.body?.repository?.full_name;
+    const event = req.headers['x-github-event'] || 'push';
+    console.log(`[IntegrationService] GitHub Webhook received event [${event}] for repo "${repoFullName}"`);
+
+    if (!repoFullName) {
+      return res.status(400).json({ error: 'Missing repository payload' });
+    }
+
+    // Find all projects that connect this repository (case-insensitive)
+    const allConns = await connectionsCollection.find({}).toArray();
+    const matching = allConns.filter(c => (c.repoFullName || '').toLowerCase() === repoFullName.toLowerCase());
+
+    if (matching.length === 0) {
+      return res.json({ message: `No projects configured for repository ${repoFullName}` });
+    }
+
+    // Trigger sync for all matching projects
+    const syncResults = [];
+    for (const conn of matching) {
+      try {
+        const stats = await performSync(
+          conn.projectId,
+          conn.repoOwner,
+          conn.repoName,
+          conn.rawToken,
+          conn.useDemoMode
+        );
+        syncResults.push({ projectId: conn.projectId, status: 'synced', commits: stats.totalCommits });
+      } catch (err) {
+        syncResults.push({ projectId: conn.projectId, status: 'failed', error: err.message });
+      }
+    }
+
+    res.json({
+      message: `Processed GitHub webhook for ${repoFullName}`,
+      event,
+      syncedProjects: syncResults
+    });
+  } catch (err) {
+    console.error('[IntegrationService] Webhook processing error:', err);
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -484,6 +556,7 @@ app.get('/github/:projectId/status', async (req, res) => {
       syncWarning: connection.syncWarning || null,
       useDemoMode: connection.useDemoMode,
       dataSource: connection.dataSource || 'live',
+      rateLimit: connection.rateLimit || null,
       stats: {
         totalCommits: commitsCount,
         totalPRs: pulls.length,

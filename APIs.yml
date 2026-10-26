@@ -1,0 +1,653 @@
+version: "2.2.0"
+info:
+  title: "ProjectFlow API Specification"
+  description: "REST API documentation for ProjectFlow academic software engineering platform. Covers Step 1 (Student Course Dashboard), Step 2 (Course Details Page, Faculty Broadcast Announcements), and Step 3 (My Team, Course Teams Management, and Team Formation)."
+  feature: "Step 3: My Team, Course Teams Management, and Team Formation"
+  lastUpdated: "2026-10-26"
+
+# ========================================================
+# 1. API CATEGORIZATION SUMMARY
+# ========================================================
+summary:
+  existingApisReused:
+    - path: "/api/auth/login"
+      method: "POST"
+      service: "auth-service"
+      description: "Authenticates students, faculty, and administrators; generates 24h JWT token."
+    - path: "/api/auth/register"
+      method: "POST"
+      service: "auth-service"
+      description: "Enrolls and registers student accounts with academic details."
+    - path: "/api/auth/me"
+      method: "GET"
+      service: "auth-service"
+      description: "Validates current token and returns active user persona profile."
+    - path: "/api/courses"
+      method: "GET"
+      service: "project-service"
+      description: "Fetches authorized academic courses for the authenticated user with search filtering."
+    - path: "/api/courses/{id}"
+      method: "GET"
+      service: "project-service"
+      description: "Fetches complete course syllabus, faculty metadata, instructor message, and resource lists."
+    - path: "/api/courses/broadcasts"
+      method: "GET"
+      service: "project-service"
+      description: "Aggregates faculty broadcast announcements across all authorized courses for the student dashboard."
+
+  newApisIntroduced:
+    - path: "/api/courses/{id}/announcements"
+      method: "GET"
+      service: "project-service"
+      description: "Lists announcements for a specific course with optional query filters (search, unreadOnly, pinnedOnly), ordered with pinned announcements first. Accessible by enrolled students without team membership."
+    - path: "/api/courses/{id}/announcements/{announcementId}"
+      method: "GET"
+      service: "project-service"
+      description: "Fetches details of a specific faculty announcement with calculated read/unread status for the user."
+    - path: "/api/courses/{id}/announcements"
+      method: "POST"
+      service: "project-service"
+      description: "Allows assigned faculty or administrators to publish a new broadcast announcement with optional attachments and pinned/important flags. Students receive 403 Forbidden."
+    - path: "/api/courses/{id}/announcements/{announcementId}"
+      method: "PUT"
+      service: "project-service"
+      description: "Allows assigned faculty or administrators to update title, body, pinned/important flags, or attachments. Students receive 403 Forbidden."
+    - path: "/api/courses/{id}/announcements/{announcementId}"
+      method: "DELETE"
+      service: "project-service"
+      description: "Allows assigned faculty or administrators to delete an announcement. Students receive 403 Forbidden."
+    - path: "/api/courses/{id}/announcements/{announcementId}/read"
+      method: "PUT"
+      service: "project-service"
+      description: "Allows enrolled students and faculty to toggle or mark an announcement as read or unread."
+    - path: "/api/courses/{id}/attachments/{filename}"
+      method: "GET"
+      service: "project-service"
+      description: "Streams course documents and announcement attachments (PDF/Word/ZIP). Enforces course enrollment authorization (non-enrolled users receive 403 Forbidden)."
+    - path: "/api/courses/{id}/teams"
+      method: "GET"
+      service: "project-service"
+      description: "Returns list of project teams for the selected course with member capacity, user membership status (Available, Full, Joined), and members list. Does not require the caller to belong to a team."
+    - path: "/api/courses/{id}/my-team"
+      method: "GET"
+      service: "project-service"
+      description: "Fetches the authenticated user's current team in the specified course, returning { team: null } if the student is not currently in a team."
+    - path: "/api/courses/{id}/teams"
+      method: "POST"
+      service: "project-service"
+      description: "Creates a new course team after validating team size (4-5), unique team name, roll number & institutional email verification against auth database, batch matching, course enrollment, and single-team membership."
+    - path: "/api/courses/{id}/teams/{teamId}/join"
+      method: "POST"
+      service: "project-service"
+      description: "Allows an eligible, unassigned enrolled student from the same batch to join an open team in the course (capacity < 5)."
+    - path: "/api/courses/{id}/teams/{teamId}/leave"
+      method: "POST"
+      service: "project-service"
+      description: "Allows a member to leave their current team in the course. Reassigns team leadership if the leader departs, or deletes the team if empty."
+
+  existingApisModified:
+    - path: "/api/courses*"
+      component: "API Gateway (gateway/server.js)"
+      type: "Attachment Binary Streaming Support"
+      description: "Enhanced Gateway proxyRequest to detect attachment download routes, request arraybuffer from microservice, and forward Content-Disposition and Content-Type headers while handling error JSON."
+
+  apisCandidatesForDeprecation:
+    - path: "/api/projects"
+      method: "GET"
+      reason: "Course scoping required in future steps (?courseId=...) rather than global root-level listing."
+
+# ========================================================
+# 2. DETAILED ENDPOINT CONTRACTS
+# ========================================================
+endpoints:
+
+  # ------------------------------------------------------
+  # GET /api/courses/{id}/announcements
+  # ------------------------------------------------------
+  - path: "/api/courses/{id}/announcements"
+    method: "GET"
+    category: "New API Introduced (Step 2)"
+    service: "project-service"
+    summary: "List announcements for a course"
+    description: "Returns broadcast announcements for the specified course. Team membership is NOT a prerequisite. Supports search, unread, and pinned filters. Pinned announcements sort first."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+      header: "Authorization: Bearer <token>"
+    authorization:
+      rules:
+        - role: "Student"
+          rule: "Must be enrolled in the course (email in enrolledEmails or ID in enrolledStudentIds). Team membership not required."
+        - role: "Faculty"
+          rule: "Must be assigned instructor for the course or Admin."
+        - role: "Non-enrolled Student"
+          rule: "HTTP 403 Forbidden."
+    pathParams:
+      - name: "id"
+        type: "string"
+        required: true
+        description: "Course code (e.g. 'CS543') or course ID (e.g. 'course_cs543')."
+    queryParams:
+      - name: "search"
+        type: "string"
+        required: false
+        description: "Case-insensitive query matching title, message content, or instructor name."
+      - name: "unreadOnly"
+        type: "boolean"
+        required: false
+        description: "If 'true', filters only announcements not yet read by the user."
+      - name: "pinnedOnly"
+        type: "boolean"
+        required: false
+        description: "If 'true', returns only pinned announcements."
+    responses:
+      200:
+        description: "List of course announcements"
+        example:
+          - id: "ann_cs543_team_guidelines"
+            courseId: "course_cs543"
+            courseCode: "CS543"
+            courseName: "Web Services"
+            title: "Project Team Formation Guidelines"
+            content: "• Each team must contain 4–5 students.\n• All members must belong to the same academic batch (2026-2028).\n• Every member must have a unique roll number and institutional email.\n• Each student can belong to only one team in the course.\n• Students must select a topic from the faculty-approved list in Resources.\n• Project proposals must be submitted before the faculty-defined deadline (25 Oct 2026)."
+            facultyName: "Dr. R. Sharma"
+            facultyEmail: "dr.sharma@projectflow.edu"
+            isPinned: true
+            isImportant: true
+            publishedAt: "2026-10-20T10:00:00.000Z"
+            date: "20 Oct 2026, 10:00 AM"
+            attachments:
+              - id: "att_guidelines_pdf"
+                name: "Project_Guidelines.pdf"
+                size: "2.4 MB"
+                type: "pdf"
+                downloadUrl: "/api/courses/CS543/attachments/Project_Guidelines.pdf"
+            readBy:
+              - "alex.chen@student.edu"
+            isRead: false
+      403:
+        description: "Access denied. Student is not enrolled in the course."
+        example:
+          error: "Access denied. You are not enrolled in CS543 - Web Services."
+      404:
+        description: "Course not found"
+        example:
+          error: "Course 'CS999' not found"
+
+  # ------------------------------------------------------
+  # GET /api/courses/{id}/announcements/{announcementId}
+  # ------------------------------------------------------
+  - path: "/api/courses/{id}/announcements/{announcementId}"
+    method: "GET"
+    category: "New API Introduced (Step 2)"
+    service: "project-service"
+    summary: "Get single announcement details"
+    description: "Returns announcement data with computed isRead status for caller."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    authorization:
+      rules:
+        - role: "Student"
+          rule: "Enrolled students can view. 403 Forbidden for non-enrolled students."
+    responses:
+      200:
+        description: "Announcement details"
+        example:
+          id: "ann_cs543_team_guidelines"
+          title: "Project Team Formation Guidelines"
+          content: "Each team must contain 4–5 students..."
+          facultyName: "Dr. R. Sharma"
+          isPinned: true
+          isRead: false
+      404:
+        example:
+          error: "Announcement 'ann_123' not found"
+
+  # ------------------------------------------------------
+  # POST /api/courses/{id}/announcements
+  # ------------------------------------------------------
+  - path: "/api/courses/{id}/announcements"
+    method: "POST"
+    category: "New API Introduced (Step 2)"
+    service: "project-service"
+    summary: "Publish course broadcast announcement"
+    description: "Publishes a new announcement. Restricted to faculty assigned to the course and administrators. Students cannot publish."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    authorization:
+      rules:
+        - role: "Student"
+          rule: "HTTP 403 Forbidden. Students cannot create or broadcast announcements."
+        - role: "Faculty"
+          rule: "Allowed only if faculty is assigned to this course."
+        - role: "Admin"
+          rule: "Allowed across all courses."
+    requestBody:
+      contentType: "application/json"
+      required: true
+      example:
+        title: "Project Team Formation Guidelines"
+        content: "• Each team must contain 4–5 students.\n• Submit proposals before deadline."
+        isPinned: true
+        isImportant: true
+        attachments:
+          - name: "Project_Guidelines.pdf"
+            size: "2.4 MB"
+            type: "pdf"
+    responses:
+      201:
+        description: "Announcement created successfully"
+        example:
+          id: "ann_1730000000000"
+          title: "Project Team Formation Guidelines"
+          courseCode: "CS543"
+          facultyName: "Dr. R. Sharma"
+          isPinned: true
+          publishedAt: "2026-10-26T21:00:00.000Z"
+      400:
+        example:
+          error: "Announcement title is required"
+      403:
+        example:
+          error: "Access forbidden: insufficient permissions. Role 'Student' is not allowed."
+
+  # ------------------------------------------------------
+  # PUT /api/courses/{id}/announcements/{announcementId}
+  # ------------------------------------------------------
+  - path: "/api/courses/{id}/announcements/{announcementId}"
+    method: "PUT"
+    category: "New API Introduced (Step 2)"
+    service: "project-service"
+    summary: "Update course announcement"
+    description: "Modifies announcement content, pinned flag, or attachments. Restricted to Faculty/Admin."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    authorization:
+      rules:
+        - role: "Student"
+          rule: "HTTP 403 Forbidden. Students cannot modify announcements."
+    requestBody:
+      contentType: "application/json"
+      required: true
+      example:
+        title: "Updated Guidelines"
+        content: "Extended deadline to 28 Oct."
+        isPinned: true
+    responses:
+      200:
+        description: "Announcement updated successfully"
+      403:
+        example:
+          error: "Access forbidden: insufficient permissions"
+
+  # ------------------------------------------------------
+  # DELETE /api/courses/{id}/announcements/{announcementId}
+  # ------------------------------------------------------
+  - path: "/api/courses/{id}/announcements/{announcementId}"
+    method: "DELETE"
+    category: "New API Introduced (Step 2)"
+    service: "project-service"
+    summary: "Delete course announcement"
+    description: "Deletes an announcement from the course feed. Restricted to Faculty/Admin."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    authorization:
+      rules:
+        - role: "Student"
+          rule: "HTTP 403 Forbidden. Students cannot delete announcements."
+    responses:
+      200:
+        example:
+          message: "Announcement deleted successfully"
+          announcementId: "ann_123"
+
+  # ------------------------------------------------------
+  # PUT /api/courses/{id}/announcements/{announcementId}/read
+  # ------------------------------------------------------
+  - path: "/api/courses/{id}/announcements/{announcementId}/read"
+    method: "PUT"
+    category: "New API Introduced (Step 2)"
+    service: "project-service"
+    summary: "Mark announcement as read or unread"
+    description: "Updates readBy registry for the authenticated student or faculty member."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    authorization:
+      rules:
+        - role: "Student"
+          rule: "Allowed for enrolled students. 403 Forbidden for non-enrolled students."
+    requestBody:
+      contentType: "application/json"
+      required: false
+      example:
+        unread: false
+    responses:
+      200:
+        description: "Read status updated"
+        example:
+          success: true
+          announcementId: "ann_cs543_team_guidelines"
+          isRead: true
+          readByCount: 2
+
+  # ------------------------------------------------------
+  # GET /api/courses/{id}/attachments/{filename}
+  # ------------------------------------------------------
+  - path: "/api/courses/{id}/attachments/{filename}"
+    method: "GET"
+    category: "New API Introduced (Step 2)"
+    service: "project-service"
+    summary: "Download course or announcement attachment"
+    description: "Streams requested academic document with appropriate MIME type and Content-Disposition. Access restricted to enrolled course members."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    authorization:
+      rules:
+        - role: "Enrolled Student / Faculty / Admin"
+          rule: "Granted file download access."
+        - role: "Non-enrolled Student"
+          rule: "HTTP 403 Forbidden. Unauthorized users cannot download attachments."
+    pathParams:
+      - name: "id"
+        type: "string"
+        required: true
+        description: "Course code or course ID"
+      - name: "filename"
+        type: "string"
+        required: true
+        description: "Name of attached document (e.g. 'Project_Guidelines.pdf')"
+    responses:
+      200:
+        description: "Binary file stream with Content-Disposition attachment header"
+        contentType: "application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      403:
+        description: "Access denied"
+        example:
+          error: "Access denied. You are not enrolled in CS543 - Web Services."
+
+  # ------------------------------------------------------
+  # GET /api/courses/{id}/teams
+  # ------------------------------------------------------
+  - path: "/api/courses/{id}/teams"
+    method: "GET"
+    category: "New API Introduced (Step 2)"
+    service: "project-service"
+    summary: "List teams for course preview"
+    description: "Returns preview listing of existing teams in the selected course. Accessible without team membership."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    authorization:
+      rules:
+        - role: "Student"
+          rule: "Allowed for enrolled students regardless of team membership."
+    pathParams:
+      - name: "id"
+        type: "string"
+        required: true
+        description: "Course code or course ID"
+    responses:
+      200:
+        description: "List of course teams"
+        example:
+          - id: "team_alpha"
+            courseCode: "CS543"
+            name: "Team Alpha"
+            teamLead: "Alka Jha"
+            memberCount: 4
+            maxMembers: 5
+            status: "Joined"
+            isUserMember: true
+            members:
+              - name: "Alka Jha"
+                rollNumber: "20251651013"
+                isLeader: true
+              - name: "Alex Chen"
+                rollNumber: "20251651001"
+                isLeader: false
+          - id: "team_innovators"
+            courseCode: "CS543"
+            name: "Team Innovators"
+            teamLead: "Rohit Kumar"
+            memberCount: 5
+            maxMembers: 5
+            status: "Full"
+            isUserMember: false
+
+  # ------------------------------------------------------
+  # GET /api/courses/{id}/my-team
+  # ------------------------------------------------------
+  - path: "/api/courses/{id}/my-team"
+    method: "GET"
+    category: "New API Introduced (Step 3)"
+    service: "project-service"
+    summary: "Get current user's team for a course"
+    description: "Returns the authenticated student's team details if they belong to a team in this course, or { team: null } if unassigned."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    pathParams:
+      - name: "id"
+        type: "string"
+        required: true
+        description: "Course code or course ID (e.g., CS543)"
+    responses:
+      200:
+        description: "Team object or null"
+        example:
+          team:
+            id: "team_alpha"
+            courseCode: "CS543"
+            name: "Team Alpha"
+            description: "Distributed Microservices Architecture with Gateway"
+            teamLead: "Aarav Sharma"
+            memberCount: 4
+            maxMembers: 5
+            status: "Joined"
+            isUserMember: true
+            members:
+              - name: "Aarav Sharma"
+                rollNumber: "20251651001"
+                email: "aarav1@iitv.ac.in"
+                isLeader: true
+      404:
+        description: "Course not found"
+
+  # ------------------------------------------------------
+  # POST /api/courses/{id}/teams
+  # ------------------------------------------------------
+  - path: "/api/courses/{id}/teams"
+    method: "POST"
+    category: "New API Introduced (Step 3)"
+    service: "project-service"
+    summary: "Create a new course team"
+    description: "Validates member identities, roll number/email consistency, batch matching, course enrollment, single-team rule, and team size (4-5 members). Caller is assigned as Team Lead."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    pathParams:
+      - name: "id"
+        type: "string"
+        required: true
+        description: "Course code or course ID (e.g., CS543)"
+    requestBody:
+      contentType: "application/json"
+      required: true
+      example:
+        name: "Team Innovators"
+        description: "Scalable Event Driven System"
+        members:
+          - rollNumber: "20251651013"
+            email: "alka123@iitv.ac.in"
+          - rollNumber: "20251651050"
+            email: "rahul50@iitv.ac.in"
+          - rollNumber: "20251651051"
+            email: "sneha51@iitv.ac.in"
+          - rollNumber: "20251651052"
+            email: "aman52@iitv.ac.in"
+    responses:
+      201:
+        description: "Team successfully created"
+        example:
+          message: "Team \"Team Innovators\" created successfully"
+          team:
+            id: "team_1793040000000_abc"
+            courseCode: "CS543"
+            name: "Team Innovators"
+            description: "Scalable Event Driven System"
+            teamLead: "Alka Jha"
+            memberCount: 4
+            maxMembers: 5
+            status: "Joined"
+            isUserMember: true
+      400:
+        description: "Validation failure (size, identity mismatch, duplicate membership, batch mismatch)"
+        example:
+          error: "Member with roll number 20251651050 already belongs to another team in this course."
+      403:
+        description: "Unauthorized or course access forbidden"
+
+  # ------------------------------------------------------
+  # POST /api/courses/{id}/teams/{teamId}/join
+  # ------------------------------------------------------
+  - path: "/api/courses/{id}/teams/{teamId}/join"
+    method: "POST"
+    category: "New API Introduced (Step 3)"
+    service: "project-service"
+    summary: "Join an existing course team"
+    description: "Allows an unassigned enrolled student from the same batch to join an open team in the course (capacity < 5)."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    pathParams:
+      - name: "id"
+        type: "string"
+        required: true
+        description: "Course code or course ID"
+      - name: "teamId"
+        type: "string"
+        required: true
+        description: "Team ID to join"
+    responses:
+      200:
+        description: "Successfully joined team"
+        example:
+          message: "You have joined team \"Team Alpha\""
+          team:
+            id: "team_alpha"
+            memberCount: 5
+            maxMembers: 5
+            status: "Joined"
+      400:
+        description: "Team is full, or student already in a team in this course"
+        example:
+          error: "This team is already full (maximum 5 members)."
+
+  # ------------------------------------------------------
+  # POST /api/courses/{id}/teams/{teamId}/leave
+  # ------------------------------------------------------
+  - path: "/api/courses/{id}/teams/{teamId}/leave"
+    method: "POST"
+    category: "New API Introduced (Step 3)"
+    service: "project-service"
+    summary: "Leave current course team"
+    description: "Allows a member to leave their team. Reassigns leadership to the next member if the team lead leaves; deletes the team if no members remain."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    pathParams:
+      - name: "id"
+        type: "string"
+        required: true
+        description: "Course code or course ID"
+      - name: "teamId"
+        type: "string"
+        required: true
+        description: "Team ID to leave"
+    responses:
+      200:
+        description: "Successfully left team"
+        example:
+          message: "You have left the team."
+      400:
+        description: "User is not a member of this team"
+
+  # ------------------------------------------------------
+  # GET /api/courses
+  # ------------------------------------------------------
+  - path: "/api/courses"
+    method: "GET"
+    category: "Core API (Step 1)"
+    service: "project-service"
+    summary: "List authorized academic courses for the authenticated user"
+    description: "Returns courses user is authorized to access. Supports search filtering."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    queryParams:
+      - name: "search"
+        type: "string"
+        required: false
+    responses:
+      200:
+        description: "Authorized courses list"
+
+  # ------------------------------------------------------
+  # GET /api/courses/{id}
+  # ------------------------------------------------------
+  - path: "/api/courses/{id}"
+    method: "GET"
+    category: "Core API (Step 1)"
+    service: "project-service"
+    summary: "Get course details"
+    description: "Returns course code, name, faculty, semester, batch, instructor message, and resources."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    responses:
+      200:
+        description: "Course details"
+
+  # ------------------------------------------------------
+  # GET /api/courses/broadcasts
+  # ------------------------------------------------------
+  - path: "/api/courses/broadcasts"
+    method: "GET"
+    category: "Core API (Step 1)"
+    service: "project-service"
+    summary: "Aggregated faculty broadcasts"
+    description: "Returns broadcast announcements across authorized courses."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    responses:
+      200:
+        description: "Broadcast announcements list"
+
+  # ------------------------------------------------------
+  # POST /api/auth/login
+  # ------------------------------------------------------
+  - path: "/api/auth/login"
+    method: "POST"
+    category: "Auth API"
+    service: "auth-service"
+    summary: "User login"
+    authentication:
+      required: false
+    requestBody:
+      contentType: "application/json"
+      required: true
+      example:
+        email: "alka123@iitv.ac.in"
+        password: "password123"
+    responses:
+      200:
+        description: "Login successful"
+      401:
+        description: "Invalid credentials"

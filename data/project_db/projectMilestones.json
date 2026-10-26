@@ -1,59 +1,59 @@
 [
   {
-    "_id": "2bd0ac876a1854003ac5be22",
-    "projectId": "d2261c3db3ed41210a017045",
+    "_id": "3fd363f2df3436d5c5a1de77",
+    "projectId": "b503fcaeb7f9f3732992009b",
     "criteriaCode": "M1",
     "name": "Milestone 1: Project Genesis & Scaffolding",
     "description": "Initial repository setup, architectural scaffolding, initial commits, and Requirements Document (SRS).",
-    "percentage": 100,
-    "status": "Completed",
+    "percentage": 55,
+    "status": "In Progress",
     "evidenceList": [
-      "✓ GitHub repository connected (projectflow-team/academic-capstone-project)",
-      "✓ Commits: 7/5 commits detected",
-      "✓ Merged PRs: 3/1 merged pull requests",
-      "✓ Issues Closed: 4/1 completed issues",
+      "✓ GitHub repository connected (Nandinikanaujiya/Code-C)",
+      "✓ Commits: 5/5 commits detected",
+      "⏳ Merged PRs: 0/1 merged (1 remaining)",
+      "⏳ Issues Closed: 0/1 closed",
       "✓ Document Artifact: SRS verified in Documents"
     ],
-    "lastCheckedAt": "2026-10-25T16:30:10.688Z",
-    "createdAt": "2026-10-23T17:44:25.063Z",
-    "updatedAt": "2026-10-25T16:30:10.690Z"
+    "lastCheckedAt": "2026-10-25T18:29:43.929Z",
+    "createdAt": "2026-10-25T17:13:13.547Z",
+    "updatedAt": "2026-10-25T18:29:43.933Z"
   },
   {
-    "_id": "a4a14b40ba0d286988f22f67",
-    "projectId": "d2261c3db3ed41210a017045",
+    "_id": "83d31fae8271b039b71afa56",
+    "projectId": "b503fcaeb7f9f3732992009b",
     "criteriaCode": "M2",
     "name": "Milestone 2: Core Development & Architecture",
     "description": "Full microservice development, team collaboration PRs, closed feature issues, and Architecture Documentation.",
-    "percentage": 93,
+    "percentage": 43,
     "status": "In Progress",
     "evidenceList": [
-      "✓ GitHub repository connected (projectflow-team/academic-capstone-project)",
-      "⏳ Commits: 7/10 commits (3 remaining)",
-      "✓ Merged PRs: 3/2 merged pull requests",
-      "✓ Issues Closed: 4/3 completed issues",
+      "✓ GitHub repository connected (Nandinikanaujiya/Code-C)",
+      "⏳ Commits: 5/10 commits (5 remaining)",
+      "⏳ Merged PRs: 0/2 merged (2 remaining)",
+      "⏳ Issues Closed: 0/3 closed",
       "✓ Document Artifact: Architecture Design verified in Documents"
     ],
-    "lastCheckedAt": "2026-10-25T16:30:10.693Z",
-    "createdAt": "2026-10-23T17:44:25.063Z",
-    "updatedAt": "2026-10-25T16:30:10.694Z"
+    "lastCheckedAt": "2026-10-25T18:29:43.940Z",
+    "createdAt": "2026-10-25T17:13:13.547Z",
+    "updatedAt": "2026-10-25T18:29:43.942Z"
   },
   {
-    "_id": "aa576451888393b52f1fda11",
-    "projectId": "d2261c3db3ed41210a017045",
+    "_id": "f2339dbcfb95c42766168e25",
+    "projectId": "b503fcaeb7f9f3732992009b",
     "criteriaCode": "M3",
     "name": "Milestone 3: Evaluation, Testing & Final Report",
     "description": "Comprehensive test coverage, final pull requests merged, resolved issues, and Final Capstone Report.",
-    "percentage": 63,
+    "percentage": 18,
     "status": "In Progress",
     "evidenceList": [
-      "✓ GitHub repository connected (projectflow-team/academic-capstone-project)",
-      "⏳ Commits: 7/15 commits (8 remaining)",
-      "✓ Merged PRs: 3/3 merged pull requests",
-      "⏳ Issues Closed: 4/5 closed",
+      "✓ GitHub repository connected (Nandinikanaujiya/Code-C)",
+      "⏳ Commits: 5/15 commits (10 remaining)",
+      "⏳ Merged PRs: 0/3 merged (3 remaining)",
+      "⏳ Issues Closed: 0/5 closed",
       "⏳ Document Artifact: Final Report required (upload in Documents)"
     ],
-    "lastCheckedAt": "2026-10-25T16:30:10.696Z",
-    "createdAt": "2026-10-23T17:44:25.063Z",
-    "updatedAt": "2026-10-25T16:30:10.697Z"
+    "lastCheckedAt": "2026-10-25T18:29:43.946Z",
+    "createdAt": "2026-10-25T17:13:13.547Z",
+    "updatedAt": "2026-10-25T18:29:43.957Z"
   }
 ]

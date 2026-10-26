@@ -1,7 +1,7 @@
 // Turnkey Mock & Offline Demo Data for ProjectFlow
 // Automatically activated when running as a static build on Netlify without live backend microservices
 
-const MOCK_STORAGE_KEY = 'projectflow_mock_db_v2';
+const MOCK_STORAGE_KEY = 'projectflow_mock_db_v5';
 
 const defaultAuthors = [
   { login: 'alex-chen', name: 'Alex Chen', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100' },
@@ -40,13 +40,73 @@ export const INITIAL_DATA = {
       createdAt: '2026-08-22T10:00:00.000Z'
     },
     {
+      id: 'usr_fac_sharma',
+      name: 'Dr. R. Sharma',
+      email: 'dr.sharma@projectflow.edu',
+      role: 'Faculty',
+      status: 'active',
+      department: 'Computer Science - Web & Cloud Systems',
+      createdAt: '2026-08-23T10:00:00.000Z'
+    },
+    {
+      id: 'usr_fac_singh',
+      name: 'Dr. P. Singh',
+      email: 'dr.singh@projectflow.edu',
+      role: 'Faculty',
+      status: 'active',
+      department: 'Computer Science - Algorithms & Theory',
+      createdAt: '2026-08-23T10:00:00.000Z'
+    },
+    {
+      id: 'usr_fac_verma',
+      name: 'Dr. M. Verma',
+      email: 'dr.verma@projectflow.edu',
+      role: 'Faculty',
+      status: 'active',
+      department: 'Computer Science - Data Engineering',
+      createdAt: '2026-08-23T10:00:00.000Z'
+    },
+    {
+      id: 'usr_fac_nair',
+      name: 'Dr. S. Nair',
+      email: 'dr.nair@projectflow.edu',
+      role: 'Faculty',
+      status: 'active',
+      department: 'Computer Science - Software Engineering',
+      createdAt: '2026-08-23T10:00:00.000Z'
+    },
+    {
       id: 'usr_stu1',
       name: 'Alex Chen',
       email: 'alex.chen@student.edu',
       role: 'Student',
       status: 'active',
       department: 'Computer Science & Engineering',
+      rollNumber: '20251651001',
+      batch: '2026-2028',
       createdAt: '2026-09-01T11:00:00.000Z'
+    },
+    {
+      id: 'usr_stu_alka',
+      name: 'Alka Jha',
+      email: 'alkaj29@gmail.com',
+      role: 'Student',
+      status: 'active',
+      department: 'Computer Science & Engineering',
+      rollNumber: '20251651013',
+      batch: '2026-2028',
+      createdAt: '2026-09-01T11:02:00.000Z'
+    },
+    {
+      id: 'usr_stu_alka2',
+      name: 'Alka Jha',
+      email: 'alka123@iitv.ac.in',
+      role: 'Student',
+      status: 'active',
+      department: 'Computer Science & Engineering',
+      rollNumber: '20251651013',
+      batch: '2026-2028',
+      createdAt: '2026-09-01T11:02:00.000Z'
     },
     {
       id: 'usr_stu2',
@@ -55,6 +115,8 @@ export const INITIAL_DATA = {
       role: 'Student',
       status: 'active',
       department: 'Computer Science & Engineering',
+      rollNumber: '20251651002',
+      batch: '2026-2028',
       createdAt: '2026-09-01T11:05:00.000Z'
     },
     {
@@ -64,6 +126,8 @@ export const INITIAL_DATA = {
       role: 'Student',
       status: 'active',
       department: 'Computer Science & Engineering',
+      rollNumber: '20251651003',
+      batch: '2026-2028',
       createdAt: '2026-09-01T11:10:00.000Z'
     },
     {
@@ -73,7 +137,383 @@ export const INITIAL_DATA = {
       role: 'Student',
       status: 'active',
       department: 'Computer Science & Engineering',
+      rollNumber: '20251651004',
+      batch: '2026-2028',
       createdAt: '2026-09-01T11:15:00.000Z'
+    }
+  ],
+  courses: [
+    {
+      id: 'course_cs543',
+      code: 'CS543',
+      name: 'Web Services',
+      facultyName: 'Dr. R. Sharma',
+      facultyEmail: 'dr.sharma@projectflow.edu',
+      batch: '2026-2028',
+      semester: '3rd Semester',
+      department: 'Computer Science & Engineering',
+      color: '#0284c7',
+      icon: 'globe',
+      description: 'Advanced distributed web services, RESTful architectural design, microservices communication, and cloud API integration.',
+      enrolledEmails: [
+        'alex.chen@student.edu',
+        'alkaj29@gmail.com',
+        'alka123@iitv.ac.in',
+        'priya.patel@student.edu',
+        'marcus.vance@student.edu'
+      ],
+      instructorMessage: {
+        author: 'Dr. R. Sharma',
+        date: '20 Oct 2026',
+        title: 'Message from Course Instructor',
+        content: `Dear Students,\nPlease read the following before forming your team:\n• Team Size: 4-5 members\n• Each member must be from the same batch.\n• Use your Roll Number and Institute Email ID.\n• Each student can be part of only one team.\n• Topics: Choose from the list provided in 'Resources'.\n• Submit team by 25 Oct 2026.\n• Project proposal format is attached.`,
+        attachments: [
+          { name: 'Project_Guidelines.pdf', size: '2.4 MB', type: 'pdf' }
+        ]
+      },
+      announcements: [
+        {
+          id: 'ann_cs543_1',
+          title: 'General Guidelines for Project Teams',
+          courseCode: 'CS543',
+          courseName: 'Web Services',
+          facultyName: 'Dr. R. Sharma',
+          date: '22 Oct 2026',
+          content: 'Please ensure team members are finalized and topics are selected before the deadline. Project proposal templates must be submitted via the portal.'
+        }
+      ],
+      resources: [
+        { name: 'Course Syllabus & Lab Manual', type: 'pdf', size: '1.4 MB' },
+        { name: 'Approved Capstone Project Topics 2026', type: 'pdf', size: '820 KB' }
+      ]
+    },
+    {
+      id: 'course_cs541',
+      code: 'CS541',
+      name: 'Design and Analysis of Algorithms',
+      facultyName: 'Dr. P. Singh',
+      facultyEmail: 'dr.singh@projectflow.edu',
+      batch: '2026-2028',
+      semester: '3rd Semester',
+      department: 'Computer Science & Engineering',
+      color: '#8b5cf6',
+      icon: 'cpu',
+      description: 'Algorithm design paradigms, graph theory algorithms, dynamic programming, NP-completeness, and performance analysis.',
+      enrolledEmails: [
+        'alex.chen@student.edu',
+        'alkaj29@gmail.com',
+        'alka123@iitv.ac.in',
+        'priya.patel@student.edu',
+        'elena.rostova@student.edu'
+      ],
+      instructorMessage: {
+        author: 'Dr. P. Singh',
+        date: '19 Oct 2026',
+        title: 'Algorithm Lab Project Guidelines',
+        content: `Dear Students,\nFor the Algorithm Analysis capstone project:\n• Choose from dynamic programming, network flow, or approximation algorithms.\n• Implement in C++ or Python with empirical benchmark plots.\n• Group submissions must adhere to reproducible evaluation metrics.`,
+        attachments: [
+          { name: 'Algorithm_Project_Syllabus.pdf', size: '1.8 MB', type: 'pdf' }
+        ]
+      },
+      announcements: [
+        {
+          id: 'ann_cs541_1',
+          title: 'Team Formation Deadline Extended',
+          courseCode: 'CS541',
+          courseName: 'Design and Analysis of Algorithms',
+          facultyName: 'Dr. P. Singh',
+          date: '20 Oct 2026',
+          content: 'Team formation deadline for Algorithms capstone projects has been extended to 28 Oct 2026.'
+        }
+      ],
+      resources: [
+        { name: 'Algorithm Benchmark Datasets', type: 'zip', size: '14.2 MB' },
+        { name: 'Complexity Analysis Cheat Sheet', type: 'pdf', size: '650 KB' }
+      ]
+    },
+    {
+      id: 'course_cs542',
+      code: 'CS542',
+      name: 'Database Systems',
+      facultyName: 'Dr. M. Verma',
+      facultyEmail: 'dr.verma@projectflow.edu',
+      batch: '2026-2028',
+      semester: '3rd Semester',
+      department: 'Computer Science & Engineering',
+      color: '#f97316',
+      icon: 'database',
+      description: 'Database engine internals, query execution plans, transactions and isolation, indexing strategies, and distributed NoSQL storage.',
+      enrolledEmails: [
+        'alex.chen@student.edu',
+        'alkaj29@gmail.com',
+        'alka123@iitv.ac.in',
+        'priya.patel@student.edu',
+        'marcus.vance@student.edu'
+      ],
+      instructorMessage: {
+        author: 'Dr. M. Verma',
+        date: '18 Oct 2026',
+        title: 'Database System Design Project Specifications',
+        content: `Welcome to CS542.\nYour semester project involves designing a fully normalized schema with replication, fault tolerance, and query indexing benchmarks.\nReview the proposal format in the resources tab.`,
+        attachments: [
+          { name: 'DB_Project_Proposal_Format.docx', size: '950 KB', type: 'doc' }
+        ]
+      },
+      announcements: [
+        {
+          id: 'ann_cs542_1',
+          title: 'Submit Project Proposal Format',
+          courseCode: 'CS542',
+          courseName: 'Database Systems',
+          facultyName: 'Dr. M. Verma',
+          date: '18 Oct 2026',
+          content: 'Use the approved institute proposal format attached in course resources before submitting your proposal.'
+        }
+      ],
+      resources: [
+        { name: 'Relational Database Schema Design Rubric', type: 'pdf', size: '1.1 MB' }
+      ]
+    },
+    {
+      id: 'course_cs544',
+      code: 'CS544',
+      name: 'Software Engineering',
+      facultyName: 'Dr. S. Nair',
+      facultyEmail: 'dr.nair@projectflow.edu',
+      batch: '2026-2028',
+      semester: '3rd Semester',
+      department: 'Computer Science & Engineering',
+      color: '#10b981',
+      icon: 'layers',
+      description: 'Software development lifecycle, Agile methodologies, CI/CD automated testing, clean code architecture, and capstone milestones.',
+      enrolledEmails: [
+        'alex.chen@student.edu',
+        'alkaj29@gmail.com',
+        'alka123@iitv.ac.in',
+        'priya.patel@student.edu',
+        'elena.rostova@student.edu'
+      ],
+      instructorMessage: {
+        author: 'Dr. S. Nair',
+        date: '17 Oct 2026',
+        title: 'Software Engineering Project Milestones',
+        content: `Welcome to CS544 Software Engineering.\nAll groups are required to use GitHub issues and pull requests to track development.\nMilestone audits will occur bi-weekly with automated criteria evaluation.`,
+        attachments: [
+          { name: 'SE_Milestone_Rubric.pdf', size: '1.2 MB', type: 'pdf' }
+        ]
+      },
+      announcements: [
+        {
+          id: 'ann_cs544_1',
+          title: 'Sprint Planning Session Schedule',
+          courseCode: 'CS544',
+          courseName: 'Software Engineering',
+          facultyName: 'Dr. S. Nair',
+          date: '16 Oct 2026',
+          content: 'Sprint 1 planning sessions will be scheduled during the lab hours next week. Review Agile guidelines.'
+        }
+      ],
+      resources: [
+        { name: 'Agile Sprint Template', type: 'pdf', size: '780 KB' }
+      ]
+    }
+  ],
+  announcements: [
+    {
+      id: 'ann_cs543_team_guidelines',
+      _id: 'ann_cs543_team_guidelines',
+      courseId: 'course_cs543',
+      courseCode: 'CS543',
+      courseName: 'Web Services',
+      title: 'Project Team Formation Guidelines',
+      content: `Dear Students,\n\nPlease read and strictly follow the team formation guidelines before submitting your project groups:\n\n• Each team must contain 4–5 students.\n• All members must belong to the same academic batch (2026-2028).\n• Every member must have a unique roll number and institutional email.\n• Each student can belong to only one team in the course.\n• Students must select a topic from the faculty-approved list in Resources.\n• Project proposals must be submitted before the faculty-defined deadline (25 Oct 2026).\n\nProject proposal format and evaluation criteria are attached below. Contact the course instructor during office hours for topic approvals.`,
+      facultyId: 'usr_fac_sharma',
+      facultyName: 'Dr. R. Sharma',
+      facultyEmail: 'dr.sharma@projectflow.edu',
+      isPinned: true,
+      isImportant: true,
+      publishedAt: '2026-10-20T10:00:00.000Z',
+      date: '20 Oct 2026, 10:00 AM',
+      attachments: [
+        {
+          id: 'att_guidelines_pdf',
+          name: 'Project_Guidelines.pdf',
+          size: '2.4 MB',
+          type: 'pdf',
+          downloadUrl: '/api/courses/CS543/attachments/Project_Guidelines.pdf'
+        },
+        {
+          id: 'att_proposal_doc',
+          name: 'Project_Proposal_Format.docx',
+          size: '850 KB',
+          type: 'doc',
+          downloadUrl: '/api/courses/CS543/attachments/Project_Proposal_Format.docx'
+        }
+      ],
+      readBy: [
+        'alex.chen@student.edu'
+      ]
+    },
+    {
+      id: 'ann_cs543_api_specs',
+      _id: 'ann_cs543_api_specs',
+      courseId: 'course_cs543',
+      courseCode: 'CS543',
+      courseName: 'Web Services',
+      title: 'Updated REST & GraphQL API Specification Standards',
+      content: 'All teams developing web service microservices must use OpenAPI 3.0 / YAML specifications for API contracts. Docker-compose configuration for service discovery must be committed to your team repository by Milestone 1.',
+      facultyId: 'usr_fac_sharma',
+      facultyName: 'Dr. R. Sharma',
+      facultyEmail: 'dr.sharma@projectflow.edu',
+      isPinned: false,
+      isImportant: false,
+      publishedAt: '2026-10-22T14:30:00.000Z',
+      date: '22 Oct 2026, 02:30 PM',
+      attachments: [
+        {
+          id: 'att_api_std_pdf',
+          name: 'API_Specification_Standards_v2.pdf',
+          size: '1.1 MB',
+          type: 'pdf',
+          downloadUrl: '/api/courses/CS543/attachments/API_Specification_Standards_v2.pdf'
+        }
+      ],
+      readBy: []
+    },
+    {
+      id: 'ann_cs541_deadline',
+      _id: 'ann_cs541_deadline',
+      courseId: 'course_cs541',
+      courseCode: 'CS541',
+      courseName: 'Design and Analysis of Algorithms',
+      title: 'Team Formation Deadline Extended',
+      content: 'The deadline for algorithm capstone project groups has been extended to 28 Oct 2026. Review benchmark dataset resources in the course page.',
+      facultyId: 'usr_fac_singh',
+      facultyName: 'Dr. P. Singh',
+      facultyEmail: 'dr.singh@projectflow.edu',
+      isPinned: true,
+      isImportant: false,
+      publishedAt: '2026-10-20T11:00:00.000Z',
+      date: '20 Oct 2026, 11:00 AM',
+      attachments: [],
+      readBy: []
+    },
+    {
+      id: 'ann_cs542_proposal',
+      _id: 'ann_cs542_proposal',
+      courseId: 'course_cs542',
+      courseCode: 'CS542',
+      courseName: 'Database Systems',
+      title: 'Submit Project Proposal Format',
+      content: 'Submit your database schema proposals using the approved institute format before the upcoming laboratory session.',
+      facultyId: 'usr_fac_verma',
+      facultyName: 'Dr. M. Verma',
+      facultyEmail: 'dr.verma@projectflow.edu',
+      isPinned: false,
+      isImportant: true,
+      publishedAt: '2026-10-18T09:00:00.000Z',
+      date: '18 Oct 2026, 09:00 AM',
+      attachments: [],
+      readBy: []
+    },
+    {
+      id: 'ann_cs544_sprint',
+      _id: 'ann_cs544_sprint',
+      courseId: 'course_cs544',
+      courseCode: 'CS544',
+      courseName: 'Software Engineering',
+      title: 'Sprint Planning Session Schedule',
+      content: 'Sprint 1 planning sessions will be scheduled during the lab hours next week. Review Agile guidelines.',
+      facultyId: 'usr_fac_nair',
+      facultyName: 'Dr. S. Nair',
+      facultyEmail: 'dr.nair@projectflow.edu',
+      isPinned: false,
+      isImportant: false,
+      publishedAt: '2026-10-16T15:00:00.000Z',
+      date: '16 Oct 2026, 03:00 PM',
+      attachments: [],
+      readBy: []
+    }
+  ],
+  courseTeams: [
+    {
+      id: 'team_alpha',
+      _id: 'team_alpha',
+      courseId: 'course_cs543',
+      courseCode: 'CS543',
+      name: 'Team Alpha',
+      description: 'Cloud microservices orchestration platform with automated CI/CD and monitoring telemetry.',
+      teamLead: 'Aarav Sharma',
+      teamLeadEmail: 'aarav.sharma@student.edu',
+      memberCount: 4,
+      maxMembers: 5,
+      status: 'Available',
+      members: [
+        { name: 'Aarav Sharma', email: 'aarav.sharma@student.edu', rollNumber: '20251651010', isLeader: true },
+        { name: 'Alex Chen', email: 'alex.chen@student.edu', rollNumber: '20251651001', isLeader: false },
+        { name: 'Priya Patel', email: 'priya.patel@student.edu', rollNumber: '20251651002', isLeader: false },
+        { name: 'Marcus Vance', email: 'marcus.vance@student.edu', rollNumber: '20251651003', isLeader: false }
+      ],
+      createdAt: '2026-10-15T10:00:00.000Z'
+    },
+    {
+      id: 'team_innovators',
+      _id: 'team_innovators',
+      courseId: 'course_cs543',
+      courseCode: 'CS543',
+      name: 'Team Innovators',
+      teamLead: 'Rohit Kumar',
+      teamLeadEmail: 'rohit.kumar@student.edu',
+      memberCount: 5,
+      maxMembers: 5,
+      status: 'Full',
+      members: [
+        { name: 'Rohit Kumar', email: 'rohit.kumar@student.edu', rollNumber: '20251651020', isLeader: true },
+        { name: 'Neha Verma', email: 'neha.verma@student.edu', rollNumber: '20251651021', isLeader: false },
+        { name: 'Amit Raj', email: 'amit.raj@student.edu', rollNumber: '20251651022', isLeader: false },
+        { name: 'Suresh Sen', email: 'suresh.sen@student.edu', rollNumber: '20251651023', isLeader: false },
+        { name: 'Kavita Roy', email: 'kavita.roy@student.edu', rollNumber: '20251651024', isLeader: false }
+      ],
+      createdAt: '2026-10-16T11:00:00.000Z'
+    },
+    {
+      id: 'team_codecraft',
+      _id: 'team_codecraft',
+      courseId: 'course_cs543',
+      courseCode: 'CS543',
+      name: 'Team CodeCraft',
+      teamLead: 'Priya Singh',
+      teamLeadEmail: 'priya.singh@student.edu',
+      memberCount: 4,
+      maxMembers: 5,
+      status: 'Open',
+      members: [
+        { name: 'Priya Singh', email: 'priya.singh@student.edu', rollNumber: '20251651030', isLeader: true },
+        { name: 'Karan Dave', email: 'karan.dave@student.edu', rollNumber: '20251651031', isLeader: false },
+        { name: 'Simran Kaur', email: 'simran.kaur@student.edu', rollNumber: '20251651032', isLeader: false },
+        { name: 'Deepak Joshi', email: 'deepak.joshi@student.edu', rollNumber: '20251651033', isLeader: false }
+      ],
+      createdAt: '2026-10-17T09:30:00.000Z'
+    },
+    {
+      id: 'team_nextgen',
+      _id: 'team_nextgen',
+      courseId: 'course_cs543',
+      courseCode: 'CS543',
+      name: 'Team NextGen',
+      teamLead: 'Vikram Mehta',
+      teamLeadEmail: 'vikram.mehta@student.edu',
+      memberCount: 5,
+      maxMembers: 5,
+      status: 'Full',
+      members: [
+        { name: 'Vikram Mehta', email: 'vikram.mehta@student.edu', rollNumber: '20251651040', isLeader: true },
+        { name: 'Ananya Roy', email: 'ananya.roy@student.edu', rollNumber: '20251651041', isLeader: false },
+        { name: 'Rohan Gupta', email: 'rohan.gupta@student.edu', rollNumber: '20251651042', isLeader: false },
+        { name: 'Divya Nair', email: 'divya.nair@student.edu', rollNumber: '20251651043', isLeader: false },
+        { name: 'Harsh Vardhan', email: 'harsh.vardhan@student.edu', rollNumber: '20251651044', isLeader: false }
+      ],
+      createdAt: '2026-10-18T14:15:00.000Z'
     }
   ],
   projects: [
@@ -434,34 +874,46 @@ export const mockService = {
   // Auth
   login: async ({ email, password }) => {
     const db = getStorage();
-    const user = db.users.find(u => u.email.toLowerCase() === email.toLowerCase());
+    const normalizedEmail = (email || '').trim().toLowerCase();
+    const user = db.users.find(u => u.email.toLowerCase() === normalizedEmail);
+
     if (!user) {
-      // Auto-create guest student if not recognized
-      const newUser = {
-        id: `usr_${Date.now()}`,
-        name: email.split('@')[0],
-        email,
-        role: 'Student',
-        status: 'active',
-        department: 'Computer Science',
-        createdAt: new Date().toISOString()
-      };
-      db.users.push(newUser);
-      saveStorage(db);
-      return { token: `demo-token-${newUser.id}`, user: newUser };
+      throw new Error('Invalid email or password');
     }
+
+    const expectedPassword = user.password || (user.role === 'Admin' ? 'admin123' : 'password123');
+    if (!password || password !== expectedPassword) {
+      throw new Error('Invalid email or password');
+    }
+
+    if (user.status === 'suspended') {
+      throw new Error('Your account has been suspended. Please contact Admin.');
+    }
+
     return { token: `demo-token-${user.id}`, user };
   },
 
   register: async (userData) => {
     const db = getStorage();
+    if (!userData.email || !userData.password || !userData.name) {
+      throw new Error('Name, email, and password are required');
+    }
+
+    const normalizedEmail = userData.email.trim().toLowerCase();
+    const existing = db.users.find(u => u.email.toLowerCase() === normalizedEmail);
+    if (existing) {
+      throw new Error('A user with this email already exists');
+    }
+
+    const assignedRole = (userData.role === 'Faculty') ? 'Faculty' : 'Student';
     const newUser = {
       id: `usr_${Date.now()}`,
-      name: userData.name,
-      email: userData.email,
-      role: userData.role || 'Student',
+      name: userData.name.trim(),
+      email: normalizedEmail,
+      password: userData.password,
+      role: assignedRole,
       status: 'active',
-      department: userData.department || 'Computer Science',
+      department: userData.department || 'Computer Science & Engineering',
       createdAt: new Date().toISOString()
     };
     db.users.push(newUser);
@@ -507,6 +959,453 @@ export const mockService = {
       return db.users[idx];
     }
     return { id, ...data };
+  },
+
+  // Academic Courses (Google Classroom style)
+  getCourses: async (params = {}) => {
+    const db = getStorage();
+    const curUser = (typeof localStorage !== 'undefined' && localStorage.getItem('projectflow_user'))
+      ? JSON.parse(localStorage.getItem('projectflow_user'))
+      : null;
+    const userRole = (curUser?.role || 'Student').toLowerCase();
+    const userEmail = (curUser?.email || '').toLowerCase();
+    const userId = curUser?.id;
+
+    let list = db.courses || [];
+    if (userRole === 'student') {
+      list = list.filter(c => {
+        const emails = (c.enrolledEmails || []).map(e => e.toLowerCase());
+        const ids = c.enrolledStudentIds || [];
+        return emails.includes(userEmail) || ids.includes(userId);
+      });
+    } else if (userRole === 'faculty') {
+      list = list.filter(c => {
+        const fEmail = (c.facultyEmail || '').toLowerCase();
+        return fEmail === userEmail || c.facultyId === userId;
+      });
+    }
+
+    if (params.search) {
+      const q = params.search.trim().toLowerCase();
+      list = list.filter(c =>
+        (c.code || '').toLowerCase().includes(q) ||
+        (c.name || '').toLowerCase().includes(q) ||
+        (c.facultyName || '').toLowerCase().includes(q) ||
+        (c.batch || '').toLowerCase().includes(q) ||
+        (c.semester || '').toLowerCase().includes(q)
+      );
+    }
+
+    return list.map(c => ({
+      id: c.id || c._id,
+      code: c.code,
+      name: c.name,
+      facultyName: c.facultyName,
+      facultyEmail: c.facultyEmail,
+      batch: c.batch,
+      semester: c.semester,
+      department: c.department,
+      color: c.color,
+      icon: c.icon,
+      description: c.description,
+      announcementsCount: (c.announcements || []).length,
+      createdAt: c.createdAt
+    }));
+  },
+
+  getCourse: async (idOrCode) => {
+    const db = getStorage();
+    const curUser = (typeof localStorage !== 'undefined' && localStorage.getItem('projectflow_user'))
+      ? JSON.parse(localStorage.getItem('projectflow_user'))
+      : null;
+    const userRole = (curUser?.role || 'Student').toLowerCase();
+    const userEmail = (curUser?.email || '').toLowerCase();
+    const userId = curUser?.id;
+
+    const course = (db.courses || []).find(c =>
+      c.id === idOrCode || (c.code || '').toLowerCase() === (idOrCode || '').toLowerCase()
+    );
+
+    if (!course) {
+      const err = new Error(`Course '${idOrCode}' not found`);
+      err.status = 404;
+      throw err;
+    }
+
+    if (userRole === 'student') {
+      const emails = (course.enrolledEmails || []).map(e => e.toLowerCase());
+      const ids = course.enrolledStudentIds || [];
+      if (!emails.includes(userEmail) && !ids.includes(userId)) {
+        const err = new Error(`Access denied. You are not enrolled in ${course.code} - ${course.name}.`);
+        err.status = 403;
+        throw err;
+      }
+    }
+
+    return course;
+  },
+
+  getCourseBroadcasts: async () => {
+    const db = getStorage();
+    const curUser = (typeof localStorage !== 'undefined' && localStorage.getItem('projectflow_user'))
+      ? JSON.parse(localStorage.getItem('projectflow_user'))
+      : null;
+    const userRole = (curUser?.role || 'Student').toLowerCase();
+    const userEmail = (curUser?.email || '').toLowerCase();
+    const userId = curUser?.id;
+
+    let list = db.courses || [];
+    if (userRole === 'student') {
+      list = list.filter(c => {
+        const emails = (c.enrolledEmails || []).map(e => e.toLowerCase());
+        const ids = c.enrolledStudentIds || [];
+        return emails.includes(userEmail) || ids.includes(userId);
+      });
+    }
+
+    const broadcasts = [];
+    list.forEach(c => {
+      (c.announcements || []).forEach(ann => {
+        broadcasts.push({
+          ...ann,
+          courseId: c.id,
+          courseCode: c.code,
+          courseName: c.name,
+          color: c.color
+        });
+      });
+    });
+
+    return broadcasts;
+  },
+
+  getCourseAnnouncements: async (courseId, params = {}) => {
+    const db = getStorage();
+    const curUser = (typeof localStorage !== 'undefined' && localStorage.getItem('projectflow_user'))
+      ? JSON.parse(localStorage.getItem('projectflow_user'))
+      : null;
+    const userEmail = (curUser?.email || '').toLowerCase();
+    const userId = curUser?.id;
+
+    let announcements = (db.announcements || []).filter(a =>
+      a.courseCode === courseId.toUpperCase() ||
+      a.courseId === courseId ||
+      a.courseCode === courseId
+    );
+
+    if (params.search) {
+      const q = String(params.search).toLowerCase().trim();
+      announcements = announcements.filter(a =>
+        (a.title && a.title.toLowerCase().includes(q)) ||
+        (a.content && a.content.toLowerCase().includes(q)) ||
+        (a.facultyName && a.facultyName.toLowerCase().includes(q))
+      );
+    }
+
+    if (params.unreadOnly === 'true' || params.unreadOnly === true) {
+      announcements = announcements.filter(a => {
+        const reads = (a.readBy || []).map(r => String(r).toLowerCase());
+        return !reads.includes(userEmail) && !reads.includes(String(userId));
+      });
+    }
+
+    if (params.pinnedOnly === 'true' || params.pinnedOnly === true) {
+      announcements = announcements.filter(a => a.isPinned);
+    }
+
+    announcements.sort((a, b) => {
+      if (a.isPinned && !b.isPinned) return -1;
+      if (!a.isPinned && b.isPinned) return 1;
+      const dateA = new Date(a.publishedAt || a.date || 0);
+      const dateB = new Date(b.publishedAt || b.date || 0);
+      return dateB - dateA;
+    });
+
+    return announcements.map(a => {
+      const reads = (a.readBy || []).map(r => String(r).toLowerCase());
+      const isRead = reads.includes(userEmail) || reads.includes(String(userId));
+      return {
+        ...a,
+        id: a._id || a.id,
+        isRead
+      };
+    });
+  },
+
+  getCourseAnnouncement: async (courseId, announcementId) => {
+    const db = getStorage();
+    const curUser = (typeof localStorage !== 'undefined' && localStorage.getItem('projectflow_user'))
+      ? JSON.parse(localStorage.getItem('projectflow_user'))
+      : null;
+    const userEmail = (curUser?.email || '').toLowerCase();
+    const userId = curUser?.id;
+
+    const ann = (db.announcements || []).find(a => (a.id === announcementId || a._id === announcementId));
+    if (!ann) throw new Error(`Announcement '${announcementId}' not found`);
+
+    const reads = (ann.readBy || []).map(r => String(r).toLowerCase());
+    const isRead = reads.includes(userEmail) || reads.includes(String(userId));
+    return { ...ann, isRead };
+  },
+
+  createCourseAnnouncement: async (courseId, data) => {
+    const db = getStorage();
+    const curUser = (typeof localStorage !== 'undefined' && localStorage.getItem('projectflow_user'))
+      ? JSON.parse(localStorage.getItem('projectflow_user'))
+      : null;
+    const course = (db.courses || []).find(c => c.code === courseId.toUpperCase() || c.id === courseId);
+
+    const now = new Date();
+    const dateFormatted = now.toLocaleDateString('en-GB', {
+      day: '2-digit', month: 'short', year: 'numeric'
+    }) + ', ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+    const newAnn = {
+      id: `ann_${Date.now()}`,
+      _id: `ann_${Date.now()}`,
+      courseId: course?.id || courseId,
+      courseCode: course?.code || courseId.toUpperCase(),
+      courseName: course?.name || 'Academic Course',
+      title: data.title,
+      content: data.content,
+      facultyId: curUser?.id || 'fac_user',
+      facultyName: curUser?.name || course?.facultyName || 'Course Instructor',
+      facultyEmail: curUser?.email || course?.facultyEmail,
+      isPinned: Boolean(data.isPinned),
+      isImportant: Boolean(data.isImportant),
+      publishedAt: now.toISOString(),
+      date: dateFormatted,
+      attachments: Array.isArray(data.attachments) ? data.attachments : [],
+      readBy: []
+    };
+
+    db.announcements = db.announcements || [];
+    db.announcements.unshift(newAnn);
+    saveStorage(db);
+    return { ...newAnn, isRead: false };
+  },
+
+  updateCourseAnnouncement: async (courseId, announcementId, data) => {
+    const db = getStorage();
+    const idx = (db.announcements || []).findIndex(a => a.id === announcementId || a._id === announcementId);
+    if (idx !== -1) {
+      db.announcements[idx] = { ...db.announcements[idx], ...data, updatedAt: new Date().toISOString() };
+      saveStorage(db);
+      return db.announcements[idx];
+    }
+    return { id: announcementId, ...data };
+  },
+
+  deleteCourseAnnouncement: async (courseId, announcementId) => {
+    const db = getStorage();
+    db.announcements = (db.announcements || []).filter(a => a.id !== announcementId && a._id !== announcementId);
+    saveStorage(db);
+    return { success: true };
+  },
+
+  markAnnouncementRead: async (courseId, announcementId, unread = false) => {
+    const db = getStorage();
+    const curUser = (typeof localStorage !== 'undefined' && localStorage.getItem('projectflow_user'))
+      ? JSON.parse(localStorage.getItem('projectflow_user'))
+      : null;
+    const userEmail = (curUser?.email || '').toLowerCase();
+
+    const ann = (db.announcements || []).find(a => a.id === announcementId || a._id === announcementId);
+    if (ann) {
+      let readBy = Array.isArray(ann.readBy) ? [...ann.readBy] : [];
+      if (unread) {
+        readBy = readBy.filter(e => e.toLowerCase() !== userEmail);
+      } else {
+        if (!readBy.map(e => e.toLowerCase()).includes(userEmail)) {
+          readBy.push(userEmail);
+        }
+      }
+      ann.readBy = readBy;
+      saveStorage(db);
+      return { success: true, announcementId, isRead: !unread, readByCount: readBy.length };
+    }
+    return { success: true, announcementId, isRead: !unread };
+  },
+
+  getCourseTeams: async (courseId) => {
+    const db = getStorage();
+    const curUser = (typeof localStorage !== 'undefined' && localStorage.getItem('projectflow_user'))
+      ? JSON.parse(localStorage.getItem('projectflow_user'))
+      : null;
+    const userEmail = (curUser?.email || '').toLowerCase();
+
+    let teams = (db.courseTeams || []).filter(t =>
+      t.courseCode === courseId.toUpperCase() ||
+      t.courseId === courseId ||
+      t.courseCode === courseId
+    );
+
+    return teams.map(t => {
+      const members = Array.isArray(t.members) ? t.members : [];
+      const isUserMember = members.some(m => (m.email || '').toLowerCase() === userEmail) ||
+                           ((t.teamLeadEmail || '').toLowerCase() === userEmail);
+      const memberCount = members.length || t.memberCount || 0;
+      const maxMembers = t.maxMembers || 5;
+
+      let status = memberCount >= maxMembers ? 'Full' : 'Available';
+      if (isUserMember) {
+        status = 'Joined';
+      }
+
+      return {
+        ...t,
+        id: t._id || t.id,
+        _id: t._id || t.id,
+        status,
+        isUserMember,
+        memberCount,
+        maxMembers,
+        members
+      };
+    });
+  },
+
+  getMyCourseTeam: async (courseId) => {
+    const db = getStorage();
+    const curUser = (typeof localStorage !== 'undefined' && localStorage.getItem('projectflow_user'))
+      ? JSON.parse(localStorage.getItem('projectflow_user'))
+      : null;
+    const userEmail = (curUser?.email || '').toLowerCase();
+
+    let teams = (db.courseTeams || []).filter(t =>
+      t.courseCode === courseId.toUpperCase() ||
+      t.courseId === courseId ||
+      t.courseCode === courseId
+    );
+
+    const userTeam = teams.find(t => {
+      const members = Array.isArray(t.members) ? t.members : [];
+      return members.some(m => (m.email || '').toLowerCase() === userEmail) ||
+             ((t.teamLeadEmail || '').toLowerCase() === userEmail);
+    });
+
+    if (!userTeam) return { team: null };
+
+    const members = Array.isArray(userTeam.members) ? userTeam.members : [];
+    const isLeader = ((userTeam.teamLeadEmail || '').toLowerCase() === userEmail) ||
+                     members.some(m => (m.email || '').toLowerCase() === userEmail && m.isLeader);
+
+    return {
+      team: {
+        ...userTeam,
+        id: userTeam._id || userTeam.id,
+        _id: userTeam._id || userTeam.id,
+        status: 'Joined',
+        isLeader,
+        memberCount: members.length,
+        maxMembers: userTeam.maxMembers || 5,
+        members
+      }
+    };
+  },
+
+  createCourseTeam: async (courseId, data) => {
+    const db = getStorage();
+    const curUser = (typeof localStorage !== 'undefined' && localStorage.getItem('projectflow_user'))
+      ? JSON.parse(localStorage.getItem('projectflow_user'))
+      : null;
+    const userEmail = (curUser?.email || 'alka123@iitv.ac.in').toLowerCase();
+    const userName = curUser?.name || 'Alka Jha';
+
+    if (!db.courseTeams) db.courseTeams = [];
+
+    const existingTeam = db.courseTeams.find(t => {
+      if (t.courseCode !== courseId.toUpperCase() && t.courseId !== courseId) return false;
+      const members = Array.isArray(t.members) ? t.members : [];
+      return members.some(m => (m.email || '').toLowerCase() === userEmail) ||
+             ((t.teamLeadEmail || '').toLowerCase() === userEmail);
+    });
+
+    if (existingTeam) {
+      throw new Error(`You already belong to team '${existingTeam.name}' in this course.`);
+    }
+
+    if (!data.name || !data.name.trim()) {
+      throw new Error('Team name is required.');
+    }
+
+    if (!Array.isArray(data.members) || data.members.length < 4 || data.members.length > 5) {
+      throw new Error('Team size must be between 4 and 5 members.');
+    }
+
+    const resolvedMembers = data.members.map((m, idx) => ({
+      name: m.name || (m.email.toLowerCase() === userEmail ? userName : `Member ${idx + 1}`),
+      email: m.email,
+      rollNumber: m.rollNumber,
+      isLeader: m.email.toLowerCase() === userEmail
+    }));
+
+    const newTeam = {
+      id: `team_${Date.now()}`,
+      _id: `team_${Date.now()}`,
+      courseId: courseId,
+      courseCode: courseId.toUpperCase(),
+      name: data.name.trim(),
+      description: data.description || '',
+      teamLead: userName,
+      teamLeadEmail: userEmail,
+      memberCount: resolvedMembers.length,
+      maxMembers: 5,
+      status: resolvedMembers.length >= 5 ? 'Full' : 'Available',
+      members: resolvedMembers,
+      createdAt: new Date().toISOString()
+    };
+
+    db.courseTeams.push(newTeam);
+    saveStorage(db);
+    return { success: true, message: 'Team created successfully', team: newTeam };
+  },
+
+  joinCourseTeam: async (courseId, teamId) => {
+    const db = getStorage();
+    const curUser = (typeof localStorage !== 'undefined' && localStorage.getItem('projectflow_user'))
+      ? JSON.parse(localStorage.getItem('projectflow_user'))
+      : null;
+    const userEmail = (curUser?.email || 'alka123@iitv.ac.in').toLowerCase();
+    const userName = curUser?.name || 'Alka Jha';
+
+    const targetTeam = (db.courseTeams || []).find(t => t.id === teamId || t._id === teamId);
+    if (!targetTeam) throw new Error('Team not found');
+
+    if (!targetTeam.members) targetTeam.members = [];
+    if (targetTeam.members.length >= (targetTeam.maxMembers || 5)) {
+      throw new Error('Team is already full');
+    }
+
+    targetTeam.members.push({
+      name: userName,
+      email: curUser?.email || 'alka123@iitv.ac.in',
+      rollNumber: curUser?.rollNumber || '20251651013',
+      isLeader: false
+    });
+    targetTeam.memberCount = targetTeam.members.length;
+    targetTeam.status = targetTeam.memberCount >= (targetTeam.maxMembers || 5) ? 'Full' : 'Available';
+
+    saveStorage(db);
+    return { success: true, message: `Joined ${targetTeam.name}!`, team: targetTeam };
+  },
+
+  leaveCourseTeam: async (courseId, teamId) => {
+    const db = getStorage();
+    const curUser = (typeof localStorage !== 'undefined' && localStorage.getItem('projectflow_user'))
+      ? JSON.parse(localStorage.getItem('projectflow_user'))
+      : null;
+    const userEmail = (curUser?.email || '').toLowerCase();
+
+    const targetTeam = (db.courseTeams || []).find(t => t.id === teamId || t._id === teamId);
+    if (!targetTeam) throw new Error('Team not found');
+
+    targetTeam.members = (targetTeam.members || []).filter(m => (m.email || '').toLowerCase() !== userEmail);
+    targetTeam.memberCount = targetTeam.members.length;
+    targetTeam.status = 'Available';
+
+    saveStorage(db);
+    return { success: true, message: 'Left team successfully' };
   },
 
   // Projects
@@ -771,10 +1670,21 @@ export const mockService = {
 
   getGitHubEvidence: async (projectId) => {
     return {
-      commitsCount: 14,
-      prsMerged: 3,
-      issuesClosed: 4,
-      repository: 'projectflow-team/academic-capstone-project'
+      connected: true,
+      repoFullName: 'TargetUltimate-Alka/projectFlow',
+      repoUrl: 'https://github.com/TargetUltimate-Alka/projectFlow',
+      totalCommits: 16,
+      totalPRs: 0,
+      mergedPRs: 0,
+      openPRs: 0,
+      closedIssues: 0,
+      openIssues: 0,
+      totalContributors: 2,
+      contributors: [
+        { login: 'TargetUltimate-Alka', name: 'TargetUltimate-Alka', commits: 14, additions: 630, deletions: 168, avatar: 'https://avatars.githubusercontent.com/u/241401052?v=4' },
+        { login: 'Nandinikanaujiya', name: 'Nandinikanaujiya', commits: 2, additions: 90, deletions: 24, avatar: 'https://avatars.githubusercontent.com/u/226968939?v=4' }
+      ],
+      recentPullRequests: []
     };
   },
 
@@ -809,16 +1719,13 @@ export const mockService = {
   },
 
   getRubricTemplate: async () => {
-    return {
-      categories: [
-        { key: 'requirements', label: 'Requirements & Scope Alignment', maxScore: 20 },
-        { key: 'architecture', label: 'Microservice Architecture & Modularity', maxScore: 20 },
-        { key: 'gitPractices', label: 'Git Hygiene, PRs & GitHub Evidence', maxScore: 20 },
-        { key: 'codeQuality', label: 'Implementation Quality & Test Coverage', maxScore: 20 },
-        { key: 'documentation', label: 'SRS, Diagrams & Technical Documentation', maxScore: 20 }
-      ],
-      maxTotal: 100
-    };
+    return [
+      { key: 'requirements', name: 'Requirements & Scope Alignment', maxScore: 20, description: 'Completeness of functional/non-functional requirements and trace.' },
+      { key: 'architecture', name: 'Microservice Architecture & Modularity', maxScore: 25, description: 'Code modularity, design patterns, separation of concerns, and clean code.' },
+      { key: 'gitPractices', name: 'Git Hygiene, PRs & GitHub Evidence', maxScore: 25, description: 'Commit frequency, pull request reviews, branches, contributor balance.' },
+      { key: 'codeQuality', name: 'Implementation Quality & Test Coverage', maxScore: 15, description: 'Unit testing, API contracts, error boundaries, and reliability.' },
+      { key: 'documentation', name: 'SRS, Diagrams & Technical Documentation', maxScore: 15, description: 'SRS document, architecture diagrams, user manual, and reports.' }
+    ];
   },
 
   // Notifications

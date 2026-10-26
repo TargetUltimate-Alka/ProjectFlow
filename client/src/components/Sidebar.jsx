@@ -18,28 +18,26 @@ import {
   Sliders,
   UserCheck,
   FileSearch,
-  MessageSquare
+  MessageSquare,
+  BookOpen,
+  User
 } from 'lucide-react';
 
 export function Sidebar({ activeTab, setActiveTab, onOpenNotifications }) {
   const { user, logout } = useAuth();
   const role = (user?.role || '').toLowerCase();
 
-  // Distinct nav configurations per role
+  // Distinct nav configurations per role - Google Classroom Course Pattern for Students
   const studentNav = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'my-project', label: 'My Project', icon: FolderGit2 },
-    { id: 'team', label: 'Team', icon: Users },
-    { id: 'requirements', label: 'Requirements', icon: ListTodo },
-    { id: 'tasks', label: 'Tasks', icon: CheckSquare },
-    { id: 'milestones', label: 'Milestones', icon: Award },
-    { id: 'github', label: 'GitHub Activity', icon: Github },
-    { id: 'documents', label: 'Documents', icon: FileText }
+    { id: 'courses', label: 'Courses', icon: BookOpen },
+    { id: 'notifications', label: 'Notifications', icon: Bell, badge: 3 },
+    { id: 'profile', label: 'Profile', icon: User }
   ];
 
   const facultyNav = [
     { id: 'faculty-dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'faculty-projects', label: 'Assigned Projects', icon: FolderGit2 },
+    { id: 'faculty-criteria', label: 'Milestone Criteria Rules', icon: Sliders },
     { id: 'faculty-evidence', label: 'GitHub Evidence', icon: Github },
     { id: 'faculty-evaluations', label: 'Project Evaluation', icon: Award },
     { id: 'faculty-feedback', label: 'Feedback & Notes', icon: MessageSquare }
@@ -50,8 +48,7 @@ export function Sidebar({ activeTab, setActiveTab, onOpenNotifications }) {
     { id: 'admin-users', label: 'User Directory', icon: Users },
     { id: 'admin-faculty', label: 'Faculty Roster', icon: School },
     { id: 'admin-projects', label: 'All Projects', icon: FolderGit2 },
-    { id: 'admin-assignments', label: 'Faculty Assignments', icon: UserCheck },
-    { id: 'admin-criteria', label: 'Milestone Criteria Rules', icon: Sliders }
+    { id: 'admin-assignments', label: 'Faculty Assignments', icon: UserCheck }
   ];
 
   let items = studentNav;
@@ -125,15 +122,22 @@ export function Sidebar({ activeTab, setActiveTab, onOpenNotifications }) {
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           {items.map((item) => {
             const Icon = item.icon;
-            const isActive = activeTab === item.id;
+            const isCoursesTab = item.id === 'courses' && (activeTab === 'courses' || activeTab === 'dashboard' || activeTab === 'course-details');
+            const isActive = isCoursesTab || activeTab === item.id;
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => {
+                  if (item.id === 'notifications') {
+                    onOpenNotifications();
+                  } else {
+                    setActiveTab(item.id);
+                  }
+                }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '12px',
+                  justifyContent: 'space-between',
                   width: '100%',
                   padding: '10px 14px',
                   borderRadius: '10px',
@@ -160,44 +164,74 @@ export function Sidebar({ activeTab, setActiveTab, onOpenNotifications }) {
                   }
                 }}
               >
-                <Icon size={18} style={{ color: isActive ? '#38bdf8' : 'inherit' }} />
-                <span>{item.label}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <Icon size={18} style={{ color: isActive ? '#38bdf8' : 'inherit' }} />
+                  <span>{item.label}</span>
+                </div>
+                {item.badge !== undefined && (
+                  <span style={{
+                    backgroundColor: '#ef4444',
+                    color: '#fff',
+                    fontSize: '0.68rem',
+                    fontWeight: 700,
+                    padding: '2px 7px',
+                    borderRadius: '999px',
+                    lineHeight: 1
+                  }}>
+                    {item.badge}
+                  </span>
+                )}
               </button>
             );
           })}
         </nav>
       </div>
 
-      {/* Footer controls */}
+      {/* Footer controls & User Profile Avatar */}
       <div style={{
         padding: '16px',
         borderTop: '1px solid rgba(255, 255, 255, 0.08)',
         display: 'flex',
         flexDirection: 'column',
-        gap: '6px'
+        gap: '10px'
       }}>
-        <button
-          onClick={onOpenNotifications}
-          style={{
+        {/* Student Avatar Card matching Google Classroom mockup */}
+        <div style={{
+          padding: '10px 12px',
+          borderRadius: '10px',
+          background: 'rgba(255, 255, 255, 0.03)',
+          border: '1px solid rgba(255, 255, 255, 0.06)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px'
+        }}>
+          <div style={{
+            width: '36px',
+            height: '36px',
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg, #0284c7 0%, #6366f1 100%)',
             display: 'flex',
             alignItems: 'center',
-            gap: '10px',
-            padding: '8px 12px',
-            borderRadius: '8px',
-            background: 'transparent',
-            border: 'none',
-            color: '#94a3b8',
-            cursor: 'pointer',
-            fontSize: '0.8rem',
-            width: '100%',
-            textAlign: 'left'
-          }}
-          onMouseEnter={e => { e.currentTarget.style.color = '#fff'; }}
-          onMouseLeave={e => { e.currentTarget.style.color = '#94a3b8'; }}
-        >
-          <Bell size={16} />
-          <span>Notifications</span>
-        </button>
+            justifyContent: 'center',
+            color: '#fff',
+            fontWeight: 700,
+            fontSize: '0.82rem',
+            flexShrink: 0,
+            boxShadow: '0 2px 8px rgba(2, 132, 199, 0.3)'
+          }}>
+            {user?.name
+              ? user.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
+              : 'ST'}
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: '0.82rem', fontWeight: 600, color: '#f8fafc', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {user?.name || 'Student User'}
+            </div>
+            <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>
+              {user?.role || 'Student'}
+            </div>
+          </div>
+        </div>
 
         <button
           onClick={logout}

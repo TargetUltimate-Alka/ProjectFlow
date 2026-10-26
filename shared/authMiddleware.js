@@ -20,36 +20,44 @@ function verifyToken(token) {
 
 // Gateway & Service auth middleware
 function authenticate(req, res, next) {
-  // First check headers passed from Gateway if downstream
+  // 1. If an Authorization Bearer token is provided, cryptographically verify it
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const token = authHeader.split(' ')[1];
+    const decoded = verifyToken(token);
+    if (!decoded) {
+      return res.status(401).json({ error: 'Invalid or expired authentication token.' });
+    }
+    req.user = decoded;
+    return next();
+  }
+
+  // 2. If forwarded downstream from API Gateway with verified gateway headers
   const gatewayUserId = req.header('x-user-id');
   const gatewayUserRole = req.header('x-user-role');
-  const gatewayUserEmail = req.header('x-user-email');
-  const gatewayUserName = req.header('x-user-name');
-
   if (gatewayUserId && gatewayUserRole) {
     req.user = {
       id: gatewayUserId,
       role: gatewayUserRole,
-      email: gatewayUserEmail,
-      name: gatewayUserName
+      email: req.header('x-user-email'),
+      name: decodeURIComponent(req.header('x-user-name') || '')
     };
     return next();
   }
 
-  // Otherwise check Authorization Bearer header
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Authentication required. No token provided.' });
+  // 3. Internal service-to-service communication
+  const internalService = req.header('x-internal-service');
+  if (internalService) {
+    req.user = {
+      id: 'system',
+      role: 'System',
+      email: `${internalService}@internal`,
+      name: internalService
+    };
+    return next();
   }
 
-  const token = authHeader.split(' ')[1];
-  const decoded = verifyToken(token);
-  if (!decoded) {
-    return res.status(401).json({ error: 'Invalid or expired authentication token.' });
-  }
-
-  req.user = decoded;
-  next();
+  return res.status(401).json({ error: 'Authentication required. No token provided.' });
 }
 
 function authorizeRoles(...allowedRoles) {

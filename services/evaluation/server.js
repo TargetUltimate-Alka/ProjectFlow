@@ -74,6 +74,7 @@ app.post('/evaluations', authenticate, authorizeRoles('Faculty', 'Admin'), async
       percentage,
       feedback: feedback ? feedback.trim() : '',
       recommendations: recommendations ? recommendations.trim() : '',
+      individualEvaluations: req.body.individualEvaluations || [],
       status: status || 'submitted', // 'draft' | 'submitted'
       evaluatedAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -146,6 +147,7 @@ app.put('/evaluations/:id', authenticate, authorizeRoles('Faculty', 'Admin'), as
 
     if (feedback !== undefined) update.feedback = feedback.trim();
     if (recommendations !== undefined) update.recommendations = recommendations.trim();
+    if (req.body.individualEvaluations !== undefined) update.individualEvaluations = req.body.individualEvaluations;
     if (status) update.status = status;
 
     await evaluationsCollection.updateOne({ _id: id }, { $set: update });

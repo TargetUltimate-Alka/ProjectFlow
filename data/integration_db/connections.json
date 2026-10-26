@@ -1,27 +1,39 @@
 [
   {
-    "_id": "fdb611015a5d475883560b18",
-    "projectId": "d2261c3db3ed41210a017045",
-    "repoOwner": "projectflow-team",
-    "repoName": "academic-capstone-project",
-    "repoFullName": "projectflow-team/academic-capstone-project",
-    "repoUrl": "https://github.com/projectflow-team/academic-capstone-project",
-    "stars": 24,
-    "forks": 7,
-    "openIssues": 3,
-    "lastSyncedAt": "2026-10-23T17:32:28.277Z",
-    "syncStatus": "syncing",
+    "_id": "46057acd39902603adc17e20",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "repoOwner": "Nandinikanaujiya",
+    "repoName": "Code-C",
+    "repoFullName": "Nandinikanaujiya/Code-C",
+    "repoUrl": "https://github.com/Nandinikanaujiya/Code-C",
+    "stars": 0,
+    "forks": 0,
+    "openIssues": 0,
+    "lastSyncedAt": "2026-10-25T18:29:12.052Z",
+    "syncStatus": "synced",
     "useDemoMode": true,
     "stats": {
-      "totalCommits": 14,
-      "totalPRs": 5,
-      "mergedPRs": 3,
-      "openPRs": 1,
-      "closedIssues": 4,
-      "openIssues": 1,
-      "totalContributors": 4
+      "totalCommits": 5,
+      "totalPRs": 0,
+      "mergedPRs": 0,
+      "openPRs": 0,
+      "closedIssues": 0,
+      "openIssues": 0,
+      "totalContributors": 1
     },
-    "createdAt": "2026-10-23T17:44:28.277Z",
-    "updatedAt": "2026-10-25T16:24:12.715Z"
+    "createdAt": "2026-10-25T17:13:16.694Z",
+    "token": null,
+    "rawToken": null,
+    "connectedAt": "2026-10-25T18:29:10.533Z",
+    "connectedBy": "7958f5d3259337b8ade1f064",
+    "updatedAt": "2026-10-25T18:29:12.053Z",
+    "syncError": null,
+    "syncWarning": null,
+    "dataSource": "live",
+    "rateLimit": {
+      "limit": 60,
+      "remaining": 54,
+      "reset": "2026-10-25T19:27:05.000Z"
+    }
   }
 ]

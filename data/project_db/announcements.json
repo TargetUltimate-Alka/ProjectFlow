@@ -1,0 +1,113 @@
+[
+  {
+    "_id": "ann_cs543_team_guidelines",
+    "courseId": "course_cs543",
+    "courseCode": "CS543",
+    "courseName": "Web Services",
+    "title": "Project Team Formation Guidelines",
+    "content": "Dear Students,\n\nPlease read and strictly follow the team formation guidelines before submitting your project groups:\n\n• Each team must contain 4–5 students.\n• All members must belong to the same academic batch (2026-2028).\n• Every member must have a unique roll number and institutional email.\n• Each student can belong to only one team in the course.\n• Students must select a topic from the faculty-approved list in Resources.\n• Project proposals must be submitted before the faculty-defined deadline (25 Oct 2026).\n\nProject proposal format and evaluation criteria are attached below. Contact the course instructor during office hours for topic approvals.",
+    "facultyId": "user_fac_sharma",
+    "facultyName": "Dr. R. Sharma",
+    "facultyEmail": "dr.sharma@projectflow.edu",
+    "isPinned": true,
+    "isImportant": true,
+    "publishedAt": "2026-10-20T10:00:00.000Z",
+    "date": "20 Oct 2026, 10:00 AM",
+    "attachments": [
+      {
+        "id": "att_guidelines_pdf",
+        "name": "Project_Guidelines.pdf",
+        "size": "2.4 MB",
+        "type": "pdf",
+        "downloadUrl": "/api/courses/CS543/attachments/Project_Guidelines.pdf"
+      },
+      {
+        "id": "att_proposal_doc",
+        "name": "Project_Proposal_Format.docx",
+        "size": "850 KB",
+        "type": "doc",
+        "downloadUrl": "/api/courses/CS543/attachments/Project_Proposal_Format.docx"
+      }
+    ],
+    "readBy": [
+      "alex.chen@student.edu"
+    ],
+    "updatedAt": "2026-10-26T17:44:34.803Z"
+  },
+  {
+    "_id": "ann_cs543_api_specs",
+    "courseId": "course_cs543",
+    "courseCode": "CS543",
+    "courseName": "Web Services",
+    "title": "Updated REST & GraphQL API Specification Standards",
+    "content": "All teams developing web service microservices must use OpenAPI 3.0 / YAML specifications for API contracts. Docker-compose configuration for service discovery must be committed to your team repository by Milestone 1.",
+    "facultyId": "user_fac_sharma",
+    "facultyName": "Dr. R. Sharma",
+    "facultyEmail": "dr.sharma@projectflow.edu",
+    "isPinned": false,
+    "isImportant": false,
+    "publishedAt": "2026-10-22T14:30:00.000Z",
+    "date": "22 Oct 2026, 02:30 PM",
+    "attachments": [
+      {
+        "id": "att_api_std_pdf",
+        "name": "API_Specification_Standards_v2.pdf",
+        "size": "1.1 MB",
+        "type": "pdf",
+        "downloadUrl": "/api/courses/CS543/attachments/API_Specification_Standards_v2.pdf"
+      }
+    ],
+    "readBy": []
+  },
+  {
+    "_id": "ann_cs541_deadline",
+    "courseId": "course_cs541",
+    "courseCode": "CS541",
+    "courseName": "Design and Analysis of Algorithms",
+    "title": "Team Formation Deadline Extended",
+    "content": "The deadline for algorithm capstone project groups has been extended to 28 Oct 2026. Review benchmark dataset resources.",
+    "facultyId": "user_fac_singh",
+    "facultyName": "Dr. P. Singh",
+    "facultyEmail": "dr.singh@projectflow.edu",
+    "isPinned": true,
+    "isImportant": false,
+    "publishedAt": "2026-10-20T11:00:00.000Z",
+    "date": "20 Oct 2026, 11:00 AM",
+    "attachments": [],
+    "readBy": []
+  },
+  {
+    "_id": "ann_cs542_proposal",
+    "courseId": "course_cs542",
+    "courseCode": "CS542",
+    "courseName": "Database Systems",
+    "title": "Submit Project Proposal Format",
+    "content": "Submit your database schema proposals using the approved institute format.",
+    "facultyId": "user_fac_verma",
+    "facultyName": "Dr. M. Verma",
+    "facultyEmail": "dr.verma@projectflow.edu",
+    "isPinned": false,
+    "isImportant": true,
+    "publishedAt": "2026-10-18T09:00:00.000Z",
+    "date": "18 Oct 2026, 09:00 AM",
+    "attachments": [],
+    "readBy": []
+  },
+  {
+    "_id": "ann_cs544_sprint",
+    "courseId": "course_cs544",
+    "courseCode": "CS544",
+    "courseName": "Software Engineering",
+    "title": "Sprint Planning Session Schedule",
+    "content": "Sprint 1 planning sessions will occur next week during lab hours.",
+    "facultyId": "user_fac_nair",
+    "facultyName": "Dr. S. Nair",
+    "facultyEmail": "dr.nair@projectflow.edu",
+    "isPinned": false,
+    "isImportant": false,
+    "publishedAt": "2026-10-16T16:00:00.000Z",
+    "date": "16 Oct 2026, 04:00 PM",
+    "attachments": [],
+    "readBy": []
+  }
+]
