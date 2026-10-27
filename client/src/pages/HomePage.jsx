@@ -379,6 +379,7 @@ export function HomePage({ onNavigateToAuth }) {
         </nav>
 
         <div className="hp-header__actions">
+          <a className="hp-btn-login" href="/institutions">Institutions</a>
           <button className="hp-btn-login" onClick={() => onNavigateToAuth('login')}>Log In</button>
           <button className="hp-btn-register" onClick={() => onNavigateToAuth('register')}>Get Started</button>
         </div>

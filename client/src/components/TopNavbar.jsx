@@ -27,6 +27,8 @@ export function TopNavbar({ activeTab, onOpenNotifications }) {
         return <span className="badge badge-rose"><Shield size={12} /> Administrator</span>;
       case 'faculty':
         return <span className="badge badge-cyan"><School size={12} /> Faculty Evaluator</span>;
+      case 'coordinator':
+        return <span className="badge badge-cyan"><School size={12} /> Coordinator</span>;
       default:
         return <span className="badge badge-emerald"><GraduationCap size={12} /> Student Lead</span>;
     }

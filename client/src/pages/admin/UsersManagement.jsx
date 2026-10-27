@@ -79,7 +79,7 @@ export function UsersManagement() {
 
       {/* Filter Tabs */}
       <div className="glass-panel" style={{ padding: '14px 20px', display: 'flex', gap: '8px' }}>
-        {['all', 'Student', 'Faculty', 'Admin'].map(r => (
+        {['all', 'Student', 'Faculty', 'Coordinator', 'Admin'].map(r => (
           <button
             key={r}
             onClick={() => setRoleFilter(r)}
@@ -183,6 +183,7 @@ export function UsersManagement() {
               <select className="form-control" value={role} onChange={e => setRole(e.target.value)}>
                 <option value="Student">Student</option>
                 <option value="Faculty">Faculty Evaluator</option>
+                <option value="Coordinator">Institution Coordinator</option>
                 <option value="Admin">Administrator</option>
               </select>
             </div>

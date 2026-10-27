@@ -97,6 +97,22 @@ export const api = {
   updateUser: (id, data) =>
     request(`/auth/users/${id}`, { method: 'PUT', body: JSON.stringify(data) }, () => mockService.updateUser(id, data)),
 
+  getInstitutions: (search = '') => request(`/institutions${search ? `?search=${encodeURIComponent(search)}` : ''}`),
+  getInstitution: (id) => request(`/institutions/${id}`),
+  createInstitution: (data) => request('/institutions', { method: 'POST', body: JSON.stringify(data) }),
+  updateCoordinatorInstitution: (id, data) => request(`/coordinator/institutions/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  getInstitutionMembership: (id) => request(`/institutions/${id}/membership`),
+  requestInstitutionMembership: (id) => request(`/institutions/${id}/membership`, { method: 'POST', body: JSON.stringify({}) }),
+  getCoordinatorOverview: () => request('/coordinator/overview'),
+  getCoordinatorBranches: () => request('/coordinator/branches'),
+  getCoordinatorMemberships: () => request('/coordinator/memberships'),
+  reviewCoordinatorMembership: (id, status) => request(`/coordinator/memberships/${id}`, { method: 'PUT', body: JSON.stringify({ status }) }),
+  createCoordinatorBranch: (data) => request('/coordinator/branches', { method: 'POST', body: JSON.stringify(data) }),
+  getCoordinatorSessions: () => request('/coordinator/sessions'),
+  createCoordinatorSession: (data) => request('/coordinator/sessions', { method: 'POST', body: JSON.stringify(data) }),
+  getCoordinatorBatches: () => request('/coordinator/batches'),
+  createCoordinatorBatch: (data) => request('/coordinator/batches', { method: 'POST', body: JSON.stringify(data) }),
+
   // Academic Courses (Google Classroom Model)
   getCourses: (params = {}) => {
     const qs = new URLSearchParams(params).toString();

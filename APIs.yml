@@ -1,9 +1,9 @@
-version: "2.2.0"
+version: "2.3.0"
 info:
   title: "ProjectFlow API Specification"
-  description: "REST API documentation for ProjectFlow academic software engineering platform. Covers Step 1 (Student Course Dashboard), Step 2 (Course Details Page, Faculty Broadcast Announcements), and Step 3 (My Team, Course Teams Management, and Team Formation)."
-  feature: "Step 3: My Team, Course Teams Management, and Team Formation"
-  lastUpdated: "2026-10-26"
+  description: "REST API documentation for the ProjectFlow academic project platform, including courses, teams, faculty workflows, and institution coordination."
+  feature: "Coordinator Portal: Institution and Academic Setup"
+  lastUpdated: "2026-10-27"
 
 # ========================================================
 # 1. API CATEGORIZATION SUMMARY
@@ -651,3 +651,175 @@ endpoints:
         description: "Login successful"
       401:
         description: "Invalid credentials"
+
+  # ------------------------------------------------------
+  # Coordinator Portal: institution discovery and academic setup
+  # ------------------------------------------------------
+  - path: "/api/institutions"
+    method: "GET"
+    category: "Coordinator Portal"
+    service: "auth-service"
+    summary: "Search public institution directory"
+    authentication: { required: false }
+    queryParams:
+      - { name: "search", type: "string", required: false, description: "Case-insensitive institution name search" }
+    responses:
+      200:
+        description: "Active public institutions (maximum 50)"
+        example: [{ id: "institution-id", name: "Example College", type: "college", city: "Delhi", state: "Delhi", country: "India", logoUrl: "", coverUrl: "", description: "" }]
+
+  - path: "/api/institutions/{id}"
+    method: "GET"
+    category: "Coordinator Portal"
+    service: "auth-service"
+    summary: "Read public institution profile"
+    authentication: { required: false }
+    responses:
+      200:
+        description: "Public profile, active branches/programs, coordinator count and public coordinator profiles; excludes private contact/account fields"
+      404: { description: "Institution not found or unpublished" }
+
+  - path: "/api/institutions"
+    method: "POST"
+    category: "Coordinator Portal"
+    service: "auth-service"
+    summary: "Create an institution profile"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization:
+      roles: ["Coordinator", "Admin"]
+      rules: ["Coordinator privileges are assigned by an administrator; self-registration cannot grant this role.", "Name and institution type (college, university, school) are required.", "Duplicate name and city returns 409; website must be http or https."]
+    requestBody:
+      contentType: "application/json"
+      required: true
+      example: { name: "Example College", type: "college", city: "Delhi", state: "Delhi", country: "India", address: "", website: "https://example.edu", description: "", logoUrl: "", coverUrl: "" }
+    responses:
+      201: { description: "Institution profile created" }
+      400: { description: "Required fields or website URL are invalid" }
+      403: { description: "Caller lacks coordinator access" }
+      409: { description: "Institution with the same name and city exists" }
+
+  - path: "/api/coordinator/overview"
+    method: "GET"
+    category: "Coordinator Portal"
+    service: "auth-service"
+    summary: "Read coordinator dashboard data"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Coordinator", "Admin"], rules: ["Coordinator reads are scoped to their institution; role and institution association are loaded from the user record."] }
+    responses:
+      200: { description: "Institution, saved branch/batch data, counts, faculty and coordinator public profiles, and recent assignment activity" }
+      403: { description: "Caller is not an active coordinator or administrator" }
+
+  - path: "/api/institutions/{id}/membership"
+    method: "GET"
+    category: "Coordinator Portal"
+    service: "auth-service"
+    summary: "Read current user's institution membership status"
+    authentication: { required: true, type: "Bearer JWT" }
+    responses: { 200: { description: "Membership status: none, pending, approved, or rejected" } }
+
+  - path: "/api/institutions/{id}/membership"
+    method: "POST"
+    category: "Coordinator Portal"
+    service: "auth-service"
+    summary: "Request faculty membership in an institution"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Faculty"], rules: ["Creates a pending request; never grants coordinator privileges.", "Account must not already belong to an institution."] }
+    responses: { 201: { description: "Pending membership request created" }, 403: { description: "Only faculty accounts may request membership" }, 404: { description: "Institution not found" }, 409: { description: "Account is already associated with an institution" } }
+
+  - path: "/api/coordinator/memberships"
+    method: "GET"
+    category: "Coordinator Portal"
+    service: "auth-service"
+    summary: "List pending faculty membership requests"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Coordinator", "Admin"], rules: ["Coordinator sees requests for their institution only."] }
+    responses: { 200: { description: "Pending requests with public faculty name and department" }, 403: { description: "Coordinator access required" } }
+
+  - path: "/api/coordinator/memberships/{id}"
+    method: "PUT"
+    category: "Coordinator Portal"
+    service: "auth-service"
+    summary: "Approve or reject faculty membership request"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Coordinator", "Admin"], rules: ["Request must be pending and in caller's institution scope.", "Approval associates the faculty account with this institution only."] }
+    requestBody: { contentType: "application/json", required: true, example: { status: "approved" } }
+    responses: { 200: { description: "Membership decision saved" }, 400: { description: "Status must be approved or rejected" }, 404: { description: "Pending request not found in caller's institution" } }
+
+  - path: "/api/coordinator/institutions/{id}"
+    method: "PUT"
+    category: "Coordinator Portal"
+    service: "auth-service"
+    summary: "Update the institution's public profile"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Coordinator", "Admin"], rules: ["Coordinator may update only their associated institution.", "Profile text and HTTP/HTTPS image links are validated.", "Gallery accepts at most 12 public image links."] }
+    requestBody:
+      contentType: "application/json"
+      required: true
+      example: { name: "Example College", type: "college", city: "Delhi", website: "https://example.edu", description: "", logoUrl: "", coverUrl: "", gallery: ["https://example.edu/campus.jpg"] }
+    responses: { 200: { description: "Updated institution profile" }, 400: { description: "Invalid type, URL, or gallery size" }, 403: { description: "Institution access denied" }, 404: { description: "Institution not found" } }
+
+  - path: "/api/coordinator/branches"
+    method: "GET"
+    category: "Coordinator Portal"
+    service: "auth-service"
+    summary: "List institution branches"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Coordinator", "Admin"] }
+    responses: { 200: { description: "Branches scoped to the coordinator's institution" }, 403: { description: "Coordinator access required" } }
+
+  - path: "/api/coordinator/branches"
+    method: "POST"
+    category: "Coordinator Portal"
+    service: "auth-service"
+    summary: "Create an institution branch and its programs"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Coordinator", "Admin"], rules: ["The institution must exist and be in the caller's scope.", "Duplicate branch names within an institution are rejected."] }
+    requestBody:
+      contentType: "application/json"
+      required: true
+      example: { name: "Computer Science & Engineering", code: "CSE", programs: ["B.Tech", "M.Tech"] }
+    responses: { 201: { description: "Branch created" }, 400: { description: "Institution and name are required" }, 403: { description: "Institution access denied" }, 409: { description: "Branch already exists" } }
+
+  - path: "/api/coordinator/sessions"
+    method: "GET"
+    category: "Coordinator Portal"
+    service: "auth-service"
+    summary: "List academic sessions"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Coordinator", "Admin"] }
+    responses: { 200: { description: "Academic sessions scoped to the coordinator's institution" } }
+
+  - path: "/api/coordinator/sessions"
+    method: "POST"
+    category: "Coordinator Portal"
+    service: "auth-service"
+    summary: "Create an academic session"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Coordinator", "Admin"], rules: ["Institution must be in caller's scope.", "Session name must be unique within the institution."] }
+    requestBody:
+      contentType: "application/json"
+      required: true
+      example: { name: "2026-2027", startYear: 2026, endYear: 2027 }
+    responses: { 201: { description: "Academic session created" }, 400: { description: "Institution and name are required" }, 403: { description: "Institution access denied" }, 409: { description: "Session already exists" } }
+
+  - path: "/api/coordinator/batches"
+    method: "GET"
+    category: "Coordinator Portal"
+    service: "auth-service"
+    summary: "List institution batches"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Coordinator", "Admin"] }
+    responses: { 200: { description: "Saved batches scoped to the coordinator's institution, newest first" } }
+
+  - path: "/api/coordinator/batches"
+    method: "POST"
+    category: "Coordinator Portal"
+    service: "auth-service"
+    summary: "Create a batch"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Coordinator", "Admin"], rules: ["Selected branch and session must both belong to the caller's institution.", "Duplicate batch names within the same session are rejected."] }
+    requestBody:
+      contentType: "application/json"
+      required: true
+      example: { name: "CSE 2026", branchId: "branch-id", sessionId: "session-id", cohortYear: 2026, description: "" }
+    responses: { 201: { description: "Batch created with resolved branch and session names" }, 400: { description: "Required fields missing or branch/session relationship invalid" }, 403: { description: "Institution access denied" }, 409: { description: "Batch already exists for the session" } }

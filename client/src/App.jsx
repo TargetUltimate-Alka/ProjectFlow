@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from './context/AuthContext';
 import { HomePage } from './pages/HomePage';
 import { AuthPage } from './pages/AuthPage';
@@ -29,6 +29,7 @@ import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { UsersManagement } from './pages/admin/UsersManagement';
 import { AssignmentsPage } from './pages/admin/AssignmentsPage';
 import { CriteriaPage } from './pages/admin/CriteriaPage';
+import { CoordinatorPortal, InstitutionDirectoryPage, PublicInstitutionPage } from './pages/coordinator/CoordinatorPortal';
 
 export function App() {
   const { user, loading } = useAuth();
@@ -41,6 +42,12 @@ export function App() {
   const [publicView, setPublicView] = useState('homepage');
   // Which auth tab to open: 'login' | 'register'
   const [authInitialTab, setAuthInitialTab] = useState('login');
+
+  useEffect(() => {
+    const handleNavigate = (event) => setActiveTab(event.detail);
+    window.addEventListener('projectflow:navigate', handleNavigate);
+    return () => window.removeEventListener('projectflow:navigate', handleNavigate);
+  }, []);
 
   if (loading) {
     return (
@@ -57,6 +64,10 @@ export function App() {
       </div>
     );
   }
+
+  const institutionMatch = window.location.pathname.match(/^\/institutions\/([^/]+)\/?$/);
+  if (institutionMatch) return <PublicInstitutionPage institutionId={decodeURIComponent(institutionMatch[1])} />;
+  if (window.location.pathname === '/institutions' || window.location.pathname === '/institutions/') return <InstitutionDirectoryPage />;
 
   // --- Unauthenticated: Show Homepage or Auth Page ---
   if (!user) {
@@ -85,6 +96,7 @@ export function App() {
   const effectiveTab = () => {
     if (role === 'faculty' && (activeTab === 'dashboard' || activeTab === 'courses')) return 'faculty-dashboard';
     if (role === 'admin' && (activeTab === 'dashboard' || activeTab === 'courses')) return 'admin-dashboard';
+    if (role === 'coordinator' && (activeTab === 'dashboard' || activeTab === 'courses')) return 'coordinator-overview';
     if (role === 'student' && (activeTab.startsWith('faculty-') || activeTab.startsWith('admin-'))) return 'courses';
     if (role === 'student' && activeTab === 'dashboard') return 'courses';
     return activeTab;
@@ -233,6 +245,8 @@ export function App() {
               {currentTab === 'admin-assignments' && <AssignmentsPage />}
             </>
           )}
+
+          {role === 'coordinator' && <CoordinatorPortal activeTab={currentTab} user={user} />}
         </main>
       </div>
 
