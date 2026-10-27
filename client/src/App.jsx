@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from './context/AuthContext';
+import { HomePage } from './pages/HomePage';
 import { AuthPage } from './pages/AuthPage';
 import { Sidebar } from './components/Sidebar';
 import { TopNavbar } from './components/TopNavbar';
@@ -36,6 +37,11 @@ export function App() {
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
 
+  // Unauthenticated view: 'homepage' | 'auth'
+  const [publicView, setPublicView] = useState('homepage');
+  // Which auth tab to open: 'login' | 'register'
+  const [authInitialTab, setAuthInitialTab] = useState('login');
+
   if (loading) {
     return (
       <div style={{
@@ -52,10 +58,27 @@ export function App() {
     );
   }
 
+  // --- Unauthenticated: Show Homepage or Auth Page ---
   if (!user) {
-    return <AuthPage />;
+    if (publicView === 'auth') {
+      return (
+        <AuthPage
+          initialTab={authInitialTab}
+          onBackToHome={() => setPublicView('homepage')}
+        />
+      );
+    }
+    return (
+      <HomePage
+        onNavigateToAuth={(tab) => {
+          setAuthInitialTab(tab || 'login');
+          setPublicView('auth');
+        }}
+      />
+    );
   }
 
+  // --- Authenticated: Dashboard Shell ---
   const role = (user.role || '').toLowerCase();
 
   // Reset tab default if role changes
