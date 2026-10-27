@@ -20,7 +20,12 @@ import {
   FileSearch,
   MessageSquare,
   BookOpen,
-  User
+  User,
+  Building2,
+  CalendarDays,
+  ClipboardList,
+  UserRoundCog,
+  Activity
 } from 'lucide-react';
 
 export function Sidebar({ activeTab, setActiveTab, onOpenNotifications }) {
@@ -51,6 +56,20 @@ export function Sidebar({ activeTab, setActiveTab, onOpenNotifications }) {
     { id: 'admin-assignments', label: 'Faculty Assignments', icon: UserCheck }
   ];
 
+  const coordinatorNav = [
+    { id: 'coordinator-overview', label: 'Overview', icon: LayoutDashboard },
+    { id: 'coordinator-institution', label: 'Institution Profile', icon: Building2 },
+    { id: 'coordinator-branches', label: 'Branches & Programs', icon: School },
+    { id: 'coordinator-courses', label: 'Courses & Subjects', icon: BookOpen },
+    { id: 'coordinator-sessions', label: 'Academic Sessions', icon: CalendarDays },
+    { id: 'coordinator-batches', label: 'Batches', icon: ClipboardList },
+    { id: 'coordinator-faculty', label: 'Faculty Directory', icon: Users },
+    { id: 'coordinator-assignments', label: 'Faculty Assignments', icon: UserCheck },
+    { id: 'coordinator-coordinators', label: 'Coordinators', icon: UserRoundCog },
+    { id: 'coordinator-activity', label: 'Activity & Monitoring', icon: Activity },
+    { id: 'notifications', label: 'Notifications', icon: Bell }
+  ];
+
   let items = studentNav;
   let roleTitle = 'Student Portal';
   let roleIcon = GraduationCap;
@@ -66,6 +85,11 @@ export function Sidebar({ activeTab, setActiveTab, onOpenNotifications }) {
     roleTitle = 'Admin Console';
     roleIcon = ShieldCheck;
     roleColor = '#fb7185';
+  } else if (role === 'coordinator') {
+    items = coordinatorNav;
+    roleTitle = 'Coordinator Portal';
+    roleIcon = Building2;
+    roleColor = '#a78bfa';
   }
 
   const RoleIconComponent = roleIcon;
@@ -123,7 +147,8 @@ export function Sidebar({ activeTab, setActiveTab, onOpenNotifications }) {
           {items.map((item) => {
             const Icon = item.icon;
             const isCoursesTab = item.id === 'courses' && (activeTab === 'courses' || activeTab === 'dashboard' || activeTab === 'course-details');
-            const isActive = isCoursesTab || activeTab === item.id;
+            const isBatchDetailsTab = item.id === 'coordinator-batches' && activeTab === 'coordinator-batch-details';
+            const isActive = isCoursesTab || isBatchDetailsTab || activeTab === item.id;
             return (
               <button
                 key={item.id}

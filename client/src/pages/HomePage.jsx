@@ -379,6 +379,7 @@ export function HomePage({ onNavigateToAuth }) {
         </nav>
 
         <div className="hp-header__actions">
+          <a className="hp-btn-login" href="/institutions" style={{ display: 'inline-flex', alignItems: 'center' }}>Institutions</a>
           <button className="hp-btn-login" onClick={() => onNavigateToAuth('login')}>Log In</button>
           <button className="hp-btn-register" onClick={() => onNavigateToAuth('register')}>Get Started</button>
         </div>
@@ -401,6 +402,7 @@ export function HomePage({ onNavigateToAuth }) {
           </button>
         ))}
         <div className="hp-mobile-menu__actions">
+          <a className="hp-btn-login" href="/institutions" style={{ display: 'block', width: '100%', textAlign: 'center' }}>Institutions</a>
           <button className="hp-btn-login" style={{ width: '100%', textAlign: 'center' }} onClick={() => { setMobileMenuOpen(false); onNavigateToAuth('login'); }}>
             Log In
           </button>
