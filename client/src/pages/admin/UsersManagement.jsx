@@ -15,6 +15,8 @@ export function UsersManagement() {
   const [password, setPassword] = useState('password123');
   const [role, setRole] = useState('Student');
   const [department, setDepartment] = useState('Computer Science & Engineering');
+  const [institutionId, setInstitutionId] = useState('');
+  const [institutions, setInstitutions] = useState([]);
 
   const fetchUsers = async () => {
     try {
@@ -30,15 +32,17 @@ export function UsersManagement() {
 
   useEffect(() => {
     fetchUsers();
+    api.getInstitutions().then(setInstitutions).catch(() => {});
   }, []);
 
   const handleCreateUser = async (e) => {
     e.preventDefault();
     try {
-      await api.createUser({ name, email, password, role, department });
+      await api.createUser({ name, email, password, role, department, institutionId: role === 'Coordinator' ? institutionId : undefined });
       setIsModalOpen(false);
       setName('');
       setEmail('');
+      setInstitutionId('');
       await fetchUsers();
     } catch (err) {
       alert('Failed to create user: ' + err.message);
@@ -153,6 +157,14 @@ export function UsersManagement() {
               onChange={e => setName(e.target.value)}
             />
           </div>
+
+          {role === 'Coordinator' && <div className="form-group">
+            <label className="form-label">Institution</label>
+            <select className="form-control" value={institutionId} onChange={e => setInstitutionId(e.target.value)}>
+              <option value="">Assign later — coordinator will create a profile</option>
+              {institutions.map(institution => <option key={institution.id} value={institution.id}>{institution.name}{institution.city ? ` · ${institution.city}` : ''}</option>)}
+            </select>
+          </div>}
 
           <div className="form-group">
             <label className="form-label">Institutional Email</label>

@@ -24,7 +24,6 @@ let institutionsCollection;
 let branchesCollection;
 let batchesCollection;
 let sessionsCollection;
-let assignmentsCollection;
 let membershipsCollection;
 let eventBus;
 
@@ -41,10 +40,12 @@ const publicUser = (user) => ({
 async function requireCoordinator(req, res, next) {
   try {
     const user = await usersCollection.findOne({ _id: req.user?.id });
-    if (!user || !['Coordinator', 'Admin'].includes(user.role) || user.status === 'suspended') {
+    const coordinatorAccess = user && (user.role === 'Coordinator' || (user.roles || []).includes('Coordinator'));
+    if (!user || (!coordinatorAccess && user.role !== 'Admin') || user.status === 'suspended') {
       return res.status(403).json({ error: 'Coordinator access is required' });
     }
     req.user.role = user.role;
+    req.user.roles = user.roles || [user.role];
     req.user.institutionId = user.institutionId || null;
     next();
   } catch (err) { res.status(500).json({ error: err.message }); }
@@ -83,6 +84,7 @@ app.post('/auth/register', async (req, res) => {
       email: normalizedEmail,
       passwordHash,
       role: assignedRole,
+      roles: [assignedRole],
       status: 'active',
       department: req.body.department || 'Computer Science & Engineering',
       createdAt: new Date().toISOString()
@@ -93,7 +95,8 @@ app.post('/auth/register', async (req, res) => {
       id: result.insertedId,
       name: newUser.name,
       email: newUser.email,
-      role: newUser.role
+      role: newUser.role,
+      roles: newUser.roles
     });
     const refreshToken = generateRefreshToken({ id: result.insertedId });
 
@@ -113,6 +116,7 @@ app.post('/auth/register', async (req, res) => {
         name: newUser.name,
         email: newUser.email,
         role: newUser.role,
+        roles: newUser.roles,
         department: newUser.department
       }
     });
@@ -149,7 +153,9 @@ app.post('/auth/login', async (req, res) => {
       id: user._id,
       name: user.name,
       email: user.email,
-      role: user.role
+      role: user.role,
+      roles: user.roles || [user.role],
+      institutionId: user.institutionId || null
     });
     const refreshToken = generateRefreshToken({ id: user._id });
 
@@ -162,6 +168,7 @@ app.post('/auth/login', async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        roles: user.roles || [user.role],
         institutionId: user.institutionId || null,
         department: user.department || 'Computer Science'
       }
@@ -194,7 +201,9 @@ app.post('/auth/refresh', async (req, res) => {
       id: user._id,
       name: user.name,
       email: user.email,
-      role: user.role
+      role: user.role,
+      roles: user.roles || [user.role],
+      institutionId: user.institutionId || null
     });
 
     res.json({ token: newToken });
@@ -215,6 +224,7 @@ app.get('/auth/me', authenticate, async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      roles: user.roles || [user.role],
       institutionId: user.institutionId || null,
       designation: user.designation || null,
       bio: user.bio || null,
@@ -244,10 +254,11 @@ app.get('/institutions/:id', async (req, res) => {
     if (!institution) return res.status(404).json({ error: 'Institution not found' });
     const [branches, coordinators] = await Promise.all([
       branchesCollection.find({ institutionId: institution._id, status: 'active' }).toArray(),
-      usersCollection.find({ institutionId: institution._id, role: 'Coordinator', status: 'active' }).toArray()
+      usersCollection.find({ institutionId: institution._id, status: 'active' }).toArray()
     ]);
     const { _id, createdBy, ...profile } = institution;
-    res.json({ ...profile, id: _id, branches: branches.map(({ _id: id, name, code, programs }) => ({ id, name, code, programs: programs || [] })), coordinatorCount: coordinators.length, coordinators: coordinators.map(publicUser) });
+    const coordinatorProfiles = coordinators.filter(person => person.role === 'Coordinator' || (person.roles || []).includes('Coordinator'));
+    res.json({ ...profile, id: _id, branches: branches.map(({ _id: id, name, code, programs }) => ({ id, name, code, programs: programs || [] })), coordinatorCount: coordinatorProfiles.length, coordinators: coordinatorProfiles.map(publicUser) });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
@@ -279,12 +290,14 @@ app.post('/institutions', authenticate, requireCoordinator, async (req, res) => 
     const name = String(req.body.name || '').trim();
     const type = String(req.body.type || '').trim().toLowerCase();
     if (!name || !['college', 'university', 'school'].includes(type)) return res.status(400).json({ error: 'Institution name and a valid type are required' });
-    const duplicate = await institutionsCollection.findOne({ normalizedName: name.toLowerCase(), city: String(req.body.city || '').trim().toLowerCase() });
-    if (duplicate) return res.status(409).json({ error: 'An institution with this name and city already exists' });
+    if (req.user.role === 'Coordinator' && req.user.institutionId) return res.status(409).json({ error: 'This coordinator is already associated with an institution' });
+    const normalizedCity = String(req.body.city || '').trim().toLowerCase();
+    const sameName = await institutionsCollection.find({ normalizedName: name.toLowerCase() }).toArray();
+    if (sameName.some(item => (item.normalizedCity || String(item.city || '').trim().toLowerCase()) === normalizedCity)) return res.status(409).json({ error: 'An institution with this name and city already exists' });
     const gallery = Array.isArray(req.body.gallery) ? req.body.gallery.map(String).map(url => url.trim()).filter(Boolean).slice(0, 12) : [];
     const imageUrls = [req.body.logoUrl, req.body.coverUrl, ...gallery].filter(Boolean);
     if (imageUrls.some(url => { try { return !['http:', 'https:'].includes(new URL(String(url)).protocol); } catch { return true; } })) return res.status(400).json({ error: 'Image links must be valid http or https URLs' });
-    const doc = { _id: crypto.randomUUID(), name, normalizedName: name.toLowerCase(), type, city: String(req.body.city || '').trim(), state: String(req.body.state || '').trim(), country: String(req.body.country || '').trim(), address: String(req.body.address || '').trim(), website: String(req.body.website || '').trim(), description: String(req.body.description || '').trim(), logoUrl: String(req.body.logoUrl || '').trim(), coverUrl: String(req.body.coverUrl || '').trim(), gallery, status: 'active', createdBy: req.user.id, createdAt: new Date().toISOString() };
+    const doc = { _id: crypto.randomUUID(), name, normalizedName: name.toLowerCase(), type, city: String(req.body.city || '').trim(), normalizedCity, state: String(req.body.state || '').trim(), country: String(req.body.country || '').trim(), address: String(req.body.address || '').trim(), website: String(req.body.website || '').trim(), description: String(req.body.description || '').trim(), logoUrl: String(req.body.logoUrl || '').trim(), coverUrl: String(req.body.coverUrl || '').trim(), gallery, status: 'active', createdBy: req.user.id, createdAt: new Date().toISOString() };
     if (doc.website && !/^https?:\/\//i.test(doc.website)) return res.status(400).json({ error: 'Website must be a valid http or https URL' });
     const result = await institutionsCollection.insertOne(doc);
     if (req.user.role === 'Coordinator' && !req.user.institutionId) {
@@ -298,12 +311,13 @@ app.post('/institutions', authenticate, requireCoordinator, async (req, res) => 
 app.get('/coordinator/overview', authenticate, requireCoordinator, async (req, res) => {
   try {
     const scope = coordinatorInstitutionFilter(req);
-    const [institutions, branches, batches, sessions, faculty, coordinators, assignments] = await Promise.all([
+    const [institutions, branches, batches, sessions, faculty, coordinators] = await Promise.all([
       institutionsCollection.find(scope).toArray(), branchesCollection.find(scope).toArray(), batchesCollection.find(scope).toArray(),
       sessionsCollection.find(scope).toArray(), usersCollection.find({ ...scope, role: 'Faculty' }).toArray(),
-      usersCollection.find({ ...scope, role: 'Coordinator' }).toArray(), assignmentsCollection.find(scope).sort({ createdAt: -1 }).limit(8).toArray()
+      usersCollection.find(scope).toArray()
     ]);
-    res.json({ institution: institutions[0] || null, stats: { branches: branches.length, batches: batches.length, sessions: sessions.length, faculty: faculty.length, coordinators: coordinators.length }, branches, batches: batches.sort((a,b) => String(b.createdAt).localeCompare(String(a.createdAt))).slice(0,6), faculty: faculty.map(publicUser), coordinators: coordinators.map(publicUser), activity: assignments });
+    const coordinatorProfiles = coordinators.filter(person => person.role === 'Coordinator' || (person.roles || []).includes('Coordinator'));
+    res.json({ institution: institutions[0] || null, stats: { branches: branches.length, batches: batches.length, sessions: sessions.length, faculty: faculty.length, coordinators: coordinatorProfiles.length }, branches, batches: batches.sort((a,b) => String(b.createdAt).localeCompare(String(a.createdAt))).slice(0,6), faculty: faculty.map(publicUser), coordinators: coordinatorProfiles.map(publicUser) });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
@@ -318,7 +332,15 @@ app.put('/coordinator/institutions/:id', authenticate, requireCoordinator, async
     for (const field of allowed) if (req.body[field] !== undefined) update[field] = String(req.body[field]).trim();
     if (update.name !== undefined && !update.name) return res.status(400).json({ error: 'Institution name cannot be empty' });
     if (update.type !== undefined && !['college', 'university', 'school'].includes(update.type.toLowerCase())) return res.status(400).json({ error: 'Institution type is invalid' });
+    if (update.type !== undefined) update.type = update.type.toLowerCase();
     if (update.name !== undefined) update.normalizedName = update.name.toLowerCase();
+    if (update.city !== undefined) update.normalizedCity = update.city.toLowerCase();
+    const nextName = update.normalizedName || institution.normalizedName;
+    const nextCity = update.normalizedCity !== undefined ? update.normalizedCity : (institution.normalizedCity || String(institution.city || '').trim().toLowerCase());
+    if (nextName !== institution.normalizedName || nextCity !== (institution.normalizedCity || String(institution.city || '').trim().toLowerCase())) {
+      const sameName = await institutionsCollection.find({ normalizedName: nextName }).toArray();
+      if (sameName.some(item => String(item._id) !== institutionId && (item.normalizedCity || String(item.city || '').trim().toLowerCase()) === nextCity)) return res.status(409).json({ error: 'An institution with this name and city already exists' });
+    }
     if (update.website && !/^https?:\/\//i.test(update.website)) return res.status(400).json({ error: 'Website must be a valid http or https URL' });
     if (req.body.gallery !== undefined) {
       if (!Array.isArray(req.body.gallery) || req.body.gallery.length > 12) return res.status(400).json({ error: 'Gallery must contain at most 12 image links' });
@@ -482,6 +504,7 @@ app.post('/auth/users', authenticate, authorizeRoles('Admin'), async (req, res) 
       email: normalizedEmail,
       passwordHash,
       role,
+      roles: [role],
       institutionId: req.body.institutionId || null,
       designation: req.body.designation || null,
       department: department || 'Computer Science & Engineering',
@@ -497,6 +520,7 @@ app.post('/auth/users', authenticate, authorizeRoles('Admin'), async (req, res) 
         name: userDoc.name,
         email: userDoc.email,
         role: userDoc.role,
+        roles: userDoc.roles,
         department: userDoc.department
       }
     });
@@ -512,7 +536,7 @@ app.put('/auth/users/:id', authenticate, authorizeRoles('Admin'), async (req, re
     const { status, role, department, name } = req.body;
     const updateFields = {};
     if (status) updateFields.status = status;
-    if (role) updateFields.role = role;
+    if (role) { updateFields.role = role; updateFields.roles = [role]; }
     if (department) updateFields.department = department;
     if (name) updateFields.name = name;
 
@@ -530,7 +554,6 @@ async function startServer() {
   branchesCollection = db.collection('branches');
   batchesCollection = db.collection('batches');
   sessionsCollection = db.collection('academic_sessions');
-  assignmentsCollection = db.collection('faculty_assignments');
   membershipsCollection = db.collection('institution_memberships');
   eventBus = await createEventBus('auth-service');
 

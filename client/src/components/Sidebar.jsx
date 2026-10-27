@@ -21,7 +21,11 @@ import {
   MessageSquare,
   BookOpen,
   User,
-  Building2, CalendarDays, ClipboardList, UserRoundCog, Activity
+  Building2,
+  CalendarDays,
+  ClipboardList,
+  UserRoundCog,
+  Activity
 } from 'lucide-react';
 
 export function Sidebar({ activeTab, setActiveTab, onOpenNotifications }) {
@@ -56,9 +60,11 @@ export function Sidebar({ activeTab, setActiveTab, onOpenNotifications }) {
     { id: 'coordinator-overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'coordinator-institution', label: 'Institution Profile', icon: Building2 },
     { id: 'coordinator-branches', label: 'Branches & Programs', icon: School },
+    { id: 'coordinator-courses', label: 'Courses & Subjects', icon: BookOpen },
     { id: 'coordinator-sessions', label: 'Academic Sessions', icon: CalendarDays },
     { id: 'coordinator-batches', label: 'Batches', icon: ClipboardList },
     { id: 'coordinator-faculty', label: 'Faculty Directory', icon: Users },
+    { id: 'coordinator-assignments', label: 'Faculty Assignments', icon: UserCheck },
     { id: 'coordinator-coordinators', label: 'Coordinators', icon: UserRoundCog },
     { id: 'coordinator-activity', label: 'Activity & Monitoring', icon: Activity },
     { id: 'notifications', label: 'Notifications', icon: Bell }
@@ -141,7 +147,8 @@ export function Sidebar({ activeTab, setActiveTab, onOpenNotifications }) {
           {items.map((item) => {
             const Icon = item.icon;
             const isCoursesTab = item.id === 'courses' && (activeTab === 'courses' || activeTab === 'dashboard' || activeTab === 'course-details');
-            const isActive = isCoursesTab || activeTab === item.id;
+            const isBatchDetailsTab = item.id === 'coordinator-batches' && activeTab === 'coordinator-batch-details';
+            const isActive = isCoursesTab || isBatchDetailsTab || activeTab === item.id;
             return (
               <button
                 key={item.id}

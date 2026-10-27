@@ -706,7 +706,7 @@ endpoints:
     authentication: { required: true, type: "Bearer JWT" }
     authorization: { roles: ["Coordinator", "Admin"], rules: ["Coordinator reads are scoped to their institution; role and institution association are loaded from the user record."] }
     responses:
-      200: { description: "Institution, saved branch/batch data, counts, faculty and coordinator public profiles, and recent assignment activity" }
+      200: { description: "Institution, saved branch/batch data, counts, faculty and coordinator public profiles" }
       403: { description: "Caller is not an active coordinator or administrator" }
 
   - path: "/api/institutions/{id}/membership"
@@ -757,6 +757,90 @@ endpoints:
       required: true
       example: { name: "Example College", type: "college", city: "Delhi", website: "https://example.edu", description: "", logoUrl: "", coverUrl: "", gallery: ["https://example.edu/campus.jpg"] }
     responses: { 200: { description: "Updated institution profile" }, 400: { description: "Invalid type, URL, or gallery size" }, 403: { description: "Institution access denied" }, 404: { description: "Institution not found" } }
+
+  - path: "/api/coordinator/courses"
+    method: "GET"
+    category: "Coordinator Portal"
+    service: "project-service"
+    summary: "List institution courses"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Coordinator", "Admin"], rules: ["Coordinator sees courses with their institutionId only."] }
+    responses: { 200: { description: "Institution courses with branch, batch, session, and faculty assignment fields" }, 403: { description: "Coordinator access required" } }
+
+  - path: "/api/coordinator/courses"
+    method: "POST"
+    category: "Coordinator Portal"
+    service: "project-service"
+    summary: "Create institution course using the existing course collection"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Coordinator", "Admin"], rules: ["Branch, batch, and session must belong together in the same institution.", "Course code must be unique within the institution."] }
+    requestBody:
+      contentType: "application/json"
+      required: true
+      example: { name: "Web Services", code: "CS543", branchId: "branch-id", batchId: "batch-id", sessionId: "session-id", semester: "Semester 3", description: "" }
+    responses: { 201: { description: "Course created" }, 400: { description: "Missing fields or incompatible academic relationships" }, 403: { description: "Institution access denied" }, 409: { description: "Course code already exists in institution" } }
+
+  - path: "/api/coordinator/courses/{id}"
+    method: "PUT"
+    category: "Coordinator Portal"
+    service: "project-service"
+    summary: "Update an institution course"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Coordinator", "Admin"], rules: ["Only courses belonging to the caller's institution may be edited."] }
+    requestBody: { contentType: "application/json", required: true, example: { name: "Web Services", semester: "Semester 3", description: "" } }
+    responses: { 200: { description: "Course updated" }, 400: { description: "Invalid course name" }, 404: { description: "Course not found in institution" } }
+
+  - path: "/api/coordinator/assignments"
+    method: "GET"
+    category: "Coordinator Portal"
+    service: "project-service"
+    summary: "List faculty assignments"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Coordinator", "Admin"], rules: ["Coordinator sees assignments for their institution only."] }
+    responses: { 200: { description: "Assignment rows including faculty, course, branch, batch, session, semester, status, and timestamps" } }
+
+  - path: "/api/coordinator/assignments"
+    method: "POST"
+    category: "Coordinator Portal"
+    service: "project-service"
+    summary: "Assign an institution faculty member to a course and batch"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Coordinator", "Admin"], rules: ["Faculty and course must belong to the same institution.", "Duplicate assignments are rejected.", "The existing course faculty fields are updated for compatibility with faculty course access."] }
+    requestBody: { contentType: "application/json", required: true, example: { courseId: "course-id", facultyId: "faculty-user-id" } }
+    responses: { 201: { description: "Assignment created" }, 400: { description: "Faculty is not an active member of the institution" }, 404: { description: "Course not found in institution" }, 409: { description: "Assignment already exists" } }
+
+  - path: "/api/coordinator/assignments/{id}"
+    method: "PUT"
+    category: "Coordinator Portal"
+    service: "project-service"
+    summary: "Reassign a course to another institution faculty member"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Coordinator", "Admin"], rules: ["Assignment and replacement faculty must belong to the caller's institution."] }
+    requestBody: { contentType: "application/json", required: true, example: { facultyId: "faculty-user-id" } }
+    responses: { 200: { description: "Assignment updated" }, 400: { description: "Replacement faculty is not an active institution member" }, 404: { description: "Assignment not found in institution" }, 409: { description: "Assignment already exists" } }
+
+  - path: "/api/auth/users"
+    method: "POST"
+    category: "Admin API"
+    service: "auth-service"
+    summary: "Provision a user, including an authorized institution coordinator"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Admin"], rules: ["Coordinator role cannot be self-registered.", "Admin may optionally associate the new coordinator with an existing institution by institutionId.", "If institutionId is omitted, an admin-provisioned coordinator may create their institution profile after login."] }
+    requestBody:
+      contentType: "application/json"
+      required: true
+      example: { name: "Jordan Lee", email: "jordan@example.edu", password: "initial-password", role: "Coordinator", department: "Academic Affairs", institutionId: "institution-id" }
+    responses: { 201: { description: "User provisioned" }, 400: { description: "Required fields are missing" }, 403: { description: "Admin access required" }, 409: { description: "Email already exists" } }
+
+  - path: "/api/auth/users/{id}"
+    method: "PUT"
+    category: "Admin API"
+    service: "auth-service"
+    summary: "Update a provisioned user's role or account details"
+    authentication: { required: true, type: "Bearer JWT" }
+    authorization: { roles: ["Admin"], rules: ["Only admins may assign or change the Coordinator role."] }
+    requestBody: { contentType: "application/json", required: true, example: { role: "Coordinator", name: "Jordan Lee", department: "Academic Affairs" } }
+    responses: { 200: { description: "User updated" }, 403: { description: "Admin access required" } }
 
   - path: "/api/coordinator/branches"
     method: "GET"

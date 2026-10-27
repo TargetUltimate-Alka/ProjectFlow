@@ -92,7 +92,7 @@ export const api = {
     request('/auth/faculty', {}, () => mockService.getFaculty()),
 
   createUser: (userData) =>
-    request('/auth/users', { method: 'POST', body: JSON.stringify(userData) }, () => mockService.createUser(userData)),
+    request('/auth/users', { method: 'POST', body: JSON.stringify(userData) }, userData.role === 'Coordinator' ? null : () => mockService.createUser(userData)),
 
   updateUser: (id, data) =>
     request(`/auth/users/${id}`, { method: 'PUT', body: JSON.stringify(data) }, () => mockService.updateUser(id, data)),
@@ -104,6 +104,12 @@ export const api = {
   getInstitutionMembership: (id) => request(`/institutions/${id}/membership`),
   requestInstitutionMembership: (id) => request(`/institutions/${id}/membership`, { method: 'POST', body: JSON.stringify({}) }),
   getCoordinatorOverview: () => request('/coordinator/overview'),
+  getCoordinatorCourses: () => request('/coordinator/courses'),
+  createCoordinatorCourse: (data) => request('/coordinator/courses', { method: 'POST', body: JSON.stringify(data) }),
+  updateCoordinatorCourse: (id, data) => request(`/coordinator/courses/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  getCoordinatorAssignments: () => request('/coordinator/assignments'),
+  createCoordinatorAssignment: (data) => request('/coordinator/assignments', { method: 'POST', body: JSON.stringify(data) }),
+  updateCoordinatorAssignment: (id, data) => request(`/coordinator/assignments/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   getCoordinatorBranches: () => request('/coordinator/branches'),
   getCoordinatorMemberships: () => request('/coordinator/memberships'),
   reviewCoordinatorMembership: (id, status) => request(`/coordinator/memberships/${id}`, { method: 'PUT', body: JSON.stringify({ status }) }),
