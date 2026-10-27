@@ -75,8 +75,31 @@ app.post('/auth/register', async (req, res) => {
       return res.status(409).json({ error: 'A user with this email already exists' });
     }
 
-    // Role safety: Admin accounts cannot be self-registered
-    const assignedRole = (role === 'Faculty') ? 'Faculty' : 'Student';
+    // Admin accounts remain managed by the admin path; users can self-register into these three roles.
+    const assignedRole = role || 'Student';
+    if (!['Coordinator', 'Faculty', 'Student'].includes(assignedRole)) {
+      return res.status(400).json({ error: 'Choose Coordinator, Faculty, or Student as your role' });
+    }
+
+    const institutionInput = req.body.institution || {};
+    let normalizedCity = '';
+    if (assignedRole === 'Coordinator') {
+      const institutionName = String(institutionInput.name || '').trim();
+      const institutionType = String(institutionInput.type || '').trim().toLowerCase();
+      if (!institutionName || !['college', 'university', 'school'].includes(institutionType)) {
+        return res.status(400).json({ error: 'Coordinator registration requires an institution name and type' });
+      }
+      normalizedCity = String(institutionInput.city || '').trim().toLowerCase();
+      const sameName = await institutionsCollection.find({ normalizedName: institutionName.toLowerCase() }).toArray();
+      if (sameName.some(item => (item.normalizedCity || String(item.city || '').trim().toLowerCase()) === normalizedCity)) {
+        return res.status(409).json({ error: 'This institution already exists. Use the institution directory or contact its current coordinator.' });
+      }
+      const urls = [institutionInput.website, institutionInput.logoUrl, institutionInput.coverUrl].filter(Boolean);
+      if (urls.some(url => { try { return !['http:', 'https:'].includes(new URL(String(url)).protocol); } catch { return true; } })) {
+        return res.status(400).json({ error: 'Website and image links must be valid http or https URLs' });
+      }
+    }
+
     const passwordHash = await bcrypt.hash(password, 10);
 
     const newUser = {
@@ -85,18 +108,51 @@ app.post('/auth/register', async (req, res) => {
       passwordHash,
       role: assignedRole,
       roles: [assignedRole],
+      institutionId: null,
       status: 'active',
       department: req.body.department || 'Computer Science & Engineering',
       createdAt: new Date().toISOString()
     };
 
     const result = await usersCollection.insertOne(newUser);
+    let institution = null;
+    if (assignedRole === 'Coordinator') {
+      institution = {
+        _id: crypto.randomUUID(),
+        name: String(institutionInput.name).trim(),
+        normalizedName: String(institutionInput.name).trim().toLowerCase(),
+        type: String(institutionInput.type).trim().toLowerCase(),
+        city: String(institutionInput.city || '').trim(),
+        normalizedCity,
+        state: String(institutionInput.state || '').trim(),
+        country: String(institutionInput.country || '').trim(),
+        address: String(institutionInput.address || '').trim(),
+        website: String(institutionInput.website || '').trim(),
+        description: String(institutionInput.description || '').trim(),
+        logoUrl: String(institutionInput.logoUrl || '').trim(),
+        coverUrl: String(institutionInput.coverUrl || '').trim(),
+        gallery: [],
+        status: 'active',
+        createdBy: result.insertedId,
+        createdAt: new Date().toISOString()
+      };
+      try {
+        await institutionsCollection.insertOne(institution);
+        await usersCollection.updateOne({ _id: result.insertedId }, { $set: { institutionId: institution._id } });
+        newUser.institutionId = institution._id;
+      } catch (err) {
+        await usersCollection.deleteOne({ _id: result.insertedId });
+        throw err;
+      }
+    }
+
     const token = generateToken({
       id: result.insertedId,
       name: newUser.name,
       email: newUser.email,
       role: newUser.role,
-      roles: newUser.roles
+      roles: newUser.roles,
+      institutionId: newUser.institutionId
     });
     const refreshToken = generateRefreshToken({ id: result.insertedId });
 
@@ -117,8 +173,10 @@ app.post('/auth/register', async (req, res) => {
         email: newUser.email,
         role: newUser.role,
         roles: newUser.roles,
+        institutionId: newUser.institutionId,
         department: newUser.department
-      }
+      },
+      institution: institution ? { id: institution._id, name: institution.name, type: institution.type } : null
     });
   } catch (err) {
     console.error('[AuthService] Register error:', err);

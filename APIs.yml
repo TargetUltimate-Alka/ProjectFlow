@@ -1,7 +1,7 @@
-version: "2.3.0"
+version: "2.4.0"
 info:
   title: "ProjectFlow API Specification"
-  description: "REST API documentation for the ProjectFlow academic project platform, including courses, teams, faculty workflows, and institution coordination."
+  description: "REST API documentation for the ProjectFlow academic project platform, including student, faculty, coordinator, and institution workflows."
   feature: "Coordinator Portal: Institution and Academic Setup"
   lastUpdated: "2026-10-27"
 
@@ -17,7 +17,7 @@ summary:
     - path: "/api/auth/register"
       method: "POST"
       service: "auth-service"
-      description: "Enrolls and registers student accounts with academic details."
+      description: "Registers Student and Faculty accounts, or creates the first Coordinator account together with its institution profile."
     - path: "/api/auth/me"
       method: "GET"
       service: "auth-service"
@@ -841,6 +841,28 @@ endpoints:
     authorization: { roles: ["Admin"], rules: ["Only admins may assign or change the Coordinator role."] }
     requestBody: { contentType: "application/json", required: true, example: { role: "Coordinator", name: "Jordan Lee", department: "Academic Affairs" } }
     responses: { 200: { description: "User updated" }, 403: { description: "Admin access required" } }
+
+  - path: "/api/auth/register"
+    method: "POST"
+    category: "Auth API"
+    service: "auth-service"
+    summary: "Register a Student, Faculty member, or first institution Coordinator"
+    authentication: { required: false }
+    authorization:
+      rules:
+        - "Self-registration accepts only Student, Faculty, or Coordinator. Admin cannot self-register."
+        - "Coordinator registration requires institution.name and institution.type and creates the first coordinator account and institution profile together."
+        - "Duplicate email or duplicate institution name and city is rejected. Institution creation does not require a pre-existing admin account."
+    requestBody:
+      contentType: "application/json"
+      required: true
+      examples:
+        studentOrFaculty: { name: "Jordan Lee", email: "jordan@example.edu", password: "password", role: "Faculty", department: "Computer Science" }
+        coordinator: { name: "Jordan Lee", email: "jordan@example.edu", password: "password", role: "Coordinator", department: "Academic Affairs", institution: { name: "North Valley College", type: "college", city: "Pune", state: "Maharashtra", country: "India", address: "", website: "https://example.edu", description: "", logoUrl: "", coverUrl: "" } }
+    responses:
+      201: { description: "Account created; for Coordinator, institution profile and institutionId are returned as well" }
+      400: { description: "Required fields missing, unsupported role, invalid institution type, or invalid URLs" }
+      409: { description: "Email or institution name and city already exists" }
 
   - path: "/api/coordinator/branches"
     method: "GET"

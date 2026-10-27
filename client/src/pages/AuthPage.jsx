@@ -11,6 +11,8 @@ export function AuthPage({ initialTab = 'login', onBackToHome }) {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('Student');
   const [department, setDepartment] = useState('Computer Science & Engineering');
+  const [institutionDetails, setInstitutionDetails] = useState({ name: '', type: 'college', city: '', state: '', country: '', address: '', website: '', description: '', logoUrl: '', coverUrl: '' });
+  const [registrationRole, setRegistrationRole] = useState('Student');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
@@ -22,7 +24,10 @@ export function AuthPage({ initialTab = 'login', onBackToHome }) {
     try {
       if (isRegister) {
         // Register but do NOT auto-login — redirect to login with success message
-        await api.register({ name, email, password, role, department });
+        const registration = { name, email, password, role, department };
+        if (role === 'Coordinator') registration.institution = institutionDetails;
+        await api.register(registration);
+        setRegistrationRole(role);
         setRegistrationSuccess(true);
         setIsRegister(false);
         // Clear registration fields
@@ -30,6 +35,7 @@ export function AuthPage({ initialTab = 'login', onBackToHome }) {
         setPassword('');
         setRole('Student');
         setDepartment('Computer Science & Engineering');
+        setInstitutionDetails({ name: '', type: 'college', city: '', state: '', country: '', address: '', website: '', description: '', logoUrl: '', coverUrl: '' });
         // Keep email so user can login immediately
       } else {
         await login(email, password);
@@ -182,7 +188,7 @@ export function AuthPage({ initialTab = 'login', onBackToHome }) {
             }}>
               <CheckCircle2 size={18} style={{ flexShrink: 0, marginTop: 2 }} />
               <div>
-                <div style={{ fontWeight: 700, marginBottom: 2 }}>Account Created Successfully!</div>
+                <div style={{ fontWeight: 700, marginBottom: 2 }}>{registrationRole === 'Coordinator' ? 'Coordinator account and institution created!' : 'Account Created Successfully!'}</div>
                 <div style={{ color: '#86efac' }}>Please sign in with your credentials to access your dashboard.</div>
               </div>
             </div>
@@ -250,13 +256,44 @@ export function AuthPage({ initialTab = 'login', onBackToHome }) {
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
                   >
-                    <option value="Student">Student (Project Member / Lead)</option>
+                    <option value="Coordinator">Coordinator (Create and manage an institution)</option>
                     <option value="Faculty">Faculty (Evaluator / Supervisor)</option>
+                    <option value="Student">Student (Project Member / Lead)</option>
                   </select>
                   <span style={{ fontSize: '0.7rem', color: '#64748b', marginTop: '4px' }}>
-                    Note: Admin accounts are managed by IT Administration.
+                    Choose the role that matches your work in ProjectFlow.
                   </span>
                 </div>
+
+                {role === 'Coordinator' && <section className="coord-registration-fields">
+                  <div className="coord-registration-heading">
+                    <span className="coord-eyebrow">FIRST COORDINATOR SETUP</span>
+                    <h3>Create your institution profile</h3>
+                    <p>The first coordinator creates the institution. You can finish branches, sessions and batches after signing in.</p>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Official institution name</label>
+                    <input type="text" required maxLength="140" className="form-control" value={institutionDetails.name} onChange={e => setInstitutionDetails({ ...institutionDetails, name: e.target.value })} placeholder="e.g. North Valley College" />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Institution type</label>
+                    <select className="form-control" required value={institutionDetails.type} onChange={e => setInstitutionDetails({ ...institutionDetails, type: e.target.value })}>
+                      <option value="college">College</option><option value="university">University</option><option value="school">School</option>
+                    </select>
+                  </div>
+                  <div className="coord-registration-grid">
+                    <div className="form-group"><label className="form-label">City</label><input className="form-control" value={institutionDetails.city} onChange={e => setInstitutionDetails({ ...institutionDetails, city: e.target.value })} /></div>
+                    <div className="form-group"><label className="form-label">State</label><input className="form-control" value={institutionDetails.state} onChange={e => setInstitutionDetails({ ...institutionDetails, state: e.target.value })} /></div>
+                    <div className="form-group"><label className="form-label">Country</label><input className="form-control" value={institutionDetails.country} onChange={e => setInstitutionDetails({ ...institutionDetails, country: e.target.value })} /></div>
+                  </div>
+                  <div className="form-group"><label className="form-label">Address</label><input className="form-control" value={institutionDetails.address} onChange={e => setInstitutionDetails({ ...institutionDetails, address: e.target.value })} /></div>
+                  <div className="form-group"><label className="form-label">Official website (optional)</label><input type="url" className="form-control" value={institutionDetails.website} onChange={e => setInstitutionDetails({ ...institutionDetails, website: e.target.value })} placeholder="https://example.edu" /></div>
+                  <div className="form-group"><label className="form-label">Public description (optional)</label><textarea className="form-control" rows="3" maxLength="1200" value={institutionDetails.description} onChange={e => setInstitutionDetails({ ...institutionDetails, description: e.target.value })} /></div>
+                  <div className="coord-registration-grid">
+                    <div className="form-group"><label className="form-label">Logo image URL (optional)</label><input type="url" className="form-control" value={institutionDetails.logoUrl} onChange={e => setInstitutionDetails({ ...institutionDetails, logoUrl: e.target.value })} /></div>
+                    <div className="form-group"><label className="form-label">Cover image URL (optional)</label><input type="url" className="form-control" value={institutionDetails.coverUrl} onChange={e => setInstitutionDetails({ ...institutionDetails, coverUrl: e.target.value })} /></div>
+                  </div>
+                </section>}
 
                 <div className="form-group">
                   <label className="form-label">Department / School</label>
