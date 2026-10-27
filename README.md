@@ -154,7 +154,7 @@ This repository is pre-configured with `netlify.toml` and `_redirects` for turnk
    - **Publish directory**: `dist` (or `client/dist` if base is repository root)
 3. **Client-Side Routing**: Handled automatically via `_redirects` and `netlify.toml` (`/* /index.html 200`).
 4. **API Integration**:
-   - For standalone static demo & evaluation (e.g. grading or preview), the frontend includes an automatic offline demo dataset supporting all 1-Click Instant Demo roles (Student, Faculty, Admin).
+   - For standalone static demo & evaluation (e.g. grading or preview), the frontend includes an automatic offline demo dataset supporting all 1-Click Instant Demo roles (Student, Faculty, Coordinator).
    - To connect to a live hosted backend (e.g. on Render, Railway, or AWS), set the environment variable in Netlify Site Settings: `VITE_API_URL=https://your-backend-api.com/api`.
 
 

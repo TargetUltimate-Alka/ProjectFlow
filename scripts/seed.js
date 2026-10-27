@@ -15,6 +15,16 @@ async function seed() {
   const users = [
     {
       name: 'Dr. Arthur Vance',
+      email: 'coordinator@projectflow.edu',
+      passwordHash: defaultPasswordHash,
+      role: 'Coordinator',
+      roles: ['Coordinator'],
+      status: 'active',
+      department: 'Computer Science & Engineering',
+      createdAt: new Date().toISOString()
+    },
+    {
+      name: 'Dr. Arthur Vance',
       email: 'admin@projectflow.edu',
       passwordHash: adminPasswordHash,
       role: 'Admin',

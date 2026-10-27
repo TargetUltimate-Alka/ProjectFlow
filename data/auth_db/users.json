@@ -1,5 +1,16 @@
 [
   {
+    "_id": "user_coordinator_demo",
+    "name": "Dr. Arthur Vance",
+    "email": "coordinator@projectflow.edu",
+    "passwordHash": "$2a$10$Q27ukWPNMmb9WIdkv8J5JeF3IWmfN1X3XxFZRpT5I6mBqP1CiBWz6",
+    "role": "Coordinator",
+    "roles": ["Coordinator"],
+    "status": "active",
+    "department": "Computer Science & Engineering",
+    "createdAt": "2026-10-27T00:00:00.000Z"
+  },
+  {
     "_id": "cb1ced430191aab7322512c9",
     "name": "Dr. Arthur Vance",
     "email": "admin@projectflow.edu",

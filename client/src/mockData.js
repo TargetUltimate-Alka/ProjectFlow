@@ -13,6 +13,15 @@ const defaultAuthors = [
 export const INITIAL_DATA = {
   users: [
     {
+      id: 'usr_coordinator',
+      name: 'Dr. Arthur Vance',
+      email: 'coordinator@projectflow.edu',
+      role: 'Coordinator',
+      status: 'active',
+      department: 'Computer Science & Engineering',
+      createdAt: '2026-08-15T09:00:00.000Z'
+    },
+    {
       id: 'usr_admin',
       name: 'Dr. Arthur Vance',
       email: 'admin@projectflow.edu',
@@ -905,7 +914,7 @@ export const mockService = {
       throw new Error('A user with this email already exists');
     }
 
-    const assignedRole = (userData.role === 'Faculty') ? 'Faculty' : 'Student';
+    const assignedRole = ['Coordinator', 'Faculty'].includes(userData.role) ? userData.role : 'Student';
     const newUser = {
       id: `usr_${Date.now()}`,
       name: userData.name.trim(),

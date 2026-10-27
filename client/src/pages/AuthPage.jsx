@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../api';
-import { FolderGit2, GraduationCap, School, ShieldCheck, ArrowRight, ArrowLeft, Sparkles, CheckCircle2 } from 'lucide-react';
+import { FolderGit2, GraduationCap, School, Building2, ArrowRight, ArrowLeft, Sparkles, CheckCircle2 } from 'lucide-react';
 
 export function AuthPage({ initialTab = 'login', onBackToHome }) {
   const { login } = useAuth();
@@ -362,18 +362,18 @@ export function AuthPage({ initialTab = 'login', onBackToHome }) {
 
               <button
                 type="button"
-                onClick={() => handleQuickLogin('admin@projectflow.edu', 'admin123')}
+                onClick={() => handleQuickLogin('coordinator@projectflow.edu', 'password123')}
                 className="btn btn-secondary btn-sm"
                 style={{ justifyContent: 'space-between', padding: '10px 14px' }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <ShieldCheck size={16} style={{ color: '#fb7185' }} />
+                  <Building2 size={16} style={{ color: '#a78bfa' }} />
                   <div style={{ textAlign: 'left' }}>
-                    <div style={{ fontWeight: 600, fontSize: '0.8rem' }}>Administrator (Dr. Arthur Vance)</div>
-                    <div style={{ fontSize: '0.7rem', color: '#64748b' }}>admin@projectflow.edu</div>
+                    <div style={{ fontWeight: 600, fontSize: '0.8rem' }}>Coordinator (Dr. Arthur Vance)</div>
+                    <div style={{ fontSize: '0.7rem', color: '#64748b' }}>coordinator@projectflow.edu</div>
                   </div>
                 </div>
-                <span className="badge badge-rose" style={{ fontSize: '0.65rem' }}>Admin</span>
+                <span className="badge badge-cyan" style={{ fontSize: '0.65rem' }}>Coordinator</span>
               </button>
             </div>
           </div>
