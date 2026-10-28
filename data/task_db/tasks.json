@@ -1,62 +1,476 @@
 [
   {
-    "_id": "f45e2151dc861b4fedd7acad",
+    "_id": "task_101",
+    "id": "task_101",
+    "taskNo": 1,
     "projectId": "b503fcaeb7f9f3732992009b",
-    "title": "Scaffold Express Gateway with JWT Header Forwarding",
-    "description": "Setup reverse proxy and attach x-user-id, x-user-role headers.",
-    "assigneeId": "7958f5d3259337b8ade1f064",
-    "assigneeName": "Alex Chen",
+    "teamId": "team_alpha",
+    "courseId": "CS543",
+    "title": "Project Setup",
+    "description": "Initial setup done",
+    "instructions": "Initialize project structure, dev environment and core dependencies.",
+    "submissionRequirements": "Submit setup verification document and repository layout.",
+    "assigneeId": "user_aarav_sharma",
+    "assigneeName": "Aarav Sharma",
+    "assigneeEmail": "aarav.sharma@student.edu",
     "priority": "critical",
     "status": "completed",
-    "dueDate": "2026-09-20",
-    "createdBy": "7958f5d3259337b8ade1f064",
-    "createdByName": "Alex Chen",
-    "createdAt": "2026-10-25T17:13:15.099Z",
-    "updatedAt": "2026-10-25T17:13:15.099Z"
+    "dueDate": "2026-09-20T18:00:00.000Z",
+    "attachments": [
+      {
+        "name": "setup_doc.pdf",
+        "size": "1.2 MB",
+        "type": "pdf"
+      }
+    ],
+    "submission": {
+      "description": "Initial setup done",
+      "attachment": {
+        "name": "setup_doc.pdf",
+        "size": "1.2 MB",
+        "type": "pdf"
+      },
+      "submittedAt": "2026-09-20T17:00:00.000Z",
+      "submittedBy": "Aarav Sharma",
+      "submittedByEmail": "aarav.sharma@student.edu"
+    },
+    "evaluation": {
+      "marksAwarded": 8,
+      "maxMarks": 10,
+      "feedback": "Initial setup verified successfully. Clean environment layout.",
+      "evaluatedBy": "Dr. R. Sharma",
+      "evaluatedByEmail": "dr.sharma@projectflow.edu",
+      "evaluatedAt": "2026-09-21T10:00:00.000Z"
+    },
+    "createdBy": "user_aarav_sharma",
+    "createdByName": "Aarav Sharma",
+    "createdAt": "2026-09-15T10:00:00.000Z",
+    "updatedAt": "2026-09-21T10:00:00.000Z"
   },
   {
-    "_id": "e00ec46cf7dc595f1b0ed5c6",
+    "_id": "task_102",
+    "id": "task_102",
+    "taskNo": 2,
     "projectId": "b503fcaeb7f9f3732992009b",
-    "title": "Implement Resilient GitHub Sync Pipeline",
-    "description": "Fetch commits, PRs, issues and preserve last-good-snapshot on failure.",
+    "teamId": "team_alpha",
+    "courseId": "CS543",
+    "title": "Database Design",
+    "description": "-",
+    "instructions": "Design database schemas, entity relations and migration scripts.",
+    "submissionRequirements": "Submit schema ER diagrams and SQL/JSON schema declarations.",
     "assigneeId": "7958f5d3259337b8ade1f064",
+    "assigneeName": "Alex Chen",
+    "assigneeEmail": "alex.chen@student.edu",
+    "priority": "high",
+    "status": "not_completed",
+    "dueDate": "2026-11-15T18:00:00.000Z",
+    "attachments": [
+      {
+        "name": "db_schema.pdf",
+        "size": "850 KB",
+        "type": "pdf"
+      }
+    ],
+    "submission": null,
+    "evaluation": null,
+    "createdBy": "user_aarav_sharma",
+    "createdByName": "Aarav Sharma",
+    "createdAt": "2026-09-16T11:00:00.000Z",
+    "updatedAt": "2026-09-16T11:00:00.000Z"
+  },
+  {
+    "_id": "task_103",
+    "id": "task_103",
+    "taskNo": 3,
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "teamId": "team_alpha",
+    "courseId": "CS543",
+    "title": "API Development",
+    "description": "Created REST APIs",
+    "instructions": "Implemented REST APIs for user and team management.",
+    "submissionRequirements": "Implemented user, team and project APIs.",
+    "assigneeId": "priya_patel_id",
     "assigneeName": "Priya Patel",
+    "assigneeEmail": "priya.patel@student.edu",
     "priority": "high",
     "status": "completed",
-    "dueDate": "2026-09-22",
-    "createdBy": "7958f5d3259337b8ade1f064",
-    "createdByName": "Alex Chen",
-    "createdAt": "2026-10-25T17:13:15.099Z",
-    "updatedAt": "2026-10-25T17:13:15.099Z"
+    "dueDate": "2026-11-10T18:00:00.000Z",
+    "attachments": [
+      {
+        "name": "api_doc.pdf",
+        "size": "2.1 MB",
+        "type": "pdf"
+      }
+    ],
+    "submission": {
+      "description": "Created REST APIs",
+      "attachment": {
+        "name": "api_implementation.zip",
+        "size": "3.4 MB",
+        "type": "zip"
+      },
+      "submittedAt": "2026-09-25T16:00:00.000Z",
+      "submittedBy": "Priya Patel",
+      "submittedByEmail": "priya.patel@student.edu"
+    },
+    "evaluation": {
+      "marksAwarded": 9,
+      "maxMarks": 10,
+      "feedback": "Clean REST architecture with JWT authorization and test coverage.",
+      "evaluatedBy": "Dr. R. Sharma",
+      "evaluatedByEmail": "dr.sharma@projectflow.edu",
+      "evaluatedAt": "2026-09-26T14:00:00.000Z"
+    },
+    "createdBy": "user_aarav_sharma",
+    "createdByName": "Aarav Sharma",
+    "createdAt": "2026-09-18T09:00:00.000Z",
+    "updatedAt": "2026-09-26T14:00:00.000Z"
   },
   {
-    "_id": "2708a433947b716f897ec03c",
+    "_id": "task_104",
+    "id": "task_104",
+    "taskNo": 4,
     "projectId": "b503fcaeb7f9f3732992009b",
-    "title": "Connect RabbitMQ Topic Exchange for Milestone Events",
-    "description": "Publish MilestoneCompleted and consume in Notification Service.",
-    "assigneeId": "7958f5d3259337b8ade1f064",
+    "teamId": "team_alpha",
+    "courseId": "CS543",
+    "title": "Frontend UI",
+    "description": "In progress",
+    "instructions": "Build student dashboard interface following Google Classroom pattern.",
+    "submissionRequirements": "Responsive React components with Tailwind styling and dark theme.",
+    "assigneeId": "marcus_vance_id",
     "assigneeName": "Marcus Vance",
-    "priority": "high",
-    "status": "in_progress",
-    "dueDate": "2026-09-25",
-    "createdBy": "7958f5d3259337b8ade1f064",
-    "createdByName": "Alex Chen",
-    "createdAt": "2026-10-25T17:13:15.099Z",
-    "updatedAt": "2026-10-25T17:13:15.099Z"
+    "assigneeEmail": "marcus.vance@student.edu",
+    "priority": "medium",
+    "status": "not_completed",
+    "dueDate": "2026-10-29T18:00:00.000Z",
+    "attachments": [
+      {
+        "name": "ui_mockup.pdf",
+        "size": "3.5 MB",
+        "type": "pdf"
+      }
+    ],
+    "submission": null,
+    "evaluation": null,
+    "createdBy": "user_aarav_sharma",
+    "createdByName": "Aarav Sharma",
+    "createdAt": "2026-09-20T14:00:00.000Z",
+    "updatedAt": "2026-10-25T12:00:00.000Z"
   },
   {
-    "_id": "70b53f36393166622d81f81a",
+    "_id": "task_105",
+    "id": "task_105",
+    "taskNo": 5,
     "projectId": "b503fcaeb7f9f3732992009b",
-    "title": "Prepare Capstone Evaluation & Rubric Criteria Demo",
-    "description": "Compile testing benchmarks and user acceptance reports.",
+    "teamId": "team_alpha",
+    "courseId": "CS543",
+    "title": "Testing",
+    "description": "-",
+    "instructions": "Execute automated integration and load testing for microservices.",
+    "submissionRequirements": "Test execution log and pass/fail summary report.",
     "assigneeId": "7958f5d3259337b8ade1f064",
-    "assigneeName": "Elena Rostova",
+    "assigneeName": "Alex Chen",
+    "assigneeEmail": "alex.chen@student.edu",
+    "priority": "critical",
+    "status": "not_completed",
+    "dueDate": "2026-11-20T18:00:00.000Z",
+    "attachments": [
+      {
+        "name": "test_plan.pdf",
+        "size": "1.1 MB",
+        "type": "pdf"
+      }
+    ],
+    "submission": null,
+    "evaluation": null,
+    "createdBy": "user_aarav_sharma",
+    "createdByName": "Aarav Sharma",
+    "createdAt": "2026-09-24T12:00:00.000Z",
+    "updatedAt": "2026-09-24T12:00:00.000Z"
+  },
+  {
+    "_id": "task_106",
+    "id": "task_106",
+    "taskNo": 6,
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "teamId": "team_alpha",
+    "courseId": "CS543",
+    "title": "Docker Containerization",
+    "description": "Dockerfiles & compose configuration complete.",
+    "instructions": "Containerize microservices and configure multi-container docker-compose network.",
+    "submissionRequirements": "docker-compose.yml and deployment verification notes.",
+    "assigneeId": "user_aarav_sharma",
+    "assigneeName": "Aarav Sharma",
+    "assigneeEmail": "aarav.sharma@student.edu",
+    "priority": "high",
+    "status": "completed",
+    "dueDate": "2026-10-08T18:00:00.000Z",
+    "attachments": [
+      {
+        "name": "docker_guide.pdf",
+        "size": "1.8 MB",
+        "type": "pdf"
+      }
+    ],
+    "submission": {
+      "description": "Dockerfiles & compose configuration complete.",
+      "attachment": {
+        "name": "docker_compose.zip",
+        "size": "2.2 MB",
+        "type": "zip"
+      },
+      "submittedAt": "2026-10-08T11:00:00.000Z",
+      "submittedBy": "Aarav Sharma",
+      "submittedByEmail": "aarav.sharma@student.edu"
+    },
+    "evaluation": {
+      "marksAwarded": 9,
+      "maxMarks": 10,
+      "feedback": "Multi-container setup starts reliably.",
+      "evaluatedBy": "Dr. R. Sharma",
+      "evaluatedByEmail": "dr.sharma@projectflow.edu",
+      "evaluatedAt": "2026-10-09T14:00:00.000Z"
+    },
+    "createdBy": "user_aarav_sharma",
+    "createdByName": "Aarav Sharma",
+    "createdAt": "2026-10-01T15:00:00.000Z",
+    "updatedAt": "2026-10-09T14:00:00.000Z"
+  },
+  {
+    "_id": "task_107",
+    "id": "task_107",
+    "taskNo": 7,
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "teamId": "team_alpha",
+    "courseId": "CS543",
+    "title": "RabbitMQ Event Pipeline",
+    "description": "-",
+    "instructions": "Implement asynchronous event publishing for milestone status transitions.",
+    "submissionRequirements": "AMQP consumer and publisher code with dead-letter queue.",
+    "assigneeId": "priya_patel_id",
+    "assigneeName": "Priya Patel",
+    "assigneeEmail": "priya.patel@student.edu",
+    "priority": "high",
+    "status": "not_completed",
+    "dueDate": "2026-11-25T18:00:00.000Z",
+    "attachments": [
+      {
+        "name": "event_spec.pdf",
+        "size": "920 KB",
+        "type": "pdf"
+      }
+    ],
+    "submission": null,
+    "evaluation": null,
+    "createdBy": "user_aarav_sharma",
+    "createdByName": "Aarav Sharma",
+    "createdAt": "2026-10-10T10:00:00.000Z",
+    "updatedAt": "2026-10-10T10:00:00.000Z"
+  },
+  {
+    "_id": "task_108",
+    "id": "task_108",
+    "taskNo": 8,
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "teamId": "team_alpha",
+    "courseId": "CS543",
+    "title": "Team Dashboard Overview",
+    "description": "Card-based dashboard layout complete.",
+    "instructions": "Build overview cards, progress bars and metrics indicators.",
+    "submissionRequirements": "Responsive React overview dashboard implementation.",
+    "assigneeId": "user_aarav_sharma",
+    "assigneeName": "Aarav Sharma",
+    "assigneeEmail": "aarav.sharma@student.edu",
+    "priority": "critical",
+    "status": "completed",
+    "dueDate": "2026-10-26T18:00:00.000Z",
+    "attachments": [
+      {
+        "name": "dashboard_specs.pdf",
+        "size": "1.4 MB",
+        "type": "pdf"
+      }
+    ],
+    "submission": {
+      "description": "Card-based dashboard layout complete.",
+      "attachment": {
+        "name": "dashboard_code.zip",
+        "size": "1.9 MB",
+        "type": "zip"
+      },
+      "submittedAt": "2026-10-26T14:00:00.000Z",
+      "submittedBy": "Aarav Sharma",
+      "submittedByEmail": "aarav.sharma@student.edu"
+    },
+    "evaluation": {
+      "marksAwarded": 10,
+      "maxMarks": 10,
+      "feedback": "Outstanding UI execution matching reference design.",
+      "evaluatedBy": "Dr. R. Sharma",
+      "evaluatedByEmail": "dr.sharma@projectflow.edu",
+      "evaluatedAt": "2026-10-26T16:00:00.000Z"
+    },
+    "createdBy": "user_aarav_sharma",
+    "createdByName": "Aarav Sharma",
+    "createdAt": "2026-10-20T10:00:00.000Z",
+    "updatedAt": "2026-10-26T16:00:00.000Z"
+  },
+  {
+    "_id": "task_109",
+    "id": "task_109",
+    "taskNo": 9,
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "teamId": "team_alpha",
+    "courseId": "CS543",
+    "title": "Real-time Notifications",
+    "description": "-",
+    "instructions": "Stream announcement and task status updates to client via SSE or WebSocket.",
+    "submissionRequirements": "Working notification drawer and event handler.",
+    "assigneeId": "marcus_vance_id",
+    "assigneeName": "Marcus Vance",
+    "assigneeEmail": "marcus.vance@student.edu",
     "priority": "medium",
-    "status": "todo",
-    "dueDate": "2026-09-28",
-    "createdBy": "7958f5d3259337b8ade1f064",
-    "createdByName": "Alex Chen",
-    "createdAt": "2026-10-25T17:13:15.099Z",
-    "updatedAt": "2026-10-25T17:13:15.099Z"
+    "status": "not_completed",
+    "dueDate": "2026-11-28T18:00:00.000Z",
+    "attachments": [
+      {
+        "name": "notif_design.pdf",
+        "size": "780 KB",
+        "type": "pdf"
+      }
+    ],
+    "submission": null,
+    "evaluation": null,
+    "createdBy": "user_aarav_sharma",
+    "createdByName": "Aarav Sharma",
+    "createdAt": "2026-10-22T09:00:00.000Z",
+    "updatedAt": "2026-10-22T09:00:00.000Z"
+  },
+  {
+    "_id": "task_110",
+    "id": "task_110",
+    "taskNo": 10,
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "teamId": "team_alpha",
+    "courseId": "CS543",
+    "title": "Document Repository Service",
+    "description": "Implemented multi-file document upload.",
+    "instructions": "Support project documents management, download and access control.",
+    "submissionRequirements": "REST endpoints and document cards UI.",
+    "assigneeId": "priya_patel_id",
+    "assigneeName": "Priya Patel",
+    "assigneeEmail": "priya.patel@student.edu",
+    "priority": "medium",
+    "status": "completed",
+    "dueDate": "2026-10-25T18:00:00.000Z",
+    "attachments": [
+      {
+        "name": "doc_service_api.pdf",
+        "size": "1.3 MB",
+        "type": "pdf"
+      }
+    ],
+    "submission": {
+      "description": "Implemented multi-file document upload.",
+      "attachment": {
+        "name": "docs_service.zip",
+        "size": "2.4 MB",
+        "type": "zip"
+      },
+      "submittedAt": "2026-10-25T15:00:00.000Z",
+      "submittedBy": "Priya Patel",
+      "submittedByEmail": "priya.patel@student.edu"
+    },
+    "evaluation": {
+      "marksAwarded": 8,
+      "maxMarks": 10,
+      "feedback": "Good role-based document access restrictions.",
+      "evaluatedBy": "Dr. R. Sharma",
+      "evaluatedByEmail": "dr.sharma@projectflow.edu",
+      "evaluatedAt": "2026-10-25T18:00:00.000Z"
+    },
+    "createdBy": "user_aarav_sharma",
+    "createdByName": "Aarav Sharma",
+    "createdAt": "2026-10-23T11:00:00.000Z",
+    "updatedAt": "2026-10-25T18:00:00.000Z"
+  },
+  {
+    "_id": "task_111",
+    "id": "task_111",
+    "taskNo": 11,
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "teamId": "team_alpha",
+    "courseId": "CS543",
+    "title": "Milestone Rubric Evaluation",
+    "description": "-",
+    "instructions": "Build faculty evaluation view with 5 rubric categories and scoring matrix.",
+    "submissionRequirements": "Evaluation page and score submission form.",
+    "assigneeId": "7958f5d3259337b8ade1f064",
+    "assigneeName": "Alex Chen",
+    "assigneeEmail": "alex.chen@student.edu",
+    "priority": "medium",
+    "status": "not_completed",
+    "dueDate": "2026-12-02T18:00:00.000Z",
+    "attachments": [
+      {
+        "name": "rubric_guide.pdf",
+        "size": "950 KB",
+        "type": "pdf"
+      }
+    ],
+    "submission": null,
+    "evaluation": null,
+    "createdBy": "user_aarav_sharma",
+    "createdByName": "Aarav Sharma",
+    "createdAt": "2026-10-24T14:00:00.000Z",
+    "updatedAt": "2026-10-24T14:00:00.000Z"
+  },
+  {
+    "_id": "task_112",
+    "id": "task_112",
+    "taskNo": 12,
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "teamId": "team_alpha",
+    "courseId": "CS543",
+    "title": "Security & Permission Audit",
+    "description": "RBAC verification complete across all routes.",
+    "instructions": "Audit gateway JWT headers, role authorization and 403 enforcement.",
+    "submissionRequirements": "Security audit checklist and automated test scripts.",
+    "assigneeId": "user_aarav_sharma",
+    "assigneeName": "Aarav Sharma",
+    "assigneeEmail": "aarav.sharma@student.edu",
+    "priority": "critical",
+    "status": "completed",
+    "dueDate": "2026-10-26T18:00:00.000Z",
+    "attachments": [
+      {
+        "name": "audit_report.pdf",
+        "size": "1.7 MB",
+        "type": "pdf"
+      }
+    ],
+    "submission": {
+      "description": "RBAC verification complete across all routes.",
+      "attachment": {
+        "name": "security_suite.zip",
+        "size": "1.5 MB",
+        "type": "zip"
+      },
+      "submittedAt": "2026-10-26T17:00:00.000Z",
+      "submittedBy": "Aarav Sharma",
+      "submittedByEmail": "aarav.sharma@student.edu"
+    },
+    "evaluation": {
+      "marksAwarded": 9,
+      "maxMarks": 10,
+      "feedback": "Strict 403 verification verified.",
+      "evaluatedBy": "Dr. R. Sharma",
+      "evaluatedByEmail": "dr.sharma@projectflow.edu",
+      "evaluatedAt": "2026-10-26T18:00:00.000Z"
+    },
+    "createdBy": "user_aarav_sharma",
+    "createdByName": "Aarav Sharma",
+    "createdAt": "2026-10-25T16:00:00.000Z",
+    "updatedAt": "2026-10-26T18:00:00.000Z"
   }
 ]

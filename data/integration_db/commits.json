@@ -1,67 +1,626 @@
 [
   {
-    "_id": "c67004d571a63ddbfda9a19a",
-    "sha": "e2d667c",
-    "message": "Add the operatingsystem folder",
+    "_id": "commit_b503_001",
+    "sha": "da22530",
+    "message": "fix: resolve race condition in milestone recalculation engine (#1)",
     "author": {
-      "login": "Nandinikanaujiya",
-      "name": "Nandini kanaujiya",
-      "avatar": "https://avatars.githubusercontent.com/u/226968939?v=4"
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
     },
-    "timestamp": "2025-10-29T13:02:50Z",
+    "timestamp": "2026-10-14T18:52:49.546Z",
     "projectId": "b503fcaeb7f9f3732992009b",
-    "createdAt": "2026-10-25T18:29:12.004Z"
+    "createdAt": "2026-10-26T18:52:49.547Z"
   },
   {
-    "_id": "7afd97b6ed2a324bba3ed60d",
-    "sha": "bbc71ba",
-    "message": "add the some files",
+    "_id": "commit_b503_002",
+    "sha": "d1fa5ee",
+    "message": "feat: add rubric evaluation calculations and scoring API (#2)",
     "author": {
-      "login": "Nandinikanaujiya",
-      "name": "Nandini kanaujiya",
-      "avatar": "https://avatars.githubusercontent.com/u/226968939?v=4"
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
     },
-    "timestamp": "2025-10-28T06:46:47Z",
+    "timestamp": "2026-10-15T00:52:49.547Z",
     "projectId": "b503fcaeb7f9f3732992009b",
-    "createdAt": "2026-10-25T18:29:12.004Z"
+    "createdAt": "2026-10-26T18:52:49.547Z"
   },
   {
-    "_id": "9f0cd9adf41657f4bedcf35e",
-    "sha": "41b8d93",
-    "message": "Add folder",
+    "_id": "commit_b503_003",
+    "sha": "2ca3284",
+    "message": "docs: update software architecture document and API contract (#3)",
     "author": {
-      "login": "Nandinikanaujiya",
-      "name": "Nandini kanaujiya",
-      "avatar": "https://avatars.githubusercontent.com/u/226968939?v=4"
+      "login": "marcus-vance",
+      "name": "Marcus Vance",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
     },
-    "timestamp": "2025-10-20T19:10:44Z",
+    "timestamp": "2026-10-15T06:52:49.547Z",
     "projectId": "b503fcaeb7f9f3732992009b",
-    "createdAt": "2026-10-25T18:29:12.005Z"
+    "createdAt": "2026-10-26T18:52:49.547Z"
   },
   {
-    "_id": "bcb6ff7fd625da3c31c973f1",
-    "sha": "c963feb",
-    "message": "add the lab6 folder",
+    "_id": "commit_b503_004",
+    "sha": "888e68e",
+    "message": "test: write integration test suite for task transition states (#4)",
     "author": {
-      "login": "Nandinikanaujiya",
-      "name": "Nandini kanaujiya",
-      "avatar": "https://avatars.githubusercontent.com/u/226968939?v=4"
+      "login": "TargetUltimate-Alka",
+      "name": "Alka Jha",
+      "avatar": "https://avatars.githubusercontent.com/u/241401052?v=4"
     },
-    "timestamp": "2025-10-17T05:20:22Z",
+    "timestamp": "2026-10-15T12:52:49.547Z",
     "projectId": "b503fcaeb7f9f3732992009b",
-    "createdAt": "2026-10-25T18:29:12.005Z"
+    "createdAt": "2026-10-26T18:52:49.547Z"
   },
   {
-    "_id": "752233d2fb11bf733038de7e",
-    "sha": "1e677ee",
-    "message": "first commit",
+    "_id": "commit_b503_005",
+    "sha": "114f7b6",
+    "message": "feat: setup RabbitMQ event bus with topic exchange routing (#5)",
     "author": {
-      "login": "Nandinikanaujiya",
-      "name": "Nandini kanaujiya",
-      "avatar": "https://avatars.githubusercontent.com/u/226968939?v=4"
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
     },
-    "timestamp": "2025-10-12T16:13:28Z",
+    "timestamp": "2026-10-15T18:52:49.547Z",
     "projectId": "b503fcaeb7f9f3732992009b",
-    "createdAt": "2026-10-25T18:29:12.005Z"
+    "createdAt": "2026-10-26T18:52:49.547Z"
+  },
+  {
+    "_id": "commit_b503_006",
+    "sha": "a166607",
+    "message": "refactor: isolate database connection layers per microservice (#6)",
+    "author": {
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+    },
+    "timestamp": "2026-10-16T00:52:49.547Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.547Z"
+  },
+  {
+    "_id": "commit_b503_007",
+    "sha": "bd27501",
+    "message": "chore: configure Vite client build and Tailwind/CSS tokens (#7)",
+    "author": {
+      "login": "marcus-vance",
+      "name": "Marcus Vance",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
+    },
+    "timestamp": "2026-10-16T06:52:49.547Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.547Z"
+  },
+  {
+    "_id": "commit_b503_008",
+    "sha": "abee216",
+    "message": "feat: add team member assignment and permissions validator (#8)",
+    "author": {
+      "login": "TargetUltimate-Alka",
+      "name": "Alka Jha",
+      "avatar": "https://avatars.githubusercontent.com/u/241401052?v=4"
+    },
+    "timestamp": "2026-10-16T12:52:49.547Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.547Z"
+  },
+  {
+    "_id": "commit_b503_009",
+    "sha": "66757ce",
+    "message": "init: scaffold initial monorepo structure with Express microservices (#9)",
+    "author": {
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
+    },
+    "timestamp": "2026-10-16T18:52:49.547Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.547Z"
+  },
+  {
+    "_id": "commit_b503_010",
+    "sha": "0294db9",
+    "message": "feat: integrate WebSocket live notification broadcast (#10)",
+    "author": {
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+    },
+    "timestamp": "2026-10-17T00:52:49.547Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.547Z"
+  },
+  {
+    "_id": "commit_b503_011",
+    "sha": "b4a92ba",
+    "message": "fix: handle token expiry redirect in student shell (#11)",
+    "author": {
+      "login": "marcus-vance",
+      "name": "Marcus Vance",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
+    },
+    "timestamp": "2026-10-17T06:52:49.547Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.547Z"
+  },
+  {
+    "_id": "commit_b503_012",
+    "sha": "1172134",
+    "message": "perf: index query filters for course announcements (#12)",
+    "author": {
+      "login": "TargetUltimate-Alka",
+      "name": "Alka Jha",
+      "avatar": "https://avatars.githubusercontent.com/u/241401052?v=4"
+    },
+    "timestamp": "2026-10-17T12:52:49.547Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.547Z"
+  },
+  {
+    "_id": "commit_b503_013",
+    "sha": "180baf7",
+    "message": "docs: add OpenAPI YAML specification for project service (#13)",
+    "author": {
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
+    },
+    "timestamp": "2026-10-17T18:52:49.547Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.547Z"
+  },
+  {
+    "_id": "commit_b503_014",
+    "sha": "daed53a",
+    "message": "feat: automated sync pipeline for pull requests (#14)",
+    "author": {
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+    },
+    "timestamp": "2026-10-18T00:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_015",
+    "sha": "31d5bfe",
+    "message": "test: unit tests for member eligibility validator (#15)",
+    "author": {
+      "login": "marcus-vance",
+      "name": "Marcus Vance",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
+    },
+    "timestamp": "2026-10-18T06:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_016",
+    "sha": "78ce532",
+    "message": "feat: implement JWT auth middleware with refresh tokens (#16)",
+    "author": {
+      "login": "TargetUltimate-Alka",
+      "name": "Alka Jha",
+      "avatar": "https://avatars.githubusercontent.com/u/241401052?v=4"
+    },
+    "timestamp": "2026-10-18T12:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_017",
+    "sha": "5d06be2",
+    "message": "fix: resolve race condition in milestone recalculation engine (#17)",
+    "author": {
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
+    },
+    "timestamp": "2026-10-18T18:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_018",
+    "sha": "e2646b8",
+    "message": "feat: add rubric evaluation calculations and scoring API (#18)",
+    "author": {
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+    },
+    "timestamp": "2026-10-19T00:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_019",
+    "sha": "c3daaef",
+    "message": "docs: update software architecture document and API contract (#19)",
+    "author": {
+      "login": "marcus-vance",
+      "name": "Marcus Vance",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
+    },
+    "timestamp": "2026-10-19T06:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_020",
+    "sha": "666c568",
+    "message": "test: write integration test suite for task transition states (#20)",
+    "author": {
+      "login": "TargetUltimate-Alka",
+      "name": "Alka Jha",
+      "avatar": "https://avatars.githubusercontent.com/u/241401052?v=4"
+    },
+    "timestamp": "2026-10-19T12:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_021",
+    "sha": "f4ceaaa",
+    "message": "feat: setup RabbitMQ event bus with topic exchange routing (#21)",
+    "author": {
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
+    },
+    "timestamp": "2026-10-19T18:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_022",
+    "sha": "3fefb35",
+    "message": "refactor: isolate database connection layers per microservice (#22)",
+    "author": {
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+    },
+    "timestamp": "2026-10-20T00:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_023",
+    "sha": "2e43d5c",
+    "message": "chore: configure Vite client build and Tailwind/CSS tokens (#23)",
+    "author": {
+      "login": "marcus-vance",
+      "name": "Marcus Vance",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
+    },
+    "timestamp": "2026-10-20T06:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_024",
+    "sha": "0fcba83",
+    "message": "feat: add team member assignment and permissions validator (#24)",
+    "author": {
+      "login": "TargetUltimate-Alka",
+      "name": "Alka Jha",
+      "avatar": "https://avatars.githubusercontent.com/u/241401052?v=4"
+    },
+    "timestamp": "2026-10-20T12:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_025",
+    "sha": "ed18bb9",
+    "message": "init: scaffold initial monorepo structure with Express microservices (#25)",
+    "author": {
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
+    },
+    "timestamp": "2026-10-20T18:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_026",
+    "sha": "af0f589",
+    "message": "feat: integrate WebSocket live notification broadcast (#26)",
+    "author": {
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+    },
+    "timestamp": "2026-10-21T00:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_027",
+    "sha": "efb50d5",
+    "message": "fix: handle token expiry redirect in student shell (#27)",
+    "author": {
+      "login": "marcus-vance",
+      "name": "Marcus Vance",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
+    },
+    "timestamp": "2026-10-21T06:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_028",
+    "sha": "09fb889",
+    "message": "perf: index query filters for course announcements (#28)",
+    "author": {
+      "login": "TargetUltimate-Alka",
+      "name": "Alka Jha",
+      "avatar": "https://avatars.githubusercontent.com/u/241401052?v=4"
+    },
+    "timestamp": "2026-10-21T12:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_029",
+    "sha": "a7d28e8",
+    "message": "docs: add OpenAPI YAML specification for project service (#29)",
+    "author": {
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
+    },
+    "timestamp": "2026-10-21T18:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_030",
+    "sha": "e127ce9",
+    "message": "feat: automated sync pipeline for pull requests (#30)",
+    "author": {
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+    },
+    "timestamp": "2026-10-22T00:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_031",
+    "sha": "15c8aaa",
+    "message": "test: unit tests for member eligibility validator (#31)",
+    "author": {
+      "login": "marcus-vance",
+      "name": "Marcus Vance",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
+    },
+    "timestamp": "2026-10-22T06:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_032",
+    "sha": "0d1f0ff",
+    "message": "feat: implement JWT auth middleware with refresh tokens (#32)",
+    "author": {
+      "login": "TargetUltimate-Alka",
+      "name": "Alka Jha",
+      "avatar": "https://avatars.githubusercontent.com/u/241401052?v=4"
+    },
+    "timestamp": "2026-10-22T12:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_033",
+    "sha": "f81e9fc",
+    "message": "fix: resolve race condition in milestone recalculation engine (#33)",
+    "author": {
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
+    },
+    "timestamp": "2026-10-22T18:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_034",
+    "sha": "7dbdfd1",
+    "message": "feat: add rubric evaluation calculations and scoring API (#34)",
+    "author": {
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+    },
+    "timestamp": "2026-10-23T00:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_035",
+    "sha": "29a9795",
+    "message": "docs: update software architecture document and API contract (#35)",
+    "author": {
+      "login": "marcus-vance",
+      "name": "Marcus Vance",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
+    },
+    "timestamp": "2026-10-23T06:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_036",
+    "sha": "a2fd5de",
+    "message": "test: write integration test suite for task transition states (#36)",
+    "author": {
+      "login": "TargetUltimate-Alka",
+      "name": "Alka Jha",
+      "avatar": "https://avatars.githubusercontent.com/u/241401052?v=4"
+    },
+    "timestamp": "2026-10-23T12:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_037",
+    "sha": "567fedb",
+    "message": "feat: setup RabbitMQ event bus with topic exchange routing (#37)",
+    "author": {
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
+    },
+    "timestamp": "2026-10-23T18:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_038",
+    "sha": "d596c84",
+    "message": "refactor: isolate database connection layers per microservice (#38)",
+    "author": {
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+    },
+    "timestamp": "2026-10-24T00:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_039",
+    "sha": "482d3d9",
+    "message": "chore: configure Vite client build and Tailwind/CSS tokens (#39)",
+    "author": {
+      "login": "marcus-vance",
+      "name": "Marcus Vance",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
+    },
+    "timestamp": "2026-10-24T06:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_040",
+    "sha": "708d81d",
+    "message": "feat: add team member assignment and permissions validator (#40)",
+    "author": {
+      "login": "TargetUltimate-Alka",
+      "name": "Alka Jha",
+      "avatar": "https://avatars.githubusercontent.com/u/241401052?v=4"
+    },
+    "timestamp": "2026-10-24T12:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_041",
+    "sha": "a024733",
+    "message": "init: scaffold initial monorepo structure with Express microservices (#41)",
+    "author": {
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
+    },
+    "timestamp": "2026-10-24T18:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_042",
+    "sha": "a41b58e",
+    "message": "feat: integrate WebSocket live notification broadcast (#42)",
+    "author": {
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+    },
+    "timestamp": "2026-10-25T00:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_043",
+    "sha": "053b280",
+    "message": "fix: handle token expiry redirect in student shell (#43)",
+    "author": {
+      "login": "marcus-vance",
+      "name": "Marcus Vance",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
+    },
+    "timestamp": "2026-10-25T06:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_044",
+    "sha": "936e186",
+    "message": "perf: index query filters for course announcements (#44)",
+    "author": {
+      "login": "TargetUltimate-Alka",
+      "name": "Alka Jha",
+      "avatar": "https://avatars.githubusercontent.com/u/241401052?v=4"
+    },
+    "timestamp": "2026-10-25T12:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_045",
+    "sha": "43011ba",
+    "message": "docs: add OpenAPI YAML specification for project service (#45)",
+    "author": {
+      "login": "alex-chen",
+      "name": "Alex Chen",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100"
+    },
+    "timestamp": "2026-10-25T18:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_046",
+    "sha": "d83fea1",
+    "message": "feat: automated sync pipeline for pull requests (#46)",
+    "author": {
+      "login": "priya-patel",
+      "name": "Priya Patel",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100"
+    },
+    "timestamp": "2026-10-26T00:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_047",
+    "sha": "c543e4b",
+    "message": "test: unit tests for member eligibility validator (#47)",
+    "author": {
+      "login": "marcus-vance",
+      "name": "Marcus Vance",
+      "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
+    },
+    "timestamp": "2026-10-26T06:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
+  },
+  {
+    "_id": "commit_b503_048",
+    "sha": "8d7c2d2",
+    "message": "feat: implement JWT auth middleware with refresh tokens (#48)",
+    "author": {
+      "login": "TargetUltimate-Alka",
+      "name": "Alka Jha",
+      "avatar": "https://avatars.githubusercontent.com/u/241401052?v=4"
+    },
+    "timestamp": "2026-10-26T12:52:49.548Z",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "createdAt": "2026-10-26T18:52:49.548Z"
   }
 ]

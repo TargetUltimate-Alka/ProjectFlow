@@ -32,7 +32,7 @@
     "readBy": [
       "alex.chen@student.edu"
     ],
-    "updatedAt": "2026-10-26T17:44:34.803Z"
+    "updatedAt": "2026-10-26T19:00:44.363Z"
   },
   {
     "_id": "ann_cs543_api_specs",
@@ -109,5 +109,142 @@
     "date": "16 Oct 2026, 04:00 PM",
     "attachments": [],
     "readBy": []
+  },
+  {
+    "_id": "ann_team_alpha_api_doc",
+    "courseId": "course_cs543",
+    "courseCode": "CS543",
+    "teamId": "team_alpha",
+    "title": "Updated API Documentation",
+    "content": "Please use the updated API endpoints. Check the document attached.",
+    "facultyId": "user_fac_sharma",
+    "facultyName": "Dr. R. Sharma",
+    "facultyEmail": "dr.sharma@projectflow.edu",
+    "isPinned": false,
+    "isImportant": false,
+    "publishedAt": "2026-10-25T11:00:00.000Z",
+    "date": "25 Oct 2026",
+    "attachments": [
+      {
+        "id": "att_api_endpoints_v2",
+        "name": "API_Endpoints_v2.pdf",
+        "size": "1.2 MB",
+        "type": "pdf",
+        "downloadUrl": "/api/courses/CS543/attachments/API_Specification_Standards_v2.pdf"
+      }
+    ],
+    "readBy": []
+  },
+  {
+    "_id": "ann_team_alpha_progress",
+    "courseId": "course_cs543",
+    "courseCode": "CS543",
+    "teamId": "team_alpha",
+    "title": "Good Progress!",
+    "content": "Team Alpha has good progress in module 1. Keep it up!",
+    "facultyId": "user_fac_sharma",
+    "facultyName": "Dr. R. Sharma",
+    "facultyEmail": "dr.sharma@projectflow.edu",
+    "isPinned": false,
+    "isImportant": false,
+    "publishedAt": "2026-10-20T14:00:00.000Z",
+    "date": "20 Oct 2026",
+    "attachments": [],
+    "readBy": []
+  },
+  {
+    "_id": "ann_team_alpha_meeting",
+    "courseId": "course_cs543",
+    "courseCode": "CS543",
+    "teamId": "team_alpha",
+    "title": "Next Meeting",
+    "content": "We will discuss your project in the next class on 22 Oct.",
+    "facultyId": "user_fac_sharma",
+    "facultyName": "Dr. R. Sharma",
+    "facultyEmail": "dr.sharma@projectflow.edu",
+    "isPinned": false,
+    "isImportant": false,
+    "publishedAt": "2026-10-18T10:00:00.000Z",
+    "date": "18 Oct 2026",
+    "attachments": [],
+    "readBy": []
+  },
+  {
+    "_id": "ann_team_1793040971447",
+    "courseId": "course_cs543",
+    "courseCode": "CS543",
+    "teamId": "team_alpha",
+    "title": "Sprint 2 Milestone Retrospective",
+    "content": "Please submit your code review checklist before Thursday 5 PM.",
+    "facultyId": "user_aarav_sharma",
+    "facultyName": "Aarav Sharma",
+    "facultyEmail": "aarav.sharma@student.edu",
+    "isPinned": false,
+    "isImportant": false,
+    "publishedAt": "2026-10-26T18:56:11.289Z",
+    "date": "27 Oct 2026",
+    "attachments": [
+      {
+        "name": "Sprint_2_Checklist.pdf",
+        "size": "450 KB",
+        "type": "pdf"
+      }
+    ],
+    "readBy": [
+      "aarav.sharma@student.edu"
+    ],
+    "createdAt": "2026-10-26T18:56:11.448Z"
+  },
+  {
+    "_id": "ann_team_1793041329766",
+    "courseId": "course_cs543",
+    "courseCode": "CS543",
+    "teamId": "team_alpha",
+    "title": "Sprint 2 Milestone Retrospective",
+    "content": "Please submit your code review checklist before Thursday 5 PM.",
+    "facultyId": "user_aarav_sharma",
+    "facultyName": "Aarav Sharma",
+    "facultyEmail": "aarav.sharma@student.edu",
+    "isPinned": false,
+    "isImportant": false,
+    "publishedAt": "2026-10-26T19:02:09.765Z",
+    "date": "27 Oct 2026",
+    "attachments": [
+      {
+        "name": "Sprint_2_Checklist.pdf",
+        "size": "450 KB",
+        "type": "pdf"
+      }
+    ],
+    "readBy": [
+      "aarav.sharma@student.edu"
+    ],
+    "createdAt": "2026-10-26T19:02:09.767Z"
+  },
+  {
+    "_id": "ann_team_1793044249360",
+    "courseId": "course_cs543",
+    "courseCode": "CS543",
+    "teamId": "team_alpha",
+    "title": "Sprint 2 Milestone Retrospective",
+    "content": "Please submit your code review checklist before Thursday 5 PM.",
+    "facultyId": "user_aarav_sharma",
+    "facultyName": "Aarav Sharma",
+    "facultyEmail": "aarav.sharma@student.edu",
+    "isPinned": false,
+    "isImportant": false,
+    "publishedAt": "2026-10-26T19:50:49.215Z",
+    "date": "27 Oct 2026",
+    "attachments": [
+      {
+        "name": "Sprint_2_Checklist.pdf",
+        "size": "450 KB",
+        "type": "pdf"
+      }
+    ],
+    "readBy": [
+      "aarav.sharma@student.edu"
+    ],
+    "createdAt": "2026-10-26T19:50:49.361Z"
   }
 ]

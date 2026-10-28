@@ -17,7 +17,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 
-export function GitHubPage() {
+export function GitHubPage({ projectId, team }) {
   const [project, setProject] = useState(null);
   const [githubStatus, setGithubStatus] = useState(null);
   const [activity, setActivity] = useState([]);
@@ -34,19 +34,24 @@ export function GitHubPage() {
   const fetchGitHubData = async () => {
     try {
       setLoading(true);
-      const projects = await api.getProjects();
-      if (projects.length > 0) {
-        const proj = projects[0];
-        setProject(proj);
+      let targetProjId = projectId;
+      if (!targetProjId) {
+        const projects = await api.getProjects();
+        if (projects.length > 0) {
+          targetProjId = projects[0].id;
+          setProject(projects[0]);
+        }
+      }
+      if (targetProjId) {
         const [status, act] = await Promise.all([
-          api.getGitHubStatus(proj.id),
-          api.getGitHubActivity(proj.id)
+          api.getGitHubStatus(targetProjId).catch(() => null),
+          api.getGitHubActivity(targetProjId).catch(() => [])
         ]);
         setGithubStatus(status);
         if (status?.repoUrl) {
           setRepoUrl(status.repoUrl);
         }
-        setActivity(act);
+        setActivity(act || []);
       }
     } catch (err) {
       console.error(err);
@@ -57,7 +62,7 @@ export function GitHubPage() {
 
   useEffect(() => {
     fetchGitHubData();
-  }, []);
+  }, [projectId]);
 
   const handleConnect = async (e) => {
     e.preventDefault();

@@ -150,6 +150,21 @@ export const api = {
       mockService.leaveCourseTeam(courseId, teamId)
     ),
 
+  getTeamDashboard: (courseId, teamId) =>
+    request(`/courses/${courseId}/teams/${teamId}/dashboard`, {}, () =>
+      mockService.getTeamDashboard(courseId, teamId)
+    ),
+
+  createTeamAnnouncement: (courseId, teamId, data) =>
+    request(`/courses/${courseId}/teams/${teamId}/announcements`, { method: 'POST', body: JSON.stringify(data) }, () =>
+      mockService.createTeamAnnouncement(courseId, teamId, data)
+    ),
+
+  updateTeamProject: (courseId, teamId, data) =>
+    request(`/courses/${courseId}/teams/${teamId}/project`, { method: 'PUT', body: JSON.stringify(data) }, () =>
+      mockService.updateTeamProject(courseId, teamId, data)
+    ),
+
   downloadCourseAttachment: async (courseId, filename) => {
     const token = getToken();
     const url = `${BASE_URL}/courses/${courseId}/attachments/${encodeURIComponent(filename)}`;
@@ -262,12 +277,21 @@ export const api = {
     ),
 
   // Tasks
-  getTasks: (projectId, filter = {}) => {
+  getTasks: (arg1, arg2 = {}) => {
+    let filter = {};
+    if (typeof arg1 === 'string') {
+      filter = { projectId: arg1, ...arg2 };
+    } else if (typeof arg1 === 'object' && arg1 !== null) {
+      filter = arg1;
+    }
     const qs = new URLSearchParams(filter).toString();
-    return request(`/tasks/projects/${projectId}/tasks${qs ? '?' + qs : ''}`, {}, () =>
-      mockService.getTasks(projectId, filter)
+    return request(`/tasks${qs ? '?' + qs : ''}`, {}, () =>
+      mockService.getTasks(filter.projectId || arg1, filter)
     );
   },
+
+  getTask: (id) =>
+    request(`/tasks/${id}`, {}, () => mockService.getTask ? mockService.getTask(id) : null),
 
   createTask: (data) =>
     request('/tasks', { method: 'POST', body: JSON.stringify(data) }, () => mockService.createTask(data)),
@@ -275,8 +299,40 @@ export const api = {
   updateTask: (id, data) =>
     request(`/tasks/${id}`, { method: 'PUT', body: JSON.stringify(data) }, () => mockService.updateTask(id, data)),
 
+  submitTask: (id, data) =>
+    request(`/tasks/${id}/submit`, { method: 'POST', body: JSON.stringify(data) }, () =>
+      mockService.submitTask ? mockService.submitTask(id, data) : null
+    ),
+
+  evaluateTask: (id, data) =>
+    request(`/tasks/${id}/evaluate`, { method: 'POST', body: JSON.stringify(data) }, () =>
+      mockService.evaluateTask ? mockService.evaluateTask(id, data) : null
+    ),
+
   deleteTask: (id) =>
     request(`/tasks/${id}`, { method: 'DELETE' }, () => mockService.deleteTask(id)),
+
+  downloadTaskAttachment: async (taskId, filename) => {
+    const token = getToken();
+    const url = `${BASE_URL}/tasks/${taskId}/attachments/${encodeURIComponent(filename)}`;
+    const res = await fetch(url, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    });
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || `Failed to download attachment (HTTP ${res.status})`);
+    }
+    const blob = await res.blob();
+    const blobUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(blobUrl);
+    return true;
+  },
 
   // GitHub Integration
   connectGitHub: (data) =>

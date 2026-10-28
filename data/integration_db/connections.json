@@ -13,13 +13,13 @@
     "syncStatus": "synced",
     "useDemoMode": true,
     "stats": {
-      "totalCommits": 5,
-      "totalPRs": 0,
-      "mergedPRs": 0,
-      "openPRs": 0,
-      "closedIssues": 0,
-      "openIssues": 0,
-      "totalContributors": 1
+      "totalCommits": 48,
+      "totalPRs": 5,
+      "mergedPRs": 4,
+      "openPRs": 1,
+      "closedIssues": 8,
+      "openIssues": 2,
+      "totalContributors": 4
     },
     "createdAt": "2026-10-25T17:13:16.694Z",
     "token": null,

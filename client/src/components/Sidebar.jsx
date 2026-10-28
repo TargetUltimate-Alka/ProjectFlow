@@ -20,18 +20,38 @@ import {
   FileSearch,
   MessageSquare,
   BookOpen,
-  User
+  User,
+  Megaphone
 } from 'lucide-react';
 
-export function Sidebar({ activeTab, setActiveTab, onOpenNotifications }) {
+export function Sidebar({
+  activeTab,
+  setActiveTab,
+  onOpenNotifications,
+  isTeamWorkspace = false,
+  teamSection = 'overview',
+  onSelectTeamSection,
+  onExitTeamWorkspace
+}) {
   const { user, logout } = useAuth();
   const role = (user?.role || '').toLowerCase();
 
-  // Distinct nav configurations per role - Google Classroom Course Pattern for Students
+  // General student navigation (Courses, Notifications, Profile)
   const studentNav = [
     { id: 'courses', label: 'Courses', icon: BookOpen },
     { id: 'notifications', label: 'Notifications', icon: Bell, badge: 3 },
     { id: 'profile', label: 'Profile', icon: User }
+  ];
+
+  // Dedicated Team Workspace navigation (Panel 7-11)
+  const teamNav = [
+    { id: 'courses', label: 'Courses', icon: BookOpen },
+    { id: 'team', label: 'Team', icon: Users },
+    { id: 'tasks', label: 'Tasks', icon: CheckSquare },
+    { id: 'documents', label: 'Documents', icon: FileText },
+    { id: 'github', label: 'GitHub Activity', icon: Github },
+    { id: 'announcements', label: 'Announcements', icon: Megaphone },
+    { id: 'notifications', label: 'Notifications', icon: Bell, badge: 3 }
   ];
 
   const facultyNav = [
@@ -51,12 +71,16 @@ export function Sidebar({ activeTab, setActiveTab, onOpenNotifications }) {
     { id: 'admin-assignments', label: 'Faculty Assignments', icon: UserCheck }
   ];
 
-  let items = studentNav;
+  let items = (role === 'student' && isTeamWorkspace) ? teamNav : studentNav;
   let roleTitle = 'Student Portal';
   let roleIcon = GraduationCap;
   let roleColor = '#34d399';
 
-  if (role === 'faculty') {
+  if (role === 'student' && isTeamWorkspace) {
+    roleTitle = 'Team Workspace';
+    roleIcon = Users;
+    roleColor = '#38bdf8';
+  } else if (role === 'faculty') {
     items = facultyNav;
     roleTitle = 'Faculty Supervision';
     roleIcon = School;
@@ -69,6 +93,43 @@ export function Sidebar({ activeTab, setActiveTab, onOpenNotifications }) {
   }
 
   const RoleIconComponent = roleIcon;
+
+  const isItemActive = (itemId) => {
+    if (isTeamWorkspace) {
+      if (itemId === 'team') return teamSection === 'overview' || teamSection === 'team' || teamSection === 'members';
+      if (itemId === 'tasks') return teamSection === 'tasks';
+      if (itemId === 'documents') return teamSection === 'documents';
+      if (itemId === 'github') return teamSection === 'github';
+      if (itemId === 'announcements') return teamSection === 'announcements';
+      return false;
+    }
+    const isCoursesTab = itemId === 'courses' && (activeTab === 'courses' || activeTab === 'dashboard' || activeTab === 'course-details');
+    return isCoursesTab || activeTab === itemId;
+  };
+
+  const handleItemClick = (item) => {
+    if (isTeamWorkspace) {
+      if (item.id === 'courses') {
+        if (onExitTeamWorkspace) {
+          onExitTeamWorkspace();
+        } else {
+          setActiveTab('courses');
+        }
+      } else if (item.id === 'notifications') {
+        onOpenNotifications();
+      } else if (item.id === 'team') {
+        if (onSelectTeamSection) onSelectTeamSection('overview');
+      } else {
+        if (onSelectTeamSection) onSelectTeamSection(item.id);
+      }
+    } else {
+      if (item.id === 'notifications') {
+        onOpenNotifications();
+      } else {
+        setActiveTab(item.id);
+      }
+    }
+  };
 
   return (
     <aside className="app-sidebar">
@@ -116,24 +177,17 @@ export function Sidebar({ activeTab, setActiveTab, onOpenNotifications }) {
           letterSpacing: '0.08em',
           padding: '8px 12px 12px 12px'
         }}>
-          Navigation
+          {isTeamWorkspace ? 'Team Workspace' : 'Navigation'}
         </div>
 
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           {items.map((item) => {
             const Icon = item.icon;
-            const isCoursesTab = item.id === 'courses' && (activeTab === 'courses' || activeTab === 'dashboard' || activeTab === 'course-details');
-            const isActive = isCoursesTab || activeTab === item.id;
+            const isActive = isItemActive(item.id);
             return (
               <button
                 key={item.id}
-                onClick={() => {
-                  if (item.id === 'notifications') {
-                    onOpenNotifications();
-                  } else {
-                    setActiveTab(item.id);
-                  }
-                }}
+                onClick={() => handleItemClick(item)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',

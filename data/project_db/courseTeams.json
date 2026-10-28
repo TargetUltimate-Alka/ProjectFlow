@@ -5,11 +5,18 @@
     "courseCode": "CS543",
     "name": "Team Alpha",
     "description": "Cloud microservices orchestration platform with automated CI/CD and monitoring telemetry.",
+    "projectId": "b503fcaeb7f9f3732992009b",
+    "projectTitle": "ProjectFlow Development",
+    "projectDescription": "Development of an academic project management system with microservices architecture.",
+    "startDate": "2026-09-01",
+    "endDate": "2026-12-15",
+    "facultyName": "Dr. R. Sharma",
+    "facultyEmail": "dr.sharma@projectflow.edu",
     "teamLead": "Aarav Sharma",
     "teamLeadEmail": "aarav.sharma@student.edu",
     "memberCount": 4,
     "maxMembers": 5,
-    "status": "Available",
+    "status": "Active",
     "members": [
       {
         "name": "Aarav Sharma",
@@ -36,7 +43,8 @@
         "isLeader": false
       }
     ],
-    "createdAt": "2026-10-15T10:00:00.000Z"
+    "createdAt": "2026-10-15T10:00:00.000Z",
+    "updatedAt": "2026-10-26T19:50:49.403Z"
   },
   {
     "_id": "team_innovators",

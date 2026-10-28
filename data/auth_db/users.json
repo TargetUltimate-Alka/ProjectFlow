@@ -82,6 +82,18 @@
     "createdAt": "2026-10-26T00:00:00.000Z"
   },
   {
+    "_id": "user_aarav_sharma",
+    "name": "Aarav Sharma",
+    "email": "aarav.sharma@student.edu",
+    "passwordHash": "$2a$10$Q27ukWPNMmb9WIdkv8J5JeF3IWmfN1X3XxFZRpT5I6mBqP1CiBWz6",
+    "role": "Student",
+    "status": "active",
+    "rollNumber": "20251651010",
+    "batch": "2026-2028",
+    "department": "Computer Science & Engineering",
+    "createdAt": "2026-10-26T00:00:00.000Z"
+  },
+  {
     "_id": "139c667c3e25e3d76aff9c10",
     "name": "Alka Jha",
     "email": "alkaj29@gmail.com",

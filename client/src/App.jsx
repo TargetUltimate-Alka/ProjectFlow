@@ -8,6 +8,7 @@ import { NotificationDrawer } from './components/NotificationDrawer';
 // Student Pages
 import { StudentDashboard } from './pages/student/StudentDashboard';
 import { CoursePage } from './pages/student/CoursePage';
+import { TeamDashboard } from './pages/student/TeamDashboard';
 import { MyProject } from './pages/student/MyProject';
 import { TeamPage } from './pages/student/TeamPage';
 import { RequirementsPage } from './pages/student/RequirementsPage';
@@ -33,8 +34,10 @@ export function App() {
   const { user, loading } = useAuth();
   const [activeTab, setActiveTab] = useState('courses');
   const [selectedCourseId, setSelectedCourseId] = useState(null);
+  const [selectedTeamId, setSelectedTeamId] = useState(null);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const [teamSection, setTeamSection] = useState('overview');
 
   if (loading) {
     return (
@@ -68,6 +71,7 @@ export function App() {
   };
 
   const currentTab = effectiveTab();
+  const isTeamWorkspace = role === 'student' && currentTab === 'team-dashboard' && !!selectedTeamId;
 
   const handleFacultySelectProject = (projId, viewType) => {
     setSelectedProjectId(projId);
@@ -77,11 +81,18 @@ export function App() {
 
   return (
     <div className="app-layout">
-      {/* Role-Specific Sidebar Shell */}
+      {/* Role-Specific or Team-Workspace Sidebar Shell */}
       <Sidebar
         activeTab={currentTab}
         setActiveTab={setActiveTab}
         onOpenNotifications={() => setIsNotifOpen(true)}
+        isTeamWorkspace={isTeamWorkspace}
+        teamSection={teamSection}
+        onSelectTeamSection={(section) => setTeamSection(section)}
+        onExitTeamWorkspace={() => {
+          setSelectedTeamId(null);
+          setActiveTab(selectedCourseId ? 'course-details' : 'courses');
+        }}
       />
 
       {/* Main Content Area */}
@@ -89,6 +100,8 @@ export function App() {
         <TopNavbar
           activeTab={currentTab}
           onOpenNotifications={() => setIsNotifOpen(true)}
+          isTeamWorkspace={isTeamWorkspace}
+          teamSection={teamSection}
         />
 
         <main className="app-content">
@@ -109,6 +122,29 @@ export function App() {
                 <CoursePage
                   courseId={selectedCourseId}
                   onBack={() => {
+                    setSelectedCourseId(null);
+                    setActiveTab('courses');
+                  }}
+                  onNavigateToTeam={(team) => {
+                    setSelectedTeamId(team.id || team._id);
+                    setTeamSection('overview');
+                    setActiveTab('team-dashboard');
+                  }}
+                />
+              )}
+
+              {currentTab === 'team-dashboard' && (
+                <TeamDashboard
+                  courseId={selectedCourseId}
+                  teamId={selectedTeamId}
+                  activeTab={teamSection}
+                  onTabChange={(sec) => setTeamSection(sec)}
+                  onBack={() => {
+                    setSelectedTeamId(null);
+                    setActiveTab(selectedCourseId ? 'course-details' : 'courses');
+                  }}
+                  onNavigateToCourse={() => {
+                    setSelectedTeamId(null);
                     setSelectedCourseId(null);
                     setActiveTab('courses');
                   }}

@@ -433,6 +433,62 @@ export const INITIAL_DATA = {
       date: '16 Oct 2026, 03:00 PM',
       attachments: [],
       readBy: []
+    },
+    {
+      id: 'ann_team_alpha_1',
+      _id: 'ann_team_alpha_1',
+      courseId: 'course_cs543',
+      courseCode: 'CS543',
+      teamId: 'team_alpha',
+      title: 'Updated API Documentation',
+      content: 'Please use the updated API endpoints. Check the document attached.',
+      facultyId: 'usr_fac_sharma',
+      facultyName: 'Dr. R. Sharma',
+      facultyEmail: 'dr.sharma@projectflow.edu',
+      isPinned: false,
+      isImportant: true,
+      publishedAt: '2026-10-25T14:00:00.000Z',
+      date: '25 Oct 2026',
+      attachments: [
+        { id: 'att_api_doc_v2', name: 'API_Endpoints_v2.pdf', size: '1.4 MB', type: 'pdf', downloadUrl: '#' }
+      ],
+      readBy: ['alka123@iitv.ac.in']
+    },
+    {
+      id: 'ann_team_alpha_2',
+      _id: 'ann_team_alpha_2',
+      courseId: 'course_cs543',
+      courseCode: 'CS543',
+      teamId: 'team_alpha',
+      title: 'Good Progress!',
+      content: 'Team Alpha has good progress in module 1. Keep it up!',
+      facultyId: 'usr_fac_sharma',
+      facultyName: 'Dr. R. Sharma',
+      facultyEmail: 'dr.sharma@projectflow.edu',
+      isPinned: false,
+      isImportant: false,
+      publishedAt: '2026-10-20T11:00:00.000Z',
+      date: '20 Oct 2026',
+      attachments: [],
+      readBy: ['alka123@iitv.ac.in']
+    },
+    {
+      id: 'ann_team_alpha_3',
+      _id: 'ann_team_alpha_3',
+      courseId: 'course_cs543',
+      courseCode: 'CS543',
+      teamId: 'team_alpha',
+      title: 'Next Meeting',
+      content: 'We will discuss your project in the next class on 22 Oct.',
+      facultyId: 'usr_fac_sharma',
+      facultyName: 'Dr. R. Sharma',
+      facultyEmail: 'dr.sharma@projectflow.edu',
+      isPinned: false,
+      isImportant: false,
+      publishedAt: '2026-10-18T16:00:00.000Z',
+      date: '18 Oct 2026',
+      attachments: [],
+      readBy: []
     }
   ],
   courseTeams: [
@@ -442,17 +498,24 @@ export const INITIAL_DATA = {
       courseId: 'course_cs543',
       courseCode: 'CS543',
       name: 'Team Alpha',
-      description: 'Cloud microservices orchestration platform with automated CI/CD and monitoring telemetry.',
-      teamLead: 'Aarav Sharma',
-      teamLeadEmail: 'aarav.sharma@student.edu',
+      projectId: 'proj_capstone_101',
+      projectTitle: 'ProjectFlow Development',
+      projectDescription: 'Development of an academic project management system with microservices architecture.',
+      startDate: '2026-09-01',
+      endDate: '2026-12-15',
+      facultyName: 'Dr. R. Sharma',
+      facultyEmail: 'dr.sharma@projectflow.edu',
+      description: 'Development of an academic project management system with microservices architecture.',
+      teamLead: 'Alka Jha',
+      teamLeadEmail: 'alka123@iitv.ac.in',
       memberCount: 4,
       maxMembers: 5,
-      status: 'Available',
+      status: 'Active',
       members: [
-        { name: 'Aarav Sharma', email: 'aarav.sharma@student.edu', rollNumber: '20251651010', isLeader: true },
-        { name: 'Alex Chen', email: 'alex.chen@student.edu', rollNumber: '20251651001', isLeader: false },
-        { name: 'Priya Patel', email: 'priya.patel@student.edu', rollNumber: '20251651002', isLeader: false },
-        { name: 'Marcus Vance', email: 'marcus.vance@student.edu', rollNumber: '20251651003', isLeader: false }
+        { name: 'Alka Jha', email: 'alka123@iitv.ac.in', rollNumber: '20251651013', isLeader: true, role: 'Team Lead' },
+        { name: 'Alex Chen', email: 'alex.chen@student.edu', rollNumber: '20251651001', isLeader: false, role: 'Fullstack Dev' },
+        { name: 'Priya Patel', email: 'priya.patel@student.edu', rollNumber: '20251651002', isLeader: false, role: 'Backend Dev' },
+        { name: 'Marcus Vance', email: 'marcus.vance@student.edu', rollNumber: '20251651003', isLeader: false, role: 'DevOps & QA' }
       ],
       createdAt: '2026-10-15T10:00:00.000Z'
     },
@@ -1408,6 +1471,187 @@ export const mockService = {
     return { success: true, message: 'Left team successfully' };
   },
 
+  getTeamDashboard: async (courseId, teamId) => {
+    const db = getStorage();
+    const curUser = (typeof localStorage !== 'undefined' && localStorage.getItem('projectflow_user'))
+      ? JSON.parse(localStorage.getItem('projectflow_user'))
+      : null;
+    const userRole = (curUser?.role || 'Student').toLowerCase();
+    const userEmail = (curUser?.email || '').toLowerCase();
+    const userId = curUser?.id;
+
+    const team = (db.courseTeams || []).find(t => t.id === teamId || t._id === teamId);
+    if (!team) {
+      const err = new Error(`Team '${teamId}' not found.`);
+      err.status = 404;
+      throw err;
+    }
+
+    const course = (db.courses || []).find(c =>
+      c.id === courseId || (c.code || '').toLowerCase() === (courseId || '').toLowerCase()
+    );
+    if (!course) {
+      const err = new Error(`Course '${courseId}' not found.`);
+      err.status = 404;
+      throw err;
+    }
+
+    // Authorization checks
+    if (userRole === 'student') {
+      const isMember = (team.members || []).some(m => (m.email || '').toLowerCase() === userEmail) ||
+                       ((team.teamLeadEmail || '').toLowerCase() === userEmail);
+      if (!isMember) {
+        const err = new Error(`Access denied. You are not an authorized member of team '${team.name}'. Students can only access their own team workspace.`);
+        err.status = 403;
+        throw err;
+      }
+    } else if (userRole === 'faculty') {
+      const isAssigned = (course.facultyEmail || '').toLowerCase() === userEmail ||
+                         course.facultyId === userId ||
+                         (team.facultyEmail || '').toLowerCase() === userEmail;
+      if (!isAssigned) {
+        const err = new Error('Access denied. You are not the assigned faculty supervisor for this course or team.');
+        err.status = 403;
+        throw err;
+      }
+    }
+
+    const projectInfo = {
+      id: team.projectId || 'proj_capstone_101',
+      title: team.projectTitle || 'ProjectFlow Development',
+      description: team.projectDescription || team.description || 'Development of an academic project management system with microservices architecture.',
+      associatedCourse: `${course.code} - ${course.name}`,
+      facultySupervisor: team.facultyName || course.facultyName || 'Dr. R. Sharma',
+      facultyEmail: team.facultyEmail || course.facultyEmail || 'dr.sharma@projectflow.edu',
+      startDate: team.startDate || '2026-09-01',
+      endDate: team.endDate || '2026-12-15',
+      status: team.status || 'Active'
+    };
+
+    const taskMetrics = {
+      total: 12,
+      completed: 6,
+      pending: 6,
+      isConfigured: true
+    };
+
+    const docMetrics = {
+      count: 6,
+      submitted: 6,
+      isConfigured: true
+    };
+
+    const githubMetrics = {
+      connected: true,
+      repoFullName: 'TargetUltimate-Alka/projectFlow',
+      commits: 48,
+      prs: 5,
+      isConfigured: true
+    };
+
+    const evaluationMetrics = {
+      status: 'Pending',
+      score: null,
+      feedback: 'Milestone 1 evaluation pending supervisor review.',
+      isConfigured: true
+    };
+
+    const overallPercentage = Math.round((taskMetrics.completed / taskMetrics.total) * 100);
+
+    const teamAnnouncements = (db.announcements || []).filter(a =>
+      a.teamId === team.id || a.teamId === team._id || a.teamId === 'team_alpha'
+    ).map(a => ({
+      id: a.id || a._id,
+      title: a.title,
+      author: a.facultyName || 'Dr. R. Sharma',
+      authorEmail: a.facultyEmail || 'dr.sharma@projectflow.edu',
+      date: a.date || 'Recent',
+      content: a.content,
+      attachments: a.attachments || []
+    }));
+
+    return {
+      team: {
+        id: team._id || team.id,
+        _id: team._id || team.id,
+        name: team.name,
+        description: team.description || '',
+        teamLead: team.teamLead,
+        teamLeadEmail: team.teamLeadEmail,
+        memberCount: (team.members || []).length,
+        maxMembers: team.maxMembers || 5,
+        status: team.status || 'Active',
+        members: team.members || [],
+        createdAt: team.createdAt
+      },
+      course: {
+        id: course.id || course._id,
+        code: course.code,
+        name: course.name,
+        batch: course.batch,
+        semester: course.semester,
+        facultyName: course.facultyName,
+        facultyEmail: course.facultyEmail
+      },
+      project: projectInfo,
+      progress: {
+        overallPercentage,
+        tasks: taskMetrics,
+        documents: docMetrics,
+        github: githubMetrics,
+        evaluation: evaluationMetrics
+      },
+      announcements: teamAnnouncements
+    };
+  },
+
+  createTeamAnnouncement: async (courseId, teamId, data) => {
+    const db = getStorage();
+    const curUser = (typeof localStorage !== 'undefined' && localStorage.getItem('projectflow_user'))
+      ? JSON.parse(localStorage.getItem('projectflow_user'))
+      : null;
+
+    const now = new Date();
+    const dateFormatted = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+    const newAnn = {
+      id: `ann_team_${Date.now()}`,
+      _id: `ann_team_${Date.now()}`,
+      courseId,
+      teamId,
+      title: data.title,
+      content: data.content,
+      facultyId: curUser?.id || 'usr_fac_sharma',
+      facultyName: curUser?.name || 'Dr. R. Sharma',
+      facultyEmail: curUser?.email || 'dr.sharma@projectflow.edu',
+      isPinned: false,
+      isImportant: false,
+      publishedAt: now.toISOString(),
+      date: dateFormatted,
+      attachments: Array.isArray(data.attachments) ? data.attachments : [],
+      readBy: []
+    };
+
+    db.announcements = db.announcements || [];
+    db.announcements.unshift(newAnn);
+    saveStorage(db);
+    return { success: true, announcement: newAnn };
+  },
+
+  updateTeamProject: async (courseId, teamId, data) => {
+    const db = getStorage();
+    const team = (db.courseTeams || []).find(t => t.id === teamId || t._id === teamId);
+    if (!team) throw new Error('Team not found');
+
+    if (data.projectTitle) team.projectTitle = data.projectTitle;
+    if (data.projectDescription !== undefined) team.projectDescription = data.projectDescription;
+    if (data.startDate) team.startDate = data.startDate;
+    if (data.endDate) team.endDate = data.endDate;
+
+    saveStorage(db);
+    return { success: true, message: 'Project information updated successfully.' };
+  },
+
   // Projects
   getProjects: async () => {
     return getStorage().projects;
@@ -1607,21 +1851,44 @@ export const mockService = {
   // Tasks
   getTasks: async (projectId, filter = {}) => {
     const db = getStorage();
-    let tasks = db.tasks.filter(t => t.projectId === projectId || t.projectId === 'proj_capstone_101');
-    if (filter.status) tasks = tasks.filter(t => t.status === filter.status);
+    let tasks = db.tasks || [];
+    if (projectId) {
+      tasks = tasks.filter(t => t.projectId === projectId || t.teamId === projectId || t.projectId === 'proj_capstone_101' || t.projectId === 'b503fcaeb7f9f3732992009b');
+    }
+    if (filter.status && filter.status !== 'all') {
+      if (filter.status === 'completed') {
+        tasks = tasks.filter(t => t.status === 'completed');
+      } else if (filter.status === 'not_completed') {
+        tasks = tasks.filter(t => t.status !== 'completed');
+      } else {
+        tasks = tasks.filter(t => t.status === filter.status);
+      }
+    }
+    tasks.sort((a, b) => (Number(a.taskNo) || 0) - (Number(b.taskNo) || 0));
     return tasks;
+  },
+
+  getTask: async (id) => {
+    const db = getStorage();
+    return (db.tasks || []).find(t => t.id === id || t._id === id) || null;
   },
 
   createTask: async (data) => {
     const db = getStorage();
+    const existing = db.tasks || [];
+    const maxTaskNo = existing.reduce((max, t) => Math.max(max, Number(t.taskNo) || 0), 0);
     const task = {
-      id: `tsk_${Date.now()}`,
-      status: 'todo',
+      id: `task_${Date.now()}`,
+      _id: `task_${Date.now()}`,
+      taskNo: maxTaskNo + 1,
+      status: 'not_completed',
       priority: 'medium',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      marks: '-',
       ...data
     };
+    db.tasks = db.tasks || [];
     db.tasks.push(task);
     saveStorage(db);
     return task;
@@ -1629,7 +1896,7 @@ export const mockService = {
 
   updateTask: async (id, data) => {
     const db = getStorage();
-    const idx = db.tasks.findIndex(t => t.id === id);
+    const idx = (db.tasks || []).findIndex(t => t.id === id || t._id === id);
     if (idx !== -1) {
       db.tasks[idx] = { ...db.tasks[idx], ...data, updatedAt: new Date().toISOString() };
       saveStorage(db);
@@ -1638,9 +1905,51 @@ export const mockService = {
     return { id, ...data };
   },
 
+  submitTask: async (id, data) => {
+    const db = getStorage();
+    const idx = (db.tasks || []).findIndex(t => t.id === id || t._id === id);
+    if (idx !== -1) {
+      db.tasks[idx] = {
+        ...db.tasks[idx],
+        status: 'completed',
+        submission: {
+          description: data.submissionDescription || '',
+          attachment: data.attachment || null,
+          submittedAt: new Date().toISOString()
+        },
+        description: data.submissionDescription || db.tasks[idx].description,
+        updatedAt: new Date().toISOString()
+      };
+      saveStorage(db);
+      return db.tasks[idx];
+    }
+    return { id, ...data, status: 'completed' };
+  },
+
+  evaluateTask: async (id, data) => {
+    const db = getStorage();
+    const idx = (db.tasks || []).findIndex(t => t.id === id || t._id === id);
+    if (idx !== -1) {
+      db.tasks[idx] = {
+        ...db.tasks[idx],
+        evaluation: {
+          marksAwarded: Number(data.marksAwarded),
+          maxMarks: Number(data.maxMarks || 10),
+          feedback: data.feedback || '',
+          evaluatedAt: new Date().toISOString()
+        },
+        marks: `${data.marksAwarded}/${data.maxMarks || 10}`,
+        updatedAt: new Date().toISOString()
+      };
+      saveStorage(db);
+      return db.tasks[idx];
+    }
+    return { id, ...data };
+  },
+
   deleteTask: async (id) => {
     const db = getStorage();
-    db.tasks = db.tasks.filter(t => t.id !== id);
+    db.tasks = (db.tasks || []).filter(t => t.id !== id && t._id !== id);
     saveStorage(db);
     return { success: true };
   },

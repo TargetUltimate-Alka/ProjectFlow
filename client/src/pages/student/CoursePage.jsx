@@ -38,7 +38,7 @@ import {
   LogOut
 } from 'lucide-react';
 
-export function CoursePage({ courseId, onBack }) {
+export function CoursePage({ courseId, onBack, onNavigateToTeam }) {
   const [course, setCourse] = useState(null);
   const [announcements, setAnnouncements] = useState([]);
   const [teams, setTeams] = useState([]);
@@ -1673,7 +1673,13 @@ export function CoursePage({ courseId, onBack }) {
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <button
-                      onClick={() => setViewingTeam(myTeam)}
+                      onClick={() => {
+                        if (onNavigateToTeam && myTeam) {
+                          onNavigateToTeam(myTeam);
+                        } else {
+                          setViewingTeam(myTeam);
+                        }
+                      }}
                       style={{
                         display: 'inline-flex',
                         alignItems: 'center',
@@ -2039,7 +2045,13 @@ export function CoursePage({ courseId, onBack }) {
                         <div>
                           {isJoined ? (
                             <button
-                              onClick={() => setViewingTeam(t)}
+                              onClick={() => {
+                                if (onNavigateToTeam) {
+                                  onNavigateToTeam(t);
+                                } else {
+                                  setViewingTeam(t);
+                                }
+                              }}
                               style={{
                                 padding: '7px 15px',
                                 borderRadius: '8px',
@@ -2055,36 +2067,48 @@ export function CoursePage({ courseId, onBack }) {
                             </button>
                           ) : isFull ? (
                             <button
-                              onClick={() => setViewingTeam(t)}
+                              onClick={() => {
+                                if (isFacultyOrAdmin && onNavigateToTeam) {
+                                  onNavigateToTeam(t);
+                                } else {
+                                  setViewingTeam(t);
+                                }
+                              }}
                               style={{
                                 padding: '7px 14px',
                                 borderRadius: '8px',
-                                backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                                border: '1px solid rgba(255, 255, 255, 0.12)',
-                                color: '#cbd5e1',
+                                backgroundColor: isFacultyOrAdmin ? '#0284c7' : 'rgba(255, 255, 255, 0.06)',
+                                border: isFacultyOrAdmin ? 'none' : '1px solid rgba(255, 255, 255, 0.12)',
+                                color: '#fff',
                                 fontSize: '0.82rem',
                                 fontWeight: 600,
                                 cursor: 'pointer'
                               }}
                             >
-                              View Members
+                              {isFacultyOrAdmin ? 'View Workspace' : 'View Members'}
                             </button>
                           ) : (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                               <button
-                                onClick={() => setViewingTeam(t)}
+                                onClick={() => {
+                                  if (isFacultyOrAdmin && onNavigateToTeam) {
+                                    onNavigateToTeam(t);
+                                  } else {
+                                    setViewingTeam(t);
+                                  }
+                                }}
                                 style={{
                                   padding: '7px 14px',
                                   borderRadius: '8px',
-                                  backgroundColor: '#0284c7',
-                                  color: '#fff',
+                                  backgroundColor: isFacultyOrAdmin ? '#0284c7' : 'rgba(255, 255, 255, 0.06)',
+                                  border: isFacultyOrAdmin ? 'none' : '1px solid rgba(255, 255, 255, 0.12)',
+                                  color: isFacultyOrAdmin ? '#fff' : '#cbd5e1',
                                   fontSize: '0.82rem',
                                   fontWeight: 600,
-                                  border: 'none',
                                   cursor: 'pointer'
                                 }}
                               >
-                                View Team
+                                {isFacultyOrAdmin ? 'View Workspace' : 'View Team'}
                               </button>
                               {!myTeam && (
                                 <button

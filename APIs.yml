@@ -1,9 +1,9 @@
-version: "2.2.0"
+version: "2.3.0"
 info:
   title: "ProjectFlow API Specification"
-  description: "REST API documentation for ProjectFlow academic software engineering platform. Covers Step 1 (Student Course Dashboard), Step 2 (Course Details Page, Faculty Broadcast Announcements), and Step 3 (My Team, Course Teams Management, and Team Formation)."
-  feature: "Step 3: My Team, Course Teams Management, and Team Formation"
-  lastUpdated: "2026-10-26"
+  description: "REST API documentation for ProjectFlow academic software engineering platform. Covers Step 1 (Student Course Dashboard), Step 2 (Course Details Page, Faculty Broadcast Announcements), Step 3 (Student Team Dashboard & Formation), and Step 4 (Task Management and Assignment)."
+  feature: "Step 4: Task Management and Assignment"
+  lastUpdated: "2026-10-27"
 
 # ========================================================
 # 1. API CATEGORIZATION SUMMARY
@@ -34,8 +34,24 @@ summary:
       method: "GET"
       service: "project-service"
       description: "Aggregates faculty broadcast announcements across all authorized courses for the student dashboard."
+    - path: "/api/tasks/{id}"
+      method: "DELETE"
+      service: "task-service"
+      description: "Deletes a task; restricted to the team lead, assigned faculty supervisor, and administrators (403 Forbidden for others)."
 
   newApisIntroduced:
+    - path: "/api/tasks/{id}/submit"
+      method: "POST"
+      service: "task-service"
+      description: "Submits work description and deliverables for a task. Enforces submission deadline on the backend (HTTP 400 Bad Request if expired). Updates task status to completed and records submission metadata without self-awarded marks."
+    - path: "/api/tasks/{id}/evaluate"
+      method: "POST"
+      service: "task-service"
+      description: "Allows assigned faculty supervisors or administrators to grade task deliverables, award marks (0-10), and provide feedback notes. Students receive HTTP 403 Forbidden."
+    - path: "/api/tasks/{id}/attachments/{filename}"
+      method: "GET"
+      service: "task-service"
+      description: "Streams task reference files or student submission attachments. Validates team membership or faculty supervision (HTTP 403 Forbidden for unauthorized callers)."
     - path: "/api/courses/{id}/announcements"
       method: "GET"
       service: "project-service"
@@ -84,8 +100,36 @@ summary:
       method: "POST"
       service: "project-service"
       description: "Allows a member to leave their current team in the course. Reassigns team leadership if the leader departs, or deletes the team if empty."
+    - path: "/api/courses/{id}/teams/{teamId}/dashboard"
+      method: "GET"
+      service: "project-service"
+      description: "Returns comprehensive team dashboard workspace: team metadata, associated course, project info, live progress metrics (tasks total/completed/pending, documents count, GitHub commits/PRs, evaluation status, percentage), and team-specific announcements. Enforces strict authorization (403 Forbidden for non-member students and unassigned faculty)."
+    - path: "/api/courses/{id}/teams/{teamId}/announcements"
+      method: "POST"
+      service: "project-service"
+      description: "Publishes a new team-specific broadcast announcement with optional attachments. Restricted to authorized team members, assigned faculty supervisors, and administrators (403 Forbidden for unauthorized users)."
+    - path: "/api/courses/{id}/teams/{teamId}/project"
+      method: "PUT"
+      service: "project-service"
+      description: "Updates project title, description, start date, and end date for the team. Restricted to the team lead, assigned faculty supervisor, and administrators (403 Forbidden for others)."
 
   existingApisModified:
+    - path: "/api/tasks"
+      method: "GET"
+      service: "task-service"
+      description: "Updated to support team workspace scoping (?projectId=...&teamId=...), sequential task numbering, status filtering (completed vs not_completed), and strict 403 authorization for unauthorized students."
+    - path: "/api/tasks"
+      method: "POST"
+      service: "task-service"
+      description: "Updated with Team Lead and Faculty RBAC authorization (403 for regular students), active team member eligibility validation (400 for non-team assignees), and auto-incremented task numbering."
+    - path: "/api/tasks/{id}"
+      method: "PUT"
+      service: "task-service"
+      description: "Restricted to Team Lead, assigned faculty, and Admin. Forbids students from modifying evaluation/marks (403 Forbidden) and validates member eligibility upon reassignment."
+    - path: "/api/tasks/{id}"
+      method: "GET"
+      service: "task-service"
+      description: "Enriched with task instructions, reference attachments, submission deliverable notes, and faculty evaluation scores."
     - path: "/api/courses*"
       component: "API Gateway (gateway/server.js)"
       type: "Attachment Binary Streaming Support"
@@ -579,6 +623,189 @@ endpoints:
         description: "User is not a member of this team"
 
   # ------------------------------------------------------
+  # GET /api/courses/{id}/teams/{teamId}/dashboard
+  # ------------------------------------------------------
+  - path: "/api/courses/{id}/teams/{teamId}/dashboard"
+    method: "GET"
+    category: "New API Introduced (Step 3)"
+    service: "project-service"
+    summary: "Get Team Dashboard data with strict permissions"
+    description: "Returns aggregated team workspace details: team metadata, course details, project info, live progress metrics (tasks total/completed/pending, documents count, GitHub commits/PRs, evaluation status, percentage), and team announcements stream. Strictly enforces role authorization (403 Forbidden for non-member students and unassigned faculty)."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+      header: "Authorization: Bearer <token>"
+    authorization:
+      rules:
+        - role: "Authorized Team Member"
+          rule: "Granted full read access to their own team workspace."
+        - role: "Non-member Student"
+          rule: "HTTP 403 Forbidden. Students cannot view another team's private dashboard."
+        - role: "Assigned Faculty Supervisor / Admin"
+          rule: "Granted supervisor access to supervised course teams."
+        - role: "Unassigned Faculty"
+          rule: "HTTP 403 Forbidden."
+    pathParams:
+      - name: "id"
+        type: "string"
+        required: true
+        description: "Course code (e.g. 'CS543') or course ID"
+      - name: "teamId"
+        type: "string"
+        required: true
+        description: "Team ID or MongoDB _id (e.g. 'team_alpha')"
+    responses:
+      200:
+        description: "Team dashboard data package"
+        example:
+          team:
+            id: "team_alpha"
+            name: "Team Alpha"
+            teamLead: "Alka Jha"
+            memberCount: 4
+            maxMembers: 5
+            status: "Active"
+            members:
+              - name: "Alka Jha"
+                email: "alka123@iitv.ac.in"
+                rollNumber: "20251651013"
+                isLeader: true
+          course:
+            code: "CS543"
+            name: "Web Services"
+            facultyName: "Dr. R. Sharma"
+          project:
+            title: "ProjectFlow Development"
+            description: "Development of an academic project management system with microservices architecture."
+            startDate: "2026-09-01"
+            endDate: "2026-12-15"
+          progress:
+            overallPercentage: 60
+            tasks:
+              total: 12
+              completed: 6
+              pending: 6
+              isConfigured: true
+            documents:
+              count: 6
+              submitted: 6
+              isConfigured: true
+            github:
+              connected: true
+              commits: 48
+              prs: 5
+              isConfigured: true
+            evaluation:
+              status: "Pending"
+              score: null
+              isConfigured: true
+          announcements:
+            - id: "ann_team_alpha_1"
+              title: "Updated API Documentation"
+              author: "Dr. R. Sharma"
+              date: "25 Oct 2026"
+              content: "Please use the updated API endpoints. Check the document attached."
+              attachments:
+                - name: "API_Endpoints_v2.pdf"
+      403:
+        description: "Access denied: student is not a member or faculty is not assigned"
+        example:
+          error: "Access denied. You are not an authorized member of team 'Team Alpha'. Students can only access their own team workspace."
+      404:
+        description: "Course or team not found"
+
+  # ------------------------------------------------------
+  # POST /api/courses/{id}/teams/{teamId}/announcements
+  # ------------------------------------------------------
+  - path: "/api/courses/{id}/teams/{teamId}/announcements"
+    method: "POST"
+    category: "New API Introduced (Step 3)"
+    service: "project-service"
+    summary: "Post a team announcement"
+    description: "Publishes a new team-specific broadcast announcement with optional attachments. Restricted to authorized team members, assigned faculty supervisors, and administrators."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    authorization:
+      rules:
+        - role: "Authorized Team Member / Faculty Supervisor / Admin"
+          rule: "Allowed to publish team announcements."
+        - role: "Unauthorized Student / Unassigned Faculty"
+          rule: "HTTP 403 Forbidden."
+    pathParams:
+      - name: "id"
+        type: "string"
+        required: true
+      - name: "teamId"
+        type: "string"
+        required: true
+    requestBody:
+      contentType: "application/json"
+      required: true
+      example:
+        title: "Updated API Documentation"
+        content: "Please use the updated API endpoints. Check the document attached."
+        attachments:
+          - name: "API_Endpoints_v2.pdf"
+            size: "1.4 MB"
+            type: "pdf"
+    responses:
+      201:
+        description: "Announcement created"
+        example:
+          success: true
+          message: "Announcement posted to team workspace."
+          announcement:
+            title: "Updated API Documentation"
+            teamId: "team_alpha"
+      403:
+        example:
+          error: "Only team members or faculty can post announcements to this team."
+
+  # ------------------------------------------------------
+  # PUT /api/courses/{id}/teams/{teamId}/project
+  # ------------------------------------------------------
+  - path: "/api/courses/{id}/teams/{teamId}/project"
+    method: "PUT"
+    category: "New API Introduced (Step 3)"
+    service: "project-service"
+    summary: "Update team project information"
+    description: "Updates project title, description, start date, and end date for the team. Restricted to the team lead, assigned faculty supervisor, and administrators."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    authorization:
+      rules:
+        - role: "Team Lead / Faculty Supervisor / Admin"
+          rule: "Allowed to modify project metadata."
+        - role: "Regular Team Member / Other Student"
+          rule: "HTTP 403 Forbidden."
+    pathParams:
+      - name: "id"
+        type: "string"
+        required: true
+      - name: "teamId"
+        type: "string"
+        required: true
+    requestBody:
+      contentType: "application/json"
+      required: true
+      example:
+        projectTitle: "ProjectFlow Development"
+        projectDescription: "Development of an academic project management system with microservices architecture."
+        startDate: "2026-09-01"
+        endDate: "2026-12-15"
+    responses:
+      200:
+        description: "Project details updated"
+        example:
+          success: true
+          message: "Project information updated successfully."
+      403:
+        example:
+          error: "Only the team lead, assigned faculty, or administrators can update project information."
+
+  # ------------------------------------------------------
   # GET /api/courses
   # ------------------------------------------------------
   - path: "/api/courses"
@@ -651,3 +878,183 @@ endpoints:
         description: "Login successful"
       401:
         description: "Invalid credentials"
+
+  # ------------------------------------------------------
+  # GET /api/tasks
+  # ------------------------------------------------------
+  - path: "/api/tasks"
+    method: "GET"
+    category: "Task Management API (Step 4)"
+    service: "task-service"
+    summary: "List tasks for a project or team"
+    description: "Returns the 7-column task roster for the specified team/project. Enforces team membership and faculty supervisor authorization (403 Forbidden for unauthorized students). Supports status ('all', 'completed', 'not_completed') and assignee filtering. Tasks are sorted by sequential taskNo ascending."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    queryParams:
+      - name: "projectId"
+        type: "string"
+        required: false
+      - name: "teamId"
+        type: "string"
+        required: false
+      - name: "status"
+        type: "string"
+        required: false
+        description: "'all', 'completed', or 'not_completed'"
+    responses:
+      200:
+        description: "List of tasks"
+        example:
+          - taskNo: 1
+            title: "Project Setup"
+            assigneeName: "Aarav Sharma"
+            status: "completed"
+            attachments:
+              - name: "setup_doc.pdf"
+            description: "Initial setup done"
+            marks: "8/10"
+      403:
+        description: "Forbidden: caller does not belong to team"
+
+  # ------------------------------------------------------
+  # GET /api/tasks/{id}
+  # ------------------------------------------------------
+  - path: "/api/tasks/{id}"
+    method: "GET"
+    category: "Task Management API (Step 4)"
+    service: "task-service"
+    summary: "Get task details"
+    description: "Returns complete task instructions, reference attachments, submission notes, and faculty evaluation details."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    responses:
+      200:
+        description: "Task record"
+      404:
+        description: "Task not found"
+
+  # ------------------------------------------------------
+  # POST /api/tasks
+  # ------------------------------------------------------
+  - path: "/api/tasks"
+    method: "POST"
+    category: "Task Management API (Step 4)"
+    service: "task-service"
+    summary: "Create and assign task"
+    description: "Creates a new task with sequential taskNo. Restricted to authorized team leads, assigned faculty, and admins (403 Forbidden for others). Validates that the assignee is an active member of the current team (400 Bad Request if not in team)."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    requestBody:
+      contentType: "application/json"
+      required: true
+      example:
+        projectId: "b503fcaeb7f9f3732992009b"
+        teamId: "team_alpha"
+        title: "API Development"
+        description: "Implement user and team endpoints."
+        assigneeEmail: "priya.patel@student.edu"
+        priority: "high"
+        dueDate: "2026-11-10T18:00:00.000Z"
+    responses:
+      201:
+        description: "Task created"
+      400:
+        description: "Validation error: assignee not in team or missing title"
+      403:
+        description: "Forbidden: only team lead or faculty can create tasks"
+
+  # ------------------------------------------------------
+  # PUT /api/tasks/{id}
+  # ------------------------------------------------------
+  - path: "/api/tasks/{id}"
+    method: "PUT"
+    category: "Task Management API (Step 4)"
+    service: "task-service"
+    summary: "Update or reassign task"
+    description: "Updates task details or reassigns task to another team member. Restricted to team lead, assigned faculty, and admin. Students attempting to award marks receive 403 Forbidden."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    responses:
+      200:
+        description: "Task updated"
+      403:
+        description: "Forbidden"
+
+  # ------------------------------------------------------
+  # POST /api/tasks/{id}/submit
+  # ------------------------------------------------------
+  - path: "/api/tasks/{id}/submit"
+    method: "POST"
+    category: "New API Introduced (Step 4)"
+    service: "task-service"
+    summary: "Submit task deliverables"
+    description: "Submits completion notes and uploaded attachment for a task. Enforces deadline on backend: if deadline passed, returns 400 Bad Request. Updates status to 'completed' without self-awarded marks."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    requestBody:
+      contentType: "application/json"
+      required: true
+      example:
+        submissionDescription: "Implemented user, team and project APIs."
+        attachment:
+          name: "api_implementation.zip"
+          size: "3.4 MB"
+          type: "zip"
+    responses:
+      200:
+        description: "Task submitted successfully"
+      400:
+        description: "Submission deadline has passed"
+      403:
+        description: "Forbidden: user does not belong to team"
+
+  # ------------------------------------------------------
+  # POST /api/tasks/{id}/evaluate
+  # ------------------------------------------------------
+  - path: "/api/tasks/{id}/evaluate"
+    method: "POST"
+    category: "New API Introduced (Step 4)"
+    service: "task-service"
+    summary: "Evaluate task submission"
+    description: "Faculty awards marks (0-10) and evaluation feedback for a completed task. Restricted to assigned faculty supervisors and administrators. Students receive 403 Forbidden."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    requestBody:
+      contentType: "application/json"
+      required: true
+      example:
+        marksAwarded: 9
+        maxMarks: 10
+        feedback: "Clean API definitions with JWT authorization and test coverage."
+    responses:
+      200:
+        description: "Task evaluated successfully"
+      403:
+        description: "Forbidden: students cannot evaluate tasks or award marks"
+
+  # ------------------------------------------------------
+  # GET /api/tasks/{id}/attachments/{filename}
+  # ------------------------------------------------------
+  - path: "/api/tasks/{id}/attachments/{filename}"
+    method: "GET"
+    category: "New API Introduced (Step 4)"
+    service: "task-service"
+    summary: "Download task attachment"
+    description: "Streams task reference files or student submission deliverables. Validates team membership or faculty supervisor authorization (403 Forbidden for unauthorized callers)."
+    authentication:
+      required: true
+      type: "Bearer JWT"
+    responses:
+      200:
+        description: "Binary file stream with Content-Disposition attachment"
+      403:
+        description: "Forbidden"
+      404:
+        description: "Task or file not found"
+

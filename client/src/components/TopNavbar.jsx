@@ -3,7 +3,12 @@ import { useAuth } from '../context/AuthContext';
 import { api } from '../api';
 import { Bell, User, LogOut, ChevronDown, CheckCircle, Shield, GraduationCap, School } from 'lucide-react';
 
-export function TopNavbar({ activeTab, onOpenNotifications }) {
+export function TopNavbar({
+  activeTab,
+  onOpenNotifications,
+  isTeamWorkspace = false,
+  teamSection = 'overview'
+}) {
   const { user, logout, quickSwitchUser } = useAuth();
   const [unreadCount, setUnreadCount] = useState(0);
   const [showSwitchMenu, setShowSwitchMenu] = useState(false);
@@ -38,6 +43,13 @@ export function TopNavbar({ activeTab, onOpenNotifications }) {
   };
 
   const getTitle = () => {
+    if (isTeamWorkspace) {
+      const sectionName = teamSection === 'github' ? 'GitHub Activity' :
+                          teamSection === 'announcements' ? 'Announcements & Feedback' :
+                          teamSection === 'members' ? 'Team Members' :
+                          teamSection ? teamSection.charAt(0).toUpperCase() + teamSection.slice(1) : 'Overview';
+      return `Team Workspace — ${sectionName}`;
+    }
     if (activeTab === 'courses' || activeTab === 'dashboard') return 'Course Dashboard';
     if (activeTab === 'course-details') return 'Course Information';
     if (activeTab === 'profile') return 'Student Profile';
