@@ -40,7 +40,7 @@ app.get('/health', async (req, res) => {
 function gatewayAuth(req, res, next) {
   // Allow public auth endpoints, webhook receiver, and health check
   const publicPaths = ['/api/auth/login', '/api/auth/register', '/api/auth/refresh', '/api/github/webhook', '/health'];
-  if (publicPaths.some(p => req.path.startsWith(p))) {
+  if (publicPaths.some(p => req.path.startsWith(p)) || (req.method === 'GET' && req.path.startsWith('/api/institutions'))) {
     return next();
   }
 
@@ -121,6 +121,26 @@ async function proxyRequest(targetUrl, req, res) {
 
 // 1. Auth Service Routes
 app.all('/api/auth/*', (req, res) => {
+  const subPath = req.url.replace('/api', '');
+  proxyRequest(`${SERVICES.auth}${subPath}`, req, res);
+});
+
+app.all('/api/institutions*', (req, res) => {
+  const subPath = req.url.replace('/api', '');
+  proxyRequest(`${SERVICES.auth}${subPath}`, req, res);
+});
+
+app.all('/api/coordinator/courses*', (req, res) => {
+  const subPath = req.url.replace('/api', '');
+  proxyRequest(`${SERVICES.project}${subPath}`, req, res);
+});
+
+app.all('/api/coordinator/assignments*', (req, res) => {
+  const subPath = req.url.replace('/api', '');
+  proxyRequest(`${SERVICES.project}${subPath}`, req, res);
+});
+
+app.all('/api/coordinator*', (req, res) => {
   const subPath = req.url.replace('/api', '');
   proxyRequest(`${SERVICES.auth}${subPath}`, req, res);
 });

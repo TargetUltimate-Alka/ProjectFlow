@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from './context/AuthContext';
+import { HomePage } from './pages/HomePage';
 import { AuthPage } from './pages/AuthPage';
 import { Sidebar } from './components/Sidebar';
 import { TopNavbar } from './components/TopNavbar';
@@ -29,6 +30,7 @@ import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { UsersManagement } from './pages/admin/UsersManagement';
 import { AssignmentsPage } from './pages/admin/AssignmentsPage';
 import { CriteriaPage } from './pages/admin/CriteriaPage';
+import { CoordinatorPortal, InstitutionDirectoryPage, PublicInstitutionPage } from './pages/coordinator/CoordinatorPortal';
 
 export function App() {
   const { user, loading } = useAuth();
@@ -38,6 +40,17 @@ export function App() {
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [teamSection, setTeamSection] = useState('overview');
+
+  // Unauthenticated view: 'homepage' | 'auth'
+  const [publicView, setPublicView] = useState('homepage');
+  // Which auth tab to open: 'login' | 'register'
+  const [authInitialTab, setAuthInitialTab] = useState('login');
+
+  useEffect(() => {
+    const handleNavigate = (event) => setActiveTab(event.detail);
+    window.addEventListener('projectflow:navigate', handleNavigate);
+    return () => window.removeEventListener('projectflow:navigate', handleNavigate);
+  }, []);
 
   if (loading) {
     return (
@@ -55,16 +68,38 @@ export function App() {
     );
   }
 
+  const institutionMatch = window.location.pathname.match(/^\/institutions\/([^/]+)\/?$/);
+  if (institutionMatch) return <PublicInstitutionPage institutionId={decodeURIComponent(institutionMatch[1])} />;
+  if (window.location.pathname === '/institutions' || window.location.pathname === '/institutions/') return <InstitutionDirectoryPage />;
+
+  // --- Unauthenticated: Show Homepage or Auth Page ---
   if (!user) {
-    return <AuthPage />;
+    if (publicView === 'auth') {
+      return (
+        <AuthPage
+          initialTab={authInitialTab}
+          onBackToHome={() => setPublicView('homepage')}
+        />
+      );
+    }
+    return (
+      <HomePage
+        onNavigateToAuth={(tab) => {
+          setAuthInitialTab(tab || 'login');
+          setPublicView('auth');
+        }}
+      />
+    );
   }
 
+  // --- Authenticated: Dashboard Shell ---
   const role = (user.role || '').toLowerCase();
 
   // Reset tab default if role changes
   const effectiveTab = () => {
     if (role === 'faculty' && (activeTab === 'dashboard' || activeTab === 'courses')) return 'faculty-dashboard';
     if (role === 'admin' && (activeTab === 'dashboard' || activeTab === 'courses')) return 'admin-dashboard';
+    if (role === 'coordinator' && (activeTab === 'dashboard' || activeTab === 'courses')) return 'coordinator-overview';
     if (role === 'student' && (activeTab.startsWith('faculty-') || activeTab.startsWith('admin-'))) return 'courses';
     if (role === 'student' && activeTab === 'dashboard') return 'courses';
     return activeTab;
@@ -246,6 +281,8 @@ export function App() {
               {currentTab === 'admin-assignments' && <AssignmentsPage />}
             </>
           )}
+
+          {role === 'coordinator' && <CoordinatorPortal activeTab={currentTab} user={user} />}
         </main>
       </div>
 

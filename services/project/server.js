@@ -25,6 +25,10 @@ let documentsCollection;
 let coursesCollection;
 let announcementsCollection;
 let courseTeamsCollection;
+let branchesCollection;
+let batchesCollection;
+let sessionsCollection;
+let facultyAssignmentsCollection;
 let usersCollection;
 let eventBus;
 
@@ -597,6 +601,22 @@ async function getAuthorizedCourse(courseIdOrCode, user) {
   }
 
   return course;
+}
+
+async function requireInstitutionCoordinator(req, res, next) {
+  try {
+    const user = await usersCollection.findOne({ _id: req.user?.id });
+    if (!user || !['Coordinator', 'Admin'].includes(user.role) || user.status === 'suspended') {
+      return res.status(403).json({ error: 'Coordinator access is required' });
+    }
+    req.user.role = user.role;
+    req.user.institutionId = user.institutionId || null;
+    next();
+  } catch (err) { res.status(500).json({ error: err.message }); }
+}
+
+function coordinatorCourseScope(user) {
+  return user.role === 'Admin' ? {} : { institutionId: user.institutionId };
 }
 
 // Milestone Evaluation Rule Engine
@@ -1241,6 +1261,86 @@ app.get('/projects/:id/overview', authenticate, async (req, res) => {
 // ==========================================
 // Academic Courses APIs (Google Classroom style)
 // ==========================================
+
+// Coordinator extensions to the existing course model. Each new course is institution-scoped.
+app.get('/coordinator/courses', authenticate, requireInstitutionCoordinator, async (req, res) => {
+  try {
+    const courses = await coursesCollection.find(coordinatorCourseScope(req.user)).sort({ createdAt: -1 }).toArray();
+    res.json(courses.map(course => ({ id: course._id, code: course.code, name: course.name, branchId: course.branchId, branchName: course.branchName, batchId: course.batchId, batch: course.batch, sessionId: course.sessionId, sessionName: course.sessionName, semester: course.semester, description: course.description || '', facultyName: course.facultyName || '', facultyEmail: course.facultyEmail || '', facultyId: course.facultyId || null, createdAt: course.createdAt })));
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.post('/coordinator/courses', authenticate, requireInstitutionCoordinator, async (req, res) => {
+  try {
+    const institutionId = req.user.role === 'Admin' ? String(req.body.institutionId || '') : String(req.user.institutionId || '');
+    const { name, code, branchId, batchId, sessionId } = req.body;
+    if (!institutionId || !String(name || '').trim() || !String(code || '').trim() || !branchId || !batchId || !sessionId) return res.status(400).json({ error: 'Institution, course name and code, branch, batch, and session are required' });
+    if (req.user.role !== 'Admin' && institutionId !== String(req.user.institutionId)) return res.status(403).json({ error: 'Institution access denied' });
+    const [branch, batch, session] = await Promise.all([
+      branchesCollection.findOne({ _id: String(branchId), institutionId }),
+      batchesCollection.findOne({ _id: String(batchId), institutionId }),
+      sessionsCollection.findOne({ _id: String(sessionId), institutionId })
+    ]);
+    if (!branch || !batch || !session || batch.branchId !== String(branchId) || batch.sessionId !== String(sessionId)) return res.status(400).json({ error: 'Selected branch, batch, and session must belong together in this institution' });
+    const normalizedCode = String(code).trim().toUpperCase();
+    if (await coursesCollection.findOne({ institutionId, code: normalizedCode })) return res.status(409).json({ error: 'This course code already exists in the institution' });
+    const course = { _id: generateId(), institutionId, code: normalizedCode, name: String(name).trim(), department: branch.name, branchId: String(branchId), branchName: branch.name, batchId: String(batchId), batch: batch.name, sessionId: String(sessionId), sessionName: session.name, semester: String(req.body.semester || '').trim(), description: String(req.body.description || '').trim(), facultyId: null, facultyName: '', facultyEmail: '', enrolledEmails: [], enrolledStudentIds: [], announcements: [], resources: [], createdBy: req.user.id, createdAt: new Date().toISOString() };
+    await coursesCollection.insertOne(course);
+    res.status(201).json({ id: course._id, ...course });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.put('/coordinator/courses/:id', authenticate, requireInstitutionCoordinator, async (req, res) => {
+  try {
+    const course = await coursesCollection.findOne({ _id: req.params.id, ...coordinatorCourseScope(req.user) });
+    if (!course) return res.status(404).json({ error: 'Course not found in your institution' });
+    const update = {};
+    if (req.body.name !== undefined) update.name = String(req.body.name).trim();
+    if (req.body.description !== undefined) update.description = String(req.body.description).trim();
+    if (req.body.semester !== undefined) update.semester = String(req.body.semester).trim();
+    if (update.name === '') return res.status(400).json({ error: 'Course name cannot be empty' });
+    await coursesCollection.updateOne({ _id: course._id }, { $set: update });
+    res.json({ ...course, ...update });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.get('/coordinator/assignments', authenticate, requireInstitutionCoordinator, async (req, res) => {
+  try { res.json(await facultyAssignmentsCollection.find(coordinatorCourseScope(req.user)).sort({ createdAt: -1 }).toArray()); }
+  catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.post('/coordinator/assignments', authenticate, requireInstitutionCoordinator, async (req, res) => {
+  try {
+    const { courseId, facultyId } = req.body;
+    const scope = coordinatorCourseScope(req.user);
+    const course = await coursesCollection.findOne({ _id: String(courseId || ''), ...scope });
+    if (!course) return res.status(404).json({ error: 'Course not found in your institution' });
+    const faculty = await usersCollection.findOne({ _id: String(facultyId || ''), role: 'Faculty', institutionId: course.institutionId, status: 'active' });
+    if (!faculty) return res.status(400).json({ error: 'Select an active faculty member associated with this institution' });
+    const activeCourseAssignment = await facultyAssignmentsCollection.findOne({ courseId: course._id, status: 'active' });
+    if (activeCourseAssignment && String(activeCourseAssignment.facultyId) !== String(faculty._id)) return res.status(409).json({ error: 'This course already has a faculty member. Reassign its existing assignment instead.' });
+    const duplicate = await facultyAssignmentsCollection.findOne({ courseId: course._id, facultyId: String(faculty._id), batchId: course.batchId, sessionId: course.sessionId, status: 'active' });
+    if (duplicate) return res.status(409).json({ error: 'This faculty assignment already exists' });
+    const assignment = { _id: generateId(), institutionId: course.institutionId, courseId: course._id, courseCode: course.code, courseName: course.name, facultyId: String(faculty._id), facultyName: faculty.name, facultyEmail: faculty.email, branchId: course.branchId, branchName: course.branchName, batchId: course.batchId, batchName: course.batch, sessionId: course.sessionId, sessionName: course.sessionName, semester: course.semester, status: 'active', createdBy: req.user.id, createdAt: new Date().toISOString() };
+    await facultyAssignmentsCollection.insertOne(assignment);
+    await coursesCollection.updateOne({ _id: course._id }, { $set: { facultyId: String(faculty._id), facultyName: faculty.name, facultyEmail: faculty.email } });
+    res.status(201).json(assignment);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.put('/coordinator/assignments/:id', authenticate, requireInstitutionCoordinator, async (req, res) => {
+  try {
+    const assignment = await facultyAssignmentsCollection.findOne({ _id: req.params.id, ...coordinatorCourseScope(req.user), status: 'active' });
+    if (!assignment) return res.status(404).json({ error: 'Assignment not found in your institution' });
+    const faculty = await usersCollection.findOne({ _id: String(req.body.facultyId || ''), role: 'Faculty', institutionId: assignment.institutionId, status: 'active' });
+    if (!faculty) return res.status(400).json({ error: 'Select an active faculty member associated with this institution' });
+    const duplicate = await facultyAssignmentsCollection.findOne({ courseId: assignment.courseId, facultyId: String(faculty._id), batchId: assignment.batchId, sessionId: assignment.sessionId, status: 'active' });
+    if (duplicate && String(duplicate._id) !== String(assignment._id)) return res.status(409).json({ error: 'This faculty assignment already exists' });
+    await facultyAssignmentsCollection.updateOne({ _id: assignment._id }, { $set: { facultyId: String(faculty._id), facultyName: faculty.name, facultyEmail: faculty.email, updatedBy: req.user.id } });
+    await coursesCollection.updateOne({ _id: assignment.courseId }, { $set: { facultyId: String(faculty._id), facultyName: faculty.name, facultyEmail: faculty.email } });
+    res.json({ ...assignment, facultyId: String(faculty._id), facultyName: faculty.name, facultyEmail: faculty.email });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
 
 // 1. GET /courses - list authorized courses with optional search
 app.get('/courses', authenticate, async (req, res) => {
@@ -2667,6 +2767,10 @@ async function startServer() {
 
   const authDb = await createDatabase('project-service-auth', 'auth_db');
   usersCollection = authDb.collection('users');
+  branchesCollection = authDb.collection('branches');
+  batchesCollection = authDb.collection('batches');
+  sessionsCollection = authDb.collection('academic_sessions');
+  facultyAssignmentsCollection = db.collection('faculty_assignments');
 
   await seedCriteriaIfEmpty();
   await seedCoursesIfEmpty();

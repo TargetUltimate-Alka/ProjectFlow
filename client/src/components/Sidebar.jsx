@@ -21,7 +21,12 @@ import {
   MessageSquare,
   BookOpen,
   User,
-  Megaphone
+  Megaphone,
+  Building2,
+  CalendarDays,
+  ClipboardList,
+  UserRoundCog,
+  Activity
 } from 'lucide-react';
 
 export function Sidebar({
@@ -71,6 +76,20 @@ export function Sidebar({
     { id: 'admin-assignments', label: 'Faculty Assignments', icon: UserCheck }
   ];
 
+  const coordinatorNav = [
+    { id: 'coordinator-overview', label: 'Overview', icon: LayoutDashboard },
+    { id: 'coordinator-institution', label: 'Institution Profile', icon: Building2 },
+    { id: 'coordinator-branches', label: 'Branches & Programs', icon: School },
+    { id: 'coordinator-courses', label: 'Courses & Subjects', icon: BookOpen },
+    { id: 'coordinator-sessions', label: 'Academic Sessions', icon: CalendarDays },
+    { id: 'coordinator-batches', label: 'Batches', icon: ClipboardList },
+    { id: 'coordinator-faculty', label: 'Faculty Directory', icon: Users },
+    { id: 'coordinator-assignments', label: 'Faculty Assignments', icon: UserCheck },
+    { id: 'coordinator-coordinators', label: 'Coordinators', icon: UserRoundCog },
+    { id: 'coordinator-activity', label: 'Activity & Monitoring', icon: Activity },
+    { id: 'notifications', label: 'Notifications', icon: Bell }
+  ];
+
   let items = (role === 'student' && isTeamWorkspace) ? teamNav : studentNav;
   let roleTitle = 'Student Portal';
   let roleIcon = GraduationCap;
@@ -90,6 +109,11 @@ export function Sidebar({
     roleTitle = 'Admin Console';
     roleIcon = ShieldCheck;
     roleColor = '#fb7185';
+  } else if (role === 'coordinator') {
+    items = coordinatorNav;
+    roleTitle = 'Coordinator Portal';
+    roleIcon = Building2;
+    roleColor = '#a78bfa';
   }
 
   const RoleIconComponent = roleIcon;
@@ -104,7 +128,8 @@ export function Sidebar({
       return false;
     }
     const isCoursesTab = itemId === 'courses' && (activeTab === 'courses' || activeTab === 'dashboard' || activeTab === 'course-details');
-    return isCoursesTab || activeTab === itemId;
+    const isBatchDetailsTab = itemId === 'coordinator-batches' && activeTab === 'coordinator-batch-details';
+    return isCoursesTab || isBatchDetailsTab || activeTab === itemId;
   };
 
   const handleItemClick = (item) => {

@@ -171,6 +171,10 @@ Project documentation is organized in the `docs/` directory and includes:
 
 This repository is structured as a modular microservice platform for academic software lifecycle management and evaluation. It is intended to be extended with additional services, integrations, and UX improvements as the project evolves.
 
+## Contributors
+
+- **Alok Mishra** — Collaborator
+
 ## License
 
 This project is currently configured without a specific license file in the repository root.

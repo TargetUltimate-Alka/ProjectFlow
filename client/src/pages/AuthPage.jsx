@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { FolderGit2, GraduationCap, School, ShieldCheck, ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react';
+import { api } from '../api';
+import { FolderGit2, GraduationCap, School, ShieldCheck, ArrowRight, ArrowLeft, Sparkles, CheckCircle2 } from 'lucide-react';
 
-export function AuthPage() {
-  const { login, register } = useAuth();
-  const [isRegister, setIsRegister] = useState(false);
+export function AuthPage({ initialTab = 'login', onBackToHome }) {
+  const { login } = useAuth();
+  const [isRegister, setIsRegister] = useState(initialTab === 'register');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,6 +13,7 @@ export function AuthPage() {
   const [department, setDepartment] = useState('Computer Science & Engineering');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,12 +21,22 @@ export function AuthPage() {
     setLoading(true);
     try {
       if (isRegister) {
-        await register({ name, email, password, role, department });
+        // Register but do NOT auto-login — redirect to login with success message
+        await api.register({ name, email, password, role, department });
+        setRegistrationSuccess(true);
+        setIsRegister(false);
+        // Clear registration fields
+        setName('');
+        setPassword('');
+        setRole('Student');
+        setDepartment('Computer Science & Engineering');
+        // Keep email so user can login immediately
       } else {
         await login(email, password);
       }
     } catch (err) {
       setError(err.message);
+      setRegistrationSuccess(false);
     } finally {
       setLoading(false);
     }
@@ -32,6 +44,7 @@ export function AuthPage() {
 
   const handleQuickLogin = async (userEmail, userPass) => {
     setError(null);
+    setRegistrationSuccess(false);
     setLoading(true);
     try {
       await login(userEmail, userPass);
@@ -52,6 +65,35 @@ export function AuthPage() {
       position: 'relative'
     }}>
       <div style={{ width: '100%', maxWidth: '460px' }}>
+        {/* Back to Homepage */}
+        {onBackToHome && (
+          <div style={{ marginBottom: '20px' }}>
+            <button
+              onClick={onBackToHome}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: 'transparent',
+                border: 'none',
+                color: '#94a3b8',
+                cursor: 'pointer',
+                fontSize: '0.85rem',
+                fontWeight: 500,
+                fontFamily: 'var(--font-main)',
+                padding: '6px 0',
+                transition: 'color 0.2s ease'
+              }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#38bdf8'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = '#94a3b8'; }}
+              aria-label="Back to homepage"
+            >
+              <ArrowLeft size={16} />
+              Back to Homepage
+            </button>
+          </div>
+        )}
+
         {/* Brand Header */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <div style={{
@@ -105,7 +147,7 @@ export function AuthPage() {
               Sign In
             </button>
             <button
-              onClick={() => { setIsRegister(true); setError(null); }}
+              onClick={() => { setIsRegister(true); setError(null); setRegistrationSuccess(false); }}
               style={{
                 flex: 1,
                 padding: '8px 0',
@@ -122,6 +164,29 @@ export function AuthPage() {
               Register
             </button>
           </div>
+
+          {/* Registration Success Message */}
+          {registrationSuccess && !isRegister && (
+            <div style={{
+              padding: '14px 16px',
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              border: '1px solid rgba(16, 185, 129, 0.3)',
+              borderRadius: '10px',
+              color: '#34d399',
+              fontSize: '0.85rem',
+              marginBottom: '18px',
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '10px',
+              lineHeight: 1.5
+            }}>
+              <CheckCircle2 size={18} style={{ flexShrink: 0, marginTop: 2 }} />
+              <div>
+                <div style={{ fontWeight: 700, marginBottom: 2 }}>Account Created Successfully!</div>
+                <div style={{ color: '#86efac' }}>Please sign in with your credentials to access your dashboard.</div>
+              </div>
+            </div>
+          )}
 
           {error && (
             <div style={{
@@ -211,7 +276,7 @@ export function AuthPage() {
               className="btn btn-primary"
               style={{ width: '100%', marginTop: '8px', padding: '12px' }}
             >
-              {loading ? 'Authenticating...' : isRegister ? 'Create Account' : 'Sign In'}
+              {loading ? 'Processing...' : isRegister ? 'Create Account' : 'Sign In'}
               <ArrowRight size={16} />
             </button>
           </form>
